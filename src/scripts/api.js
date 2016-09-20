@@ -1,6 +1,6 @@
 var API = {
     version: process.env.NODE_ENV === 'development' ? '2_dev' : '2',
-    url: 'http://upload.beget.edgestile.net/api/',
+    url: 'http://lapka.e-stile.ru/api/',
     complete(params) {
         if (!('notFoundRedirect' in params))
             params.notFoundRedirect = true
