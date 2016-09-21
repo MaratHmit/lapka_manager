@@ -18,40 +18,22 @@ app.checkUnsupported = () => {
 }
 
 app.login = params => {
-    $.ajax({
-        url: 'https://api.siteedit.ru/api/host.php?project=' + params.project.trim(),
-        dataType: 'json',
+    var secookie = md5(Date.now())
+
+    API.request({
+        object: 'Auth',
+        method: 'Info',
+        data: {
+            login: params.serial.toString().trim(),
+            hash: params.password.trim()
+        },
+        beforeSend(request) {
+            //request.setRequestHeader('Project', response.data.project)
+            request.setRequestHeader('Secookie', secookie)
+        },
         success(response) {
-            if (response.status === 'ok') {
-                var secookie = md5(Date.now())
-                API.url = `${response.data.hostApi}/api/`
-
-                API.request({
-                    object: 'Auth',
-                    method: 'Info',
-                    data: {
-                        login: params.serial.toString().trim(),
-                        hash: params.password.trim()
-                    },
-                    beforeSend(request) {
-                        request.setRequestHeader('Project', response.data.project)
-                        request.setRequestHeader('Secookie', secookie)
-                    },
-                    success(response) {
-                        if (typeof params.success === 'function')
-                            params.success.bind(this, response, secookie)()
-                    },
-                    error(response) {
-                        if (typeof params.error === 'function')
-                            params.error.bind(this, response)()
-                    }
-                })
-
-            }
-            if (response.status === 'error') {
-                if (typeof params.error === 'function')
-                    params.error.bind(this, response)()
-            }
+            if (typeof params.success === 'function')
+                params.success.bind(this, response, secookie)()
         },
         error(response) {
             if (typeof params.error === 'function')
@@ -63,10 +45,12 @@ app.login = params => {
 app.init = () => {
     let storage = JSON.parse(localStorage.getItem('shop24') || '{}')
 
-    if (storage && storage.domain) {
+    console.log(storage)
+
+    if (storage && storage.hostname) {
         app.config.project = storage.project
         app.config.lang = 'rus'
-        app.config.projectURL = `${storage.domain}/`
+        app.config.projectURL = `http://${storage.hostname}/`
         app.config.isAdmin = storage.isAdmin || false
         app.auth = true
     } else {
@@ -81,62 +65,14 @@ app.init = () => {
         })
     }
 
-    let mainUser = JSON.parse(localStorage.getItem('shop24_main_user') || '{}')
     let config = JSON.parse(localStorage.getItem('shop24') || '{}')
 
-    if (config && mainUser &&
-        'login' in config &&
-        'login' in mainUser &&
-        config.login !== mainUser.login) {
-        app.login({
-            project: mainUser.project,
-            serial: mainUser.login,
-            password: mainUser.hash,
-            success(response, secookie) {
-                API.request({
-                    object: 'Account',
-                    method: 'Fetch',
-                    cookie: secookie,
-                    unauthorizedReload: false,
-                    success(response) {
-                        app.mainCookie = secookie
-                        if ('items' in response &&
-                            response.items instanceof Array) {
-                            app.accounts = response.items
-                        }
-                    },
-                    complete() {
-                        observable.trigger('auth', app.auth)
-                    }
-                })
-            },
-            error(response) {
-                observable.trigger('auth', app.auth)
-            }
-        })
-    } else {
-        API.request({
-            object: 'Account',
-            method: 'Fetch',
-            unauthorizedReload: false,
-            success(response) {
-                app.mainCookie = localStorage.getItem('shop24_cookie')
-                if ('items' in response &&
-                    response.items instanceof Array) {
-                    app.accounts = response.items
-                }
-            },
-            complete() {
-                observable.trigger('auth', app.auth)
-            }
-        })
-    }
+    observable.trigger('auth', app.auth)
 }
 
 app.restoreSession = user => {
     let params = JSON.parse(user)
-    var secookie = md5(Date.now())
-    API.url = `${params.uri}/api/`
+    let secookie = md5(Date.now())
 
     API.request({
         object: 'Auth',

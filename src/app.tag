@@ -35,25 +35,6 @@ app
                         a(href='#\{ link \}')
                             i(class='fa { icon }')
                             span { title }
-                    //li.hidden-md.hidden-sm.hidden-lg
-                    //    a
-                    //        i.fa.fa-globe
-                    //        span Аккаунты
-                    //    ul.dropdown-menu
-                    //        li
-                    //            a(href='#', onclick='{ accountAdd }')
-                    //                i.fa.fa-fw.fa-plus.text-success
-                    //                |  Добавить
-                    //        li.divider(if='{ app.accounts.length }')
-                    //        li(each='{ account, i in app.accounts }', class='{ active: activeLogin == account.login }')
-                    //            a(href='{ "#": activeLogin != account.login }', onclick='{ activeLogin != account.login  ? accountChange : null }')
-                    //                i.fa.fa-fw(class='{ "text-primary": activeLogin != account.login, "fa-home": account.isMain, "fa-globe": !account.isMain }')
-                    //                |  { account.alias }
-                    //        li.divider(if='{ app.accounts.length }')
-                    //        li
-                    //            a(href='#', onclick='{ accountSettings }')
-                    //                i.fa.fa-fw.fa-pencil.text-danger
-                    //                |  Управление аккаунтами
                     li.hidden-md.hidden-sm.hidden-lg
                         a(href='{ app.config.projectURL }', target='_blank', title='Перейти на сайт')
                             i.fa.fa-share
@@ -76,26 +57,6 @@ app
 
                     .navbar-collapse.collapse
                         ul.nav.navbar-nav.navbar-right
-                            li.dropdown
-                                a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true',
-                                aria-expanded='false')
-                                    | { app.config.project }
-                                    span.caret
-                                ul.dropdown-menu
-                                    li
-                                        a(href='#', onclick='{ accountAdd }')
-                                            i.fa.fa-fw.fa-plus.text-success
-                                            |  Добавить
-                                    li.divider(if='{ app.accounts.length }')
-                                    li(each='{ account, i in app.accounts }', class='{ active: activeLogin == account.login }')
-                                        a(href='{ "#": activeLogin != account.login }', onclick='{ activeLogin != account.login  ? accountChange : null }')
-                                            i.fa.fa-fw(class='{ "text-primary": activeLogin != account.login, "fa-home": account.isMain, "fa-globe": !account.isMain }')
-                                            |  { account.alias }
-                                    li.divider(if='{ app.accounts.length }')
-                                    li
-                                        a(href='#', onclick='{ accountSettings }')
-                                            i.fa.fa-fw.fa-pencil.text-danger
-                                            |  Управление аккаунтами
                             li(if='{ app.config.projectURL }')
                                 a(href='{ app.config.projectURL }', target='_blank', title='Перейти на сайт')
                                     i.fa.fa-share
@@ -246,43 +207,13 @@ app
             })
         }
 
-        self.getActiveAccount = () => {
-            let shop = JSON.parse(localStorage.getItem('shop24') || '{}')
-            if ('login' in shop) {
-                let { login } = shop
-                let item = app.accounts.filter(item => item.login === login)[0] || {}
-                if ('login' in item)
-                    self.activeLogin = item.login
-            }
-        }
 
         observable.on('auth', auth => {
-            if (auth)
-                self.getActiveAccount()
             self.loader = false
             self.update()
         })
 
-        observable.on('accounts-change', accounts => {
-            if (accounts && accounts instanceof Array) {
-                app.accounts = accounts
-                self.update()
-            } else {
-                API.request({
-                    object: 'Account',
-                    method: 'Fetch',
-                    cookie: app.mainCookie,
-                    unauthorizedReload: false,
-                    success(response) {
-                        if ('items' in response &&
-                            response.items instanceof Array) {
-                            app.accounts = response.items
-                            self.update()
-                        }
-                    },
-                })
-            }
-        })
+
 
         observable.on('not-found', () => {
             self.headTitle = '404'

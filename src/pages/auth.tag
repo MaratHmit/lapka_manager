@@ -17,11 +17,6 @@ auth
                             .form-group
                                 .input-group
                                     span.input-group-addon
-                                        .fa.fa-cog.fa-fw
-                                    input.form-control(name='project', placeholder='Проект')
-                            .form-group
-                                .input-group
-                                    span.input-group-addon
                                         .fa.fa-user.fa-fw
                                     input.form-control(name='serial', placeholder='Логин')
                             .form-group
@@ -58,18 +53,10 @@ auth
         self.auth = () => {
 
             app.login({
-                project: self.project.value.trim(),
+                //project: self.project.value.trim(),
                 serial: self.serial.value.trim(),
                 password: md5(self.password.value.trim()),
                 success(response, secookie) {
-                    var mainUser = {
-                        project: self.project.value.trim(),
-                        login: self.serial.value.trim(),
-                        hash: md5(self.password.value.trim()),
-                    }
-
-                    localStorage.setItem('shop24_main_user', JSON.stringify(mainUser))
-
                     if (self.remember.checked)
                         localStorage.setItem('shop24_user', JSON.stringify(response.config))
 
@@ -77,7 +64,7 @@ auth
                         localStorage.setItem('shop24_permissions', JSON.stringify(response.permissions))
 
                     localStorage.setItem('shop24_cookie', secookie)
-                    localStorage.setItem('shop24', JSON.stringify(response.config))
+                    localStorage.setItem('shop24', JSON.stringify(response))
                     app.init()
                 },
                 error(response) {

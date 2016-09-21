@@ -72,7 +72,7 @@ var API = {
             throw new Error('"Method" parameter is required')
 
         settings.crossDomain = true
-        settings.url = `${this.url}${this.version}/${params.object}/`
+        settings.url = `${this.url}${params.object}/`
         settings.method = params.method
         settings.beforeSend = params.beforeSend || function (request) {
             request.setRequestHeader("Secookie", params.cookie || localStorage.getItem('shop24_cookie'))
@@ -91,8 +91,8 @@ var API = {
             throw new Error('"Data" parameter is required')
 
         if (!params.object)
-            settings.url = `${this.url}${this.version}/Image/?section=${params.section}`
-        else settings.url = `${this.url}${this.version}/${params.object}`
+            settings.url = `${this.url}Image/?section=${params.section}`
+        else settings.url = `${this.url}${params.object}`
 
         settings.method = 'POST'
         settings.data = params.data
@@ -128,7 +128,7 @@ var API = {
 
         var xhr = new XMLHttpRequest();
 
-        xhr.open('POST', `${this.url}${this.version}/${params.object}/`, true)
+        xhr.open('POST', `${this.url}${params.object}/`, true)
         xhr.withCredentials = true
         xhr.responseType = 'arraybuffer'
         xhr.setRequestHeader("Secookie", params.cookie || localStorage.getItem('shop24_cookie'))
@@ -178,7 +178,7 @@ var API = {
     authCheck(params) {
         let settings = {}
 
-        settings.url = `${this.url}${this.version}/Auth/`
+        settings.url = `${this.url}Auth/`
         settings.method = 'GET'
 
         settings.beforeSend = (xhr) => {
