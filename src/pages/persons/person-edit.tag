@@ -19,11 +19,11 @@ person-edit
 
         ul.nav.nav-tabs.m-b-2
             li.active #[a(data-toggle='tab', href='#person-edit-home') Информация]
-            li #[a(data-toggle='tab', href='#person-edit-documents') Паспортные данные]
+            //li #[a(data-toggle='tab', href='#person-edit-documents') Паспортные данные]
             //li #[a(data-toggle='tab', href='#person-edit-requisites') Реквизиты компании]
-            li(if='{ checkPermission("orders", "1000") }') #[a(data-toggle='tab', href='#person-edit-orders') Заказы]
+            //li(if='{ checkPermission("orders", "1000") }') #[a(data-toggle='tab', href='#person-edit-orders') Заказы]
             li(if='{ checkPermission("products", "1000") }') #[a(data-toggle='tab', href='#person-edit-groups') Группы]
-            li #[a(data-toggle='tab', href='#person-edit-balance') Лицевой счёт]
+            //li #[a(data-toggle='tab', href='#person-edit-balance') Лицевой счёт]
             li(if='{ item.customFields && item.customFields.length }')
                 a(data-toggle='tab', href='#person-edit-fields') Доп. информация
 
@@ -49,7 +49,7 @@ person-edit
                                 .col-md-4
                                     .form-group
                                         label.control-label Отчество
-                                        input.form-control(name='secName', type='text', value='{ item.secName }')
+                                        input.form-control(name='patronymic', type='text', value='{ item.patronymic }')
                             .row
                                 .col-md-2
                                     .form-group
@@ -85,17 +85,6 @@ person-edit
                                     .form-group
                                         label.control-label Пароль
                                         input.form-control(name='password', type='password', value='{ item.password }')
-                            .row
-                                .col-md-12
-                                    .form-group(class='{ has-error: (error.idUp) }')
-                                            label.control-label Рекомендатель
-                                            .input-group
-                                                input.form-control(name='idUp', value='{ item.referName }', readonly)
-                                                span.input-group-addon(onclick='{ changeReferContact }')
-                                                    i.fa.fa-list
-                                                span.input-group-addon(onclick='{ removeReferContact }')
-                                                    i.fa.fa-eraser
-                                            .help-block { (error.idUp) }
                     .row
                         .col-md-12
                             .form-group
@@ -115,61 +104,7 @@ person-edit
                                     nbsp
                                     b { item.regDate }
 
-                #person-edit-documents.tab-pane.fade
-                    .row
-                        .col-md-4
-                            .form-group
-                                label.control-label Серия
-                                input.form-control(name='docSer', type='text', value='{ item.docSer }')
-                        .col-md-6
-                            .form-group
-                                label.control-label Номер
-                                input.form-control(name='docNum', type='text', value='{ item.docNum }')
-                    .row
-                        .col-md-12
-                            .form-group
-                                label.control-label Регистрационные данные
-                                textarea.form-control(rows='5', name='docRegistr',
-                                style='min-width: 100%; max-width: 100%;', value='{ item.docRegistr }')
-
-
-                //#person-edit-requisites.tab-pane.fade
-                    .row
-                        .col-md-6
-                            .form-group
-                                label.control-label Наименование компании
-                                input.form-control(name='company', type='text', value='{ item.company }')
-                        .col-md-6
-                            .form-group
-                                label.control-label Директор
-                                input.form-control(name='director', type='text', value='{ item.director }')
-                    .row
-                        .col-md-6
-                            .form-group
-                                label.control-label Телефон
-                                input.form-control(name='tel', type='text', value='{ item.tel }')
-                        .col-md-6
-                            .form-group
-                                label.control-label Факс
-                                input.form-control(name='fax', type='text', value='{ item.fax }')
-                    .row
-                        .col-md-6
-                            .form-group
-                                label.control-label Юридический адрес
-                                input.form-control(name='uradres', type='text', value='{ item.uradres }')
-                        .col-md-6
-                            .form-group
-                                label.control-label Почтовый адрес
-                                input.form-control(name='fizadres', type='text', value='{ item.fizadres }')
-                    .row
-                        .col-md-6
-                            h4 Регистрационные и банковские реквизиты
-                            datatable(rows="{ item.companyRequisites }", handlers='{ companyRequisitesHandlers }')
-                                datatable-cell(name='name') { row.title }
-                                datatable-cell(name='value')
-                                    input(type='text', value='{ row.value }', oninput='{ handlers.valueChange }')
-
-                #person-edit-orders.tab-pane.fade(if='{ checkPermission("orders", "1000") }')
+                //#person-edit-orders.tab-pane.fade(if='{ checkPermission("orders", "1000") }')
                     .row
                         .col-md-12
                             datatable(cols='{ cols }', rows='{ orders }', handlers='{ handlersOrders }', dblclick='{ dblclickOrder }')
@@ -201,7 +136,7 @@ person-edit
                                 datatable-cell(name='id') { row.id }
                                 datatable-cell(name='name') { row.name }
 
-                #person-edit-balance.tab-pane.fade
+                //#person-edit-balance.tab-pane.fade
                     .row
                         .col-md-12
                             catalog-static(name='personalAccount', add='{ addBalance }', dblclick='{ editBalance }',
@@ -378,7 +313,6 @@ person-edit
                     self.accountOperations = response.accountOperations
                     self.loader = false
                     self.update()
-                    getOrders(self.item.id)
                 },
                 error(response) {
                     self.item = {}
@@ -389,43 +323,27 @@ person-edit
 
         })
 
-        function getOrders(idCustomer) {
-            var params = {filters: {field: "idAuthor", value: idCustomer}}
-
-            API.request({
-                object: 'Order',
-                method: 'Fetch',
-                data: params,
-                success: (response, xhr) => {
-                    if (!(response.items instanceof Array))
-                        response.items = []
-                    self.orders = response.items
-                    self.update()
-                }
-            })
-        }
-
-        self.changeReferContact = () => {
-            modals.create('persons-list-select-modal',{
-                type: 'modal-primary',
-                size: 'modal-lg',
-                submit() {
-                    let items = this.tags.catalog.tags.datatable.getSelectedRows()
-                    if (!items.length) return
-
-                    self.item.idUp = items[0].id
-                    self.item.referName = items[0].displayName
-
-                    self.update()
-                    this.modalHide()
-                }
-            })
-        }
-
-        self.removeReferContact = () => {
-            self.item.idUp = null
-            self.item.referName = null
-        }
+        //        self.changeReferContact = () => {
+        //            modals.create('persons-list-select-modal',{
+        //                type: 'modal-primary',
+        //                size: 'modal-lg',
+        //                submit() {
+        //                    let items = this.tags.catalog.tags.datatable.getSelectedRows()
+        //                    if (!items.length) return
+        //
+        //                    self.item.idUp = items[0].id
+        //                    self.item.referName = items[0].displayName
+        //
+        //                    self.update()
+        //                    this.modalHide()
+        //                }
+        //            })
+        //        }
+        //
+        //        self.removeReferContact = () => {
+        //            self.item.idUp = null
+        //            self.item.referName = null
+        //        }
 
         self.one('updated', () => {
             self.tags.groups.on('row-selected', count => {
@@ -434,23 +352,23 @@ person-edit
             })
         })
 
-        self.orderText = {
-             text: {
-                Y: 'Оплачен', N: 'Не оплачен', K: 'Кредит', P: 'Подарок', W: 'В ожидании', C: 'Возврат', T: 'Тест'
-             },
-             colors: {
-                Y: 'bg-success', N: 'bg-danger', K: 'bg-warning', P: null, W: null, C: null, T: null
-             }
-        }
-
-        self.deliveryText = {
-            text: {
-                Y: 'Доставлен', N: 'Не доставлен', M: 'В работе', P: 'Отправлен'
-            },
-            colors: {
-                Y: 'bg-success', N: 'bg-danger', M: null, P: null
-            }
-        }
+        //        self.orderText = {
+        //             text: {
+        //                Y: 'Оплачен', N: 'Не оплачен', K: 'Кредит', P: 'Подарок', W: 'В ожидании', C: 'Возврат', T: 'Тест'
+        //             },
+        //             colors: {
+        //                Y: 'bg-success', N: 'bg-danger', K: 'bg-warning', P: null, W: null, C: null, T: null
+        //             }
+        //        }
+        //
+        //        self.deliveryText = {
+        //            text: {
+        //                Y: 'Доставлен', N: 'Не доставлен', M: 'В работе', P: 'Отправлен'
+        //            },
+        //            colors: {
+        //                Y: 'bg-success', N: 'bg-danger', M: null, P: null
+        //            }
+        //        }
 
         self.handlersOrders = {
             orderText: self.orderText,

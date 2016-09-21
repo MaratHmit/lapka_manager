@@ -45,8 +45,6 @@ app.login = params => {
 app.init = () => {
     let storage = JSON.parse(localStorage.getItem('shop24') || '{}')
 
-    console.log(storage)
-
     if (storage && storage.hostname) {
         app.config.project = storage.project
         app.config.lang = 'rus'

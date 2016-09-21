@@ -1,7 +1,5 @@
 | import 'pages/persons/persons-list.tag'
 | import 'pages/persons/person-edit.tag'
-| import 'pages/persons/companies-list.tag'
-| import 'pages/persons/company-edit.tag'
 | import 'pages/persons/persons-categories-list.tag'
 
 persons
@@ -14,9 +12,6 @@ persons
         persons-list(if='{ tab == "contacts" && !edit }')
         person-edit(if='{ tab == "contacts" && edit }')
 
-        companies-list(if='{ tab == "companies" && !edit }')
-        company-edit(if='{ tab == "companies" && edit }')
-
         persons-categories-list(if='{ tab == "categories" && !edit }')
 
     script(type='text/babel').
@@ -24,12 +19,10 @@ persons
             route = riot.route.create()
 
         self.edit = false
-
         self.tab = ''
 
         self.tabs = [
             {title: 'Контакты', name: 'contacts', link: ''},
-            {title: 'Компании', name: 'companies', link: 'companies'},
             {title: 'Группы', name: 'categories', link: 'categories'},
         ]
 

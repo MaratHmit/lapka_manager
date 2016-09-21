@@ -1,7 +1,6 @@
 | import 'components/catalog.tag'
 | import 'pages/persons/person-new-modal.tag'
 
-
 persons-list
 
     catalog(search='true', sortable='true', object='Contact', cols='{ cols }', reload='true',
@@ -12,20 +11,11 @@ persons-list
             datatable-cell(name='id') { row.id }
             datatable-cell(name='regDate') { row.regDate }
             datatable-cell(name='displayName') { row.displayName }
-            datatable-cell(name='company') { row.company }
             datatable-cell(name='username') { row.username }
             datatable-cell(name='email') { row.email }
             datatable-cell(name='phone') { row.phone }
             datatable-cell(name='countOrders') { row.countOrders }
             datatable-cell(name='amountOrders') { (row.amountOrders / 1).toFixed(2) }/{ (row.paidOrders / 1).toFixed(2) }
-        #{'yield'}(to='head')
-            button.btn.btn-primary(if='{ selectedCount == 1 }',  onclick='{ parent.exportCard }' title='Карточка контакта (XLS)', type='button')
-                i.fa.fa-file-excel-o(aria-hidden="true")
-            button.btn.btn-primary(type='button', onclick='{ parent.exportPersons }', title='Экспорт')
-                i.fa.fa-upload
-            .btn.btn-file.btn-primary
-                input(type='file', onchange='{ parent.importPersons }', title='Импорт')
-                i.fa.fa-download
         #{'yield'}(to='filters')
             .well.well-sm
                 .form-inline
@@ -47,7 +37,6 @@ persons-list
             {name: 'id', value: '#'},
             {name: 'regDate', value: 'Время рег.'},
             {name: 'displayName', value: 'Ф.И.О'},
-            {name: 'company', value: 'Компания'},
             {name: 'username', value: 'Логин'},
             {name: 'email', value: 'E-mail'},
             {name: 'phone', value: 'Телефоны'},
@@ -83,57 +72,6 @@ persons-list
 
         self.personOpenItem = id => {
             riot.route(`/persons/${id}`)
-        }
-
-        self.importPersons = (e) => {
-            var formData = new FormData();
-            for (var i = 0; i < e.target.files.length; i++) {
-                formData.append('file' + i, e.target.files[i], e.target.files[i].name)
-            }
-
-            API.upload({
-                object: 'Contact',
-                data: formData,
-                success(response) {
-                    self.update();
-                }
-            })
-        }
-
-        self.exportPersons = () => {
-            API.request({
-                object: 'Contact',
-                method: 'Export',
-                success(response, xhr) {
-                    let a = document.createElement('a')
-                    a.href = response.url
-                    a.download = response.name
-                    document.body.appendChild(a)
-                    a.click()
-                    a.remove()
-                }
-            })
-        }
-
-        self.exportCard = (e) => {
-            var _this = this
-
-            var rows = self.tags.catalog.tags.datatable.getSelectedRows()
-            var params = { id: rows[0].id }
-
-            API.request({
-                object: 'Contact',
-                method: 'Export',
-                data: params,
-                success(response, xhr) {
-                    let a = document.createElement('a')
-                    a.href = response.url
-                    a.download = response.name
-                    document.body.appendChild(a)
-                    a.click()
-                    a.remove()
-                }
-            })
         }
 
         self.getContactCategory = () => {
