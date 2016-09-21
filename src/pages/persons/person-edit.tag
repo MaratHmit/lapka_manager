@@ -281,7 +281,7 @@ person-edit
                     self.item.password = md5(self.item.password)
 
                 API.request({
-                    object: 'Contact',
+                    object: 'User',
                     method: 'Save',
                     data: params,
                     success(response) {
@@ -304,7 +304,7 @@ person-edit
             self.error = false
             self.loader = true
             API.request({
-                object: 'Contact',
+                object: 'User',
                 method: 'Info',
                 data: params,
                 success: (response, xhr) => {

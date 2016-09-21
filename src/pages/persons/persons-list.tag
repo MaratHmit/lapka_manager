@@ -3,15 +3,15 @@
 
 persons-list
 
-    catalog(search='true', sortable='true', object='Contact', cols='{ cols }', reload='true',
+    catalog(search='true', sortable='true', object='User', cols='{ cols }', reload='true',
     add='{ permission(add, "contacts", "0100") }',
     remove='{ permission(remove, "contacts", "0001") }',
     dblclick='{ permission(personOpen, "contacts", "1000") }', store='persons-list')
         #{'yield'}(to='body')
             datatable-cell(name='id') { row.id }
-            datatable-cell(name='regDate') { row.regDate }
-            datatable-cell(name='displayName') { row.displayName }
-            datatable-cell(name='username') { row.username }
+            datatable-cell(name='createdAt') { row.createdAt }
+            datatable-cell(name='name') { row.name }
+            datatable-cell(name='login') { row.login }
             datatable-cell(name='email') { row.email }
             datatable-cell(name='phone') { row.phone }
             datatable-cell(name='countOrders') { row.countOrders }
@@ -31,13 +31,13 @@ persons-list
 
         self.mixin('permissions')
         self.mixin('remove')
-        self.collection = 'Contact'
+        self.collection = 'User'
 
         self.cols = [
             {name: 'id', value: '#'},
-            {name: 'regDate', value: 'Время рег.'},
-            {name: 'displayName', value: 'Ф.И.О'},
-            {name: 'username', value: 'Логин'},
+            {name: 'createdAt', value: 'Время рег.'},
+            {name: 'name', value: 'Имя'},
+            {name: 'login', value: 'Логин'},
             {name: 'email', value: 'E-mail'},
             {name: 'phone', value: 'Телефоны'},
             {name: 'countOrders', value: 'Кол-во зак.'},
@@ -76,7 +76,7 @@ persons-list
 
         self.getContactCategory = () => {
             API.request({
-                object: 'ContactCategory',
+                object: 'UserGroup',
                 method: 'Fetch',
                 success(response) {
                     self.categories = response.items

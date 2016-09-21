@@ -1,7 +1,7 @@
 | import './person-category-new-modal.tag'
 
 persons-categories-list
-    catalog(search='true', sortable='true', object='ContactCategory', cols='{ cols }', reload='true',
+    catalog(search='true', sortable='true', object='UserGroup', cols='{ cols }', reload='true',
     add='{ permission(addEdit, "contacts", "0100") }',
     remove='{ permission(remove, "contacts", "0001") }',
     dblclick='{ permission(addEdit, "contacts", "1000") }', store='persons-category-list')
