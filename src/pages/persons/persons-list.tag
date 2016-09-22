@@ -49,9 +49,9 @@ persons-list
                 type: 'modal-primary',
                 submit() {
                     var _this = this
-                    var params = { firstName: _this.name.value }
+                    var params = { name: _this.name.value }
                     API.request({
-                        object: 'Contact',
+                        object: 'User',
                         method: 'Save',
                         data: params,
                         success(response, xhr) {

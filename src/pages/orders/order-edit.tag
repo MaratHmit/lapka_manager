@@ -1,6 +1,5 @@
 | import 'components/datetime-picker.tag'
 | import 'pages/settings/delivery/delivery-list-modal.tag'
-| import 'pages/persons/persons-company-list-modal.tag'
 | import 'pages/products/modifications/modifications-list-modal.tag'
 | import 'pages/payments/payments-list-modal.tag'
 | import 'components/loader.tag'

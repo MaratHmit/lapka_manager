@@ -14,7 +14,7 @@ persons-categories-list
 
         self.mixin('permissions')
         self.mixin('remove')
-        self.collection = 'ContactCategory'
+        self.collection = 'UserGroup'
 
         self.cols = [
             {name: 'id', value: '#'},
@@ -33,7 +33,7 @@ persons-categories-list
                     let _this = this
 
                     API.request({
-                        object: 'ContactCategory',
+                        object: 'UserGroup',
                         data: _this.item,
                         method: 'Save',
                         success(response) {
