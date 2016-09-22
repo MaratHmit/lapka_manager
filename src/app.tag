@@ -1,7 +1,7 @@
 | import md5 from 'blueimp-md5/js/md5.min.js'
 | import 'pages/auth.tag'
 | import 'pages/orders/orders.tag'
-| import 'pages/products/products.tag'
+//| import 'pages/products/products.tag'
 | import 'pages/persons/persons.tag'
 | import 'pages/comments/comments.tag'
 | import 'pages/news/news.tag'
@@ -44,7 +44,7 @@ app
                             i.fa.fa-sign-out
                             span Выход
 
-        .main-container
+        .main-container.clearfix
             .navbar.navbar-default.navbar-fixed-top.m-b-2
                 .container-fluid
                     .navbar-header
@@ -132,16 +132,16 @@ app
         self.unsupported = app.checkUnsupported()
 
         self.sidebar = [
-            //            {title: 'Заказы', name: 'orders', link: 'orders', permission: 'orders', icon: 'fa-shopping-cart'},
-            //            {title: 'Товары', name: 'products', link: 'products', permission: 'products', icon: 'fa-shopping-bag'},
-            //            {title: 'Платежи', name: 'payments', link: 'payments', permission: 'payments', icon: 'fa-money'},
+            //{title: 'Заказы', name: 'orders', link: 'orders', permission: 'orders', icon: 'fa-shopping-cart'},
+            //{title: 'Товары', name: 'products', link: 'products', permission: 'products', icon: 'fa-shopping-bag'},
+            //{title: 'Платежи', name: 'payments', link: 'payments', permission: 'payments', icon: 'fa-money'},
             {title: 'Контакты', name: 'persons', link: 'persons', permission: 'contacts', icon: 'fa-users'},
-            //            {title: 'Новости', name: 'news', link: 'news', permission: 'news', icon: 'fa-newspaper-o'},
-            //            {title: 'Отзывы', name: 'reviews', link: 'reviews', permission: 'reviews', icon: 'fa-comment-o'},
-            //            {title: 'Комментарии', name: 'comments', link: 'comments', permission: 'comments', icon: 'fa-comments-o'},
-            //            {title: 'Картинки', name: 'images', link: 'images/products', permission: 'images', icon: 'fa-picture-o'},
-            //            {title: 'Аналитика', name: 'analytics', link: 'analytics', permission: '', icon: 'fa-area-chart '},
-            //            {title: 'Настройки', name: 'settings', link: 'settings', permission: '', icon: 'fa-cogs'},
+            //{title: 'Новости', name: 'news', link: 'news', permission: 'news', icon: 'fa-newspaper-o'},
+            //{title: 'Отзывы', name: 'reviews', link: 'reviews', permission: 'reviews', icon: 'fa-comment-o'},
+            //{title: 'Комментарии', name: 'comments', link: 'comments', permission: 'comments', icon: 'fa-comments-o'},
+            {title: 'Картинки', name: 'images', link: 'images', permission: 'images', icon: 'fa-picture-o'},
+            //{title: 'Аналитика', name: 'analytics', link: 'analytics', permission: '', icon: 'fa-area-chart '},
+            //{title: 'Настройки', name: 'settings', link: 'settings', permission: '', icon: 'fa-cogs'},
         ]
 
         self.toggleSidebar = () => {

@@ -56,12 +56,15 @@ html {
 
     .main-container {
         position: relative;
-        width: calc(100% - 74px);
+        padding-left: 74px;
+        box-sizing: border-box;
+        min-height: 100%;
     }
 
     .main-container .main {
-        margin-left: 74px;
-        margin-top: 61px;
+        padding-top: 61px;
+        box-sizing: border-box;
+        min-height: 100%;
     }
 
     .main-container .navbar {
