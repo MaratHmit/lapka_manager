@@ -37,20 +37,10 @@ person-edit
                                     image-select(name='imageFile', section='contacts', alt='0', size='256', value='{ item.imageFile }')
                         .col-md-10
                             .row
-                                .col-md-4
+                                .col-md-8
                                     .form-group
-                                        label.control-label Фамилия
-                                        input.form-control(name='lastName', type='text', value='{ item.lastName }')
-                                .col-md-4
-                                    .form-group(class='{ has-error: error.firstName }')
-                                        label.control-label Имя*
-                                        input.form-control(name='firstName', type='text', value='{ item.firstName }')
-                                        .help-block { error.firstName }
-                                .col-md-4
-                                    .form-group
-                                        label.control-label Отчество
-                                        input.form-control(name='patronymic', type='text', value='{ item.patronymic }')
-                            .row
+                                        label.control-label Имя
+                                        input.form-control(name='name', type='text', value='{ item.name }')
                                 .col-md-2
                                     .form-group
                                         label.control-label Дата рождения
@@ -62,11 +52,12 @@ person-edit
                                             option(value='N') Не указан
                                             option(value='M') Мужской
                                             option(value='F') Женский
-                                .col-md-4
+                            .row
+                                .col-md-6
                                     .form-group
                                         label.control-label Телефон
                                         input.form-control(name='phone', type='text', value='{ item.phone }')
-                                .col-md-4
+                                .col-md-6
                                     .form-group(class='{ has-error: error.email }')
                                         label.control-label Email
                                         input.form-control(name='email', type='text', value='{ item.email }')
@@ -163,7 +154,7 @@ person-edit
         self.mixin('change')
 
         self.rules = {
-            firstName: 'empty',
+            name: 'empty',
             email: {rules: [{type: 'email'}]}
         }
 

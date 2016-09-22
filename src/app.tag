@@ -106,16 +106,12 @@ app
 
         route(tab => {
             if (tab == '') {
-                if (self.checkPermission(self.sidebar[1].permission, "1000")) {
-                    riot.route(self.sidebar[1].link)
+                let links = self.sidebar.filter(i => self.checkPermission(i.permission, "1000"))
+                if (links.length) {
+                    riot.route(links[0].link)
                 } else {
-                    let links = self.sidebar.filter(i => self.checkPermission(i.permission, "1000"))
-                    if (links.length) {
-                        riot.route(links[0].link)
-                    } else {
-                        riot.route('')
-                        observable.trigger('not-found')
-                    }
+                    riot.route('')
+                    observable.trigger('not-found')
                 }
             } else {
                 let idx = self.sidebar.map(item => item.name).indexOf(tab)
