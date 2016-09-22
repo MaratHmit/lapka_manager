@@ -43,11 +43,6 @@ person-edit
                                 input.form-control(name='email', type='text', value='{ item.email }')
                                 .help-block { error.email }
                     .row
-                        .col-md-12
-                            .form-group
-                                label.control-label Адрес
-                                input.form-control(name='addr', type='text', value='{ item.addr }')
-                    .row
                         .col-md-6
                             .form-group
                                 label.control-label Логин
@@ -55,7 +50,7 @@ person-edit
                         .col-md-6
                             .form-group
                                 label.control-label Пароль
-                                input.form-control(name='password', type='password', value='{ item.password }')
+                                input.form-control(name='hash', type='password', value='{ item.hash }')
                     .row
                         .col-md-12
                             .checkbox
@@ -149,10 +144,8 @@ person-edit
             self.error = self.validation.validate(params, self.rules)
 
             if (!self.error) {
-                if (self.item && self.item.password && self.item.password.trim() === '')
-                    delete self.item.password
-                else
-                    self.item.password = md5(self.item.password)
+                if (self.item && self.item.hash && self.item.hash.trim() === '')
+                    delete self.item.hash
 
                 API.request({
                     object: 'User',
