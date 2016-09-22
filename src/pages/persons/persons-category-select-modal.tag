@@ -5,7 +5,7 @@ persons-category-select-modal
         #{'yield'}(to="title")
             .h4.modal-title Группы контактов
         #{'yield'}(to="body")
-            catalog(object='ContactCategory', cols='{ parent.cols }', add='{ parent.add }', remove='{ parent.remove }',
+            catalog(object='UserGroup', cols='{ parent.cols }', add='{ parent.add }', remove='{ parent.remove }',
                 disable-col-select='true')
                 #{'yield'}(to='body')
                     datatable-cell(name='id') { row.id }
@@ -22,7 +22,7 @@ persons-category-select-modal
             {name: 'name', value: 'Наименование'}
         ]
 
-        self.collection = "ContactCategory"
+        self.collection = "UserGroup"
         self.remove = (e, items) => {
             var self = this,
             params = {ids: items}
