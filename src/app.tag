@@ -22,7 +22,7 @@ app
         +oldBrowser
 
     loader(if='{ loader }', size='large', text='Загрузка')
-    auth(if='{ !app.auth }')
+    auth(if='{ !app.auth && !loader }')
 
     .app-layout(if='{ sidebarShow }', onclick='{ toggleSidebar }')
 
