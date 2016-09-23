@@ -29,6 +29,8 @@ filemanager
         .filemanager__file(each='{ value }')
             .filemanager__file-icon(if='{ isDir }', ondblclick='{ openFolder }')
                 i.fa.fa-folder-o.fa-4x
+            .filemanager__file-icon(if='{ !isDir }', style="background-image: url({ urlPreview })")
+                //img.img-responsive(src='{ urlPreview }')
             .filemanager__filename(title='{ name }') { name }
 
     .filemanager__status-panel
@@ -82,6 +84,9 @@ filemanager
             top: 0;
             text-align: center;
             line-height: 8;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
 
         .filemanager__filename {
