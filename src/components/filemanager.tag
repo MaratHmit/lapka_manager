@@ -30,7 +30,6 @@ filemanager
             .filemanager__file-icon(if='{ isDir }', ondblclick='{ openFolder }')
                 i.fa.fa-folder-o.fa-4x
             .filemanager__file-icon(if='{ !isDir }', style="background-image: url({ urlPreview })")
-                //img.img-responsive(src='{ urlPreview }')
             .filemanager__filename(title='{ name }') { name }
 
     .filemanager__status-panel
@@ -99,6 +98,8 @@ filemanager
             right: 0;
             overflow: hidden;
             word-wrap: break-word;
+            padding: 2px;
+            box-sizing: border-box;
         }
 
     script(type='text/babel').
@@ -132,7 +133,7 @@ filemanager
             path.pop()
             self.historyBackward.push(self.path)
             self.historyForward = []
-            self.path = path.join('/')
+            self.path = path.join('/') === '' ? '/' : path.join('/')
             self.reload()
         }
 
@@ -156,7 +157,7 @@ filemanager
 
         self.reload = () => {
             if (typeof opts.reload === 'function')
-                opts.reload({ path: self.path })
+                opts.reload({ path: self.path + '/' })
         }
 
         self.on('update', () => {
