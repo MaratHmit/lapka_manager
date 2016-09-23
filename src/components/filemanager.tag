@@ -3,28 +3,35 @@
 filemanager
     .filemanager__control-panel
         .form-inline
-            .btn-group
-                button.btn.btn-default(type='button', title='Назад', class='{ disabled: !historyBackward.length }',
-                onclick='{ backward }')
-                    i.fa.fa-arrow-left
-                button.btn.btn-default(type='button', title='Вперед', class='{ disabled: !historyForward.length }',
-                onclick='{ forward }')
-                    i.fa.fa-arrow-right
-                button.btn.btn-default(type='button', title='Вверх', class!='{ disabled: ["", "/"].indexOf(path) > - 1 }',
-                onclick='{ higherFolder }')
-                    i.fa.fa-arrow-up
-                button.btn.btn-default(type='button', title='Обновить', onclick='{ reload }')
-                    i.fa.fa-refresh
-            .btn-group
-                button.btn.btn-default(type='button', title='Загрузка')
-                    i.fa.fa-upload
-                button.btn.btn-default(type='button', title='Новая папка', onclick='{ newFolder }')
-                    i.fa.fa-plus
-            .input-group
-                .input-group-btn
-                    button.btn.btn-default(type='button', title='Домой', onclick='{ goToHome }')
-                        i.fa.fa-home
-                input.form-control(type='text', value='{ path }', readonly)
+            .form-group
+                .btn-group
+                    button.btn.btn-default(type='button', title='Назад', class='{ disabled: !historyBackward.length }',
+                    onclick='{ backward }')
+                        i.fa.fa-arrow-left
+                    button.btn.btn-default(type='button', title='Вперед', class='{ disabled: !historyForward.length }',
+                    onclick='{ forward }')
+                        i.fa.fa-arrow-right
+                    button.btn.btn-default(type='button', title='Вверх', class!='{ disabled: ["", "/"].indexOf(path) > - 1 }',
+                    onclick='{ higherFolder }')
+                        i.fa.fa-arrow-up
+                    button.btn.btn-default(type='button', title='Обновить', onclick='{ reload }')
+                        i.fa.fa-refresh
+            .form-group
+                .btn-group
+                    button.btn.btn-default(type='button', title='Загрузка')
+                        i.fa.fa-upload
+                    button.btn.btn-default(type='button', title='Новая папка', onclick='{ newFolder }')
+                        i.fa.fa-plus
+                    button.btn.btn-default(if='{ selectedCount == 1 }', type='button', title='Переименовать')
+                        i.fa.fa-pencil
+                    button.btn.btn-default(if='{ selectedCount }', type='button', title='Удалить', onclick='{ removeFiles }')
+                        i.fa.fa-trash.text-danger
+            .form-group
+                .input-group
+                    .input-group-btn
+                        button.btn.btn-default(type='button', title='Домой', onclick='{ goToHome }')
+                            i.fa.fa-home
+                    input.form-control(type='text', value='{ path }', readonly)
     .filemanager__body(onclick='{ setUnselectAllFiles }', ontouchmove='{ bodyScroll }')
         loader(if='{ loader }')
         .filemanager__file(each='{ value }', onclick='{ fileClick }', ontouchstart='{ fileTouchStart }',
@@ -35,7 +42,7 @@ filemanager
             .filemanager__filename(title='{ name }') { name }
 
     .filemanager__status-panel
-        span Выделено: { getSelectedFilesCount() }
+        span Выделено: { selectedCount }
 
     style(scoped).
         .filemanager__control-panel {
@@ -309,6 +316,36 @@ filemanager
             })
         }
 
+        self.removeFiles = () => {
+            let params = {path: self.path, files: []}
+            params.files = self.getSelectedFiles().map(i => i.name)
+
+            modals.create('bs-alert', {
+                type: 'modal-danger',
+                title: 'Предупреждение',
+                text: 'Вы точно хотите удалить выделенные элементы?',
+                size: 'modal-sm',
+                buttons: [
+                    {action: 'yes', title: 'Удалить', style: 'btn-danger'},
+                    {action: 'no', title: 'Отмена', style: 'btn-default'},
+                ],
+                callback(action) {
+                    if (action === 'yes') {
+                        API.request({
+                            object: 'ImageFolder',
+                            method: 'Delete',
+                            data: params,
+                            success(response) {
+                                popups.create({title: 'Успешно удалено!', style: 'popup-success'})
+                                self.reload()
+                            }
+                        })
+                    }
+                    this.modalHide()
+                }
+            })
+        }
+
         self.reload = data => {
             self.loader = true
             API.request({
@@ -334,6 +371,10 @@ filemanager
                 }
             })
         }
+
+        self.on('update', () => {
+            self.selectedCount = self.getSelectedFilesCount()
+        })
 
 filemanager-rename-modal
     bs-modal
