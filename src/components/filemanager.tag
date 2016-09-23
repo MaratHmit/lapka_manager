@@ -153,7 +153,8 @@ filemanager
 
             if (clickLength < 300 && clickLength > 0 && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
                 currentClick = 0
-                self.openFolder(e)
+                if (e.item.isDir)
+                    self.openFolder(e)
             }
 
             if (!e.shiftKey) {
@@ -211,7 +212,8 @@ filemanager
 
             if (tapLength < 500 && tapLength > 0) {
                 currentTap = 0
-                self.openFolder(e)
+                if (e.item.isDir)
+                    self.openFolder(e)
             }
 
             item.__lastTapEnd__ = currentTap
