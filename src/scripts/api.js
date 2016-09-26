@@ -90,9 +90,7 @@ var API = {
         if (!params.data)
             throw new Error('"Data" parameter is required')
 
-        if (!params.object)
-            settings.url = `${this.url}Image/?section=${params.section}`
-        else settings.url = `${this.url}${params.object}`
+        settings.url = `${this.url}${params.object}/`
 
         settings.method = 'POST'
         settings.data = params.data

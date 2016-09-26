@@ -17,15 +17,24 @@ filemanager
                     button.btn.btn-default(type='button', title='Обновить', onclick='{ reload }')
                         i.fa.fa-refresh
             .form-group
-                .btn-group
-                    button.btn.btn-default(type='button', title='Загрузка')
-                        i.fa.fa-upload
-                    button.btn.btn-default(type='button', title='Новая папка', onclick='{ newFolder }')
-                        i.fa.fa-plus
-                    button.btn.btn-default(if='{ selectedCount == 1 }', type='button', title='Переименовать')
-                        i.fa.fa-pencil
-                    button.btn.btn-default(if='{ selectedCount }', type='button', title='Удалить', onclick='{ removeFiles }')
-                        i.fa.fa-trash.text-danger
+                .dropdown.pull-right
+                    button.btn.btn-default.dropdown-toggle(data-toggle="dropdown", aria-haspopup="true", type='button', aria-expanded="true")
+                        | Действия&nbsp;
+                        span.caret
+                    ul.dropdown-menu
+                        li: a.btn-file(href='#')
+                            i.fa.fa-fw.fa-upload
+                            input(type='file', onchange='{ uploadFile }', accept='image/*', multiple)
+                            |  Загрузка
+                        li(onclick='{ newFolder }'): a(href='#')
+                            i.fa.fa-fw.fa-plus
+                            |  Новая папка
+                        li(if='{ selectedCount == 1 }', onclick='{ renameFile }'): a(href='#')
+                            i.fa.fa-fw.fa-pencil
+                            |  Переименовать
+                        li(if='{ selectedCount }', onclick='{ removeFiles }'): a(href='#')
+                            i.fa.fa-fw.fa-trash.text-danger
+                            span.text-danger  Удалить
             .form-group
                 .input-group
                     .input-group-btn
@@ -318,6 +327,33 @@ filemanager
             })
         }
 
+        self.uploadFile = e => {
+            var formData = new FormData();
+
+            for (var i = 0; i < e.target.files.length; i++) {
+                formData.append('file' + i, e.target.files[i], e.target.files[i].name)
+            }
+
+            formData.append('path', self.path)
+
+            API.upload({
+                object: 'Image',
+                data: formData,
+                progress(e) {
+                    var percentComplete = Math.ceil(e.loaded / e.total * 100)
+                    self.uploadStatus = percentComplete
+                    self.update()
+                },
+                success(response) {
+                    self.reload()
+                },
+                complete() {
+                    self.uploadStatus = 0
+                    self.update()
+                }
+            })
+        }
+
         self.removeFiles = () => {
             let params = {path: self.path, files: []}
             params.files = self.getSelectedFiles().map(i => i.name)
@@ -344,6 +380,36 @@ filemanager
                         })
                     }
                     this.modalHide()
+                }
+            })
+        }
+
+        self.renameFile = () => {
+            let item = self.getSelectedFiles()[0]
+            modals.create('filemanager-rename-modal', {
+                type: 'modal-primary',
+                title: item.isDir
+                    ? 'Переименовать папку'
+                    : 'Переименовать файл',
+                item: {...item},
+                submit() {
+                    let _this = this
+                    let params = {
+                        cmd: 'rename',
+                        name: item.name,
+                        newName: _this.item.name,
+                        path: self.path
+                    }
+
+                    API.request({
+                        object: 'ImageFolder',
+                        method: 'Save',
+                        data: params,
+                        success(response) {
+                            _this.modalHide()
+                            self.reload()
+                        }
+                    })
                 }
             })
         }
@@ -386,7 +452,7 @@ filemanager-rename-modal
             form(onchange='{ change }', onkeyup='{ change }')
                 .form-group(class='{ has-error: error.name }')
                     label.control-label Имя
-                    input.form-control(name='name', type='text')
+                    input.form-control(name='name', type='text', value='{ item.name }')
                     .help-block { error.name }
         #{'yield'}(to='footer')
             button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Закрыть
