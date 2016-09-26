@@ -1,7 +1,7 @@
 | import 'components/ckeditor.tag'
 | import 'components/loader.tag'
 
-| import 'pages/images/image-select.tag'
+// | import 'pages/images/image-select.tag'
 | import 'pages/products/products/product-edit-additional-categories.tag'
 | import 'pages/products/products/product-edit-discounts.tag'
 | import 'pages/products/groups/filters-select-modal.tag'

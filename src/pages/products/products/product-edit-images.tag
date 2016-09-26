@@ -1,5 +1,5 @@
 | import 'components/datatable.tag'
-| import 'pages/images/images-gallery-modal.tag'
+//| import 'pages/images/images-gallery-modal.tag'
 
 
 product-edit-images
