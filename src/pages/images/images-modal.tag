@@ -8,6 +8,11 @@ images-modal
             button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Закрыть
             button(onclick='{ parent.opts.submit.bind(this) }', type='button', class='btn btn-primary btn-embossed') Сохранить
 
+    style(scoped).
+        :scope .filemanager__body {
+            min-height: calc(100vh - 315px) !important;
+        }
+
     script(type='text/babel').
         let self = this
 
