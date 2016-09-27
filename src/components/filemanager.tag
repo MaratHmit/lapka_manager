@@ -41,10 +41,10 @@ filemanager
                         button.btn.btn-default(type='button', title='Домой', onclick='{ goToHome }')
                             i.fa.fa-home
                     input.form-control(type='text', value='{ path }', readonly)
-    .filemanager__body(onclick='{ setUnselectAllFiles }', ontouchmove='{ bodyScroll }')
+    .filemanager__body(onclick='{ setUnselectAllItems }', ontouchmove='{ bodyScroll }')
         loader(if='{ loader }', text='{ uploadStatus ? uploadStatus + "%" : "" }')
-        .filemanager__file(each='{ value }', onclick='{ fileClick }', ontouchstart='{ fileTouchStart }',
-        ontouchend='{ fileTouchEnd }', class='{ filemanager__file_selected: __selected__ }')
+        .filemanager__file(each='{ value }', onclick='{ itemClick }', ontouchstart='{ itemTouchStart }',
+        ontouchend='{ itemTouchEnd }', class='{ filemanager__file_selected: __selected__ }')
             .filemanager__file-icon(if='{ isDir }')
                 i.fa.fa-folder-o.fa-4x
             .filemanager__file-icon(if='{ !isDir }', style="background-image: url({ urlPreview })")
@@ -153,7 +153,7 @@ filemanager
         }
 
         let lastSelectedRowIndex = 0
-        self.fileClick = e => {
+        self.itemClick = e => {
             e.stopPropagation()
 
             let currentSelectedRowIndex = self.value.indexOf(e.item)
@@ -168,14 +168,14 @@ filemanager
 
             if (!e.shiftKey) {
                 if (!e.ctrlKey && !e.metaKey)
-                    self.selectOneFile(e)
+                    self.selectOneItem(e)
                 else
-                    self.setFileSelected(e.item, !e.item.__selected__)
+                    self.setItemSelected(e.item, !e.item.__selected__)
             } else {
                 if (currentSelectedRowIndex >= lastSelectedRowIndex)
-                    self.selectRangeFiles(lastSelectedRowIndex, currentSelectedRowIndex)
+                    self.selectRangeItems(lastSelectedRowIndex, currentSelectedRowIndex)
                 else
-                    self.selectRangeFiles(currentSelectedRowIndex, lastSelectedRowIndex)
+                    self.selectRangeItems(currentSelectedRowIndex, lastSelectedRowIndex)
             }
 
             if (!e.shiftKey)
@@ -190,7 +190,7 @@ filemanager
             return true
         }
 
-        self.fileTouchStart = e => {
+        self.itemTouchStart = e => {
             var item = e.item
             item.__tapLong__ = false
             bodyScroll = false
@@ -198,7 +198,7 @@ filemanager
 
             item.__tapStartTimer__ = setTimeout(() => {
                 if (!bodyScroll) {
-                    self.setFileSelected(item, !item.__selected__)
+                    self.setItemSelected(item, !item.__selected__)
                     item.__tapLong__ = true
                     self.update()
                 }
@@ -207,7 +207,7 @@ filemanager
             return true
         }
 
-        self.fileTouchEnd = e => {
+        self.itemTouchEnd = e => {
             var item = e.item
             var currentTap = Date.now()
             var tapLength = currentTap - (item.__lastTapEnd__ || 0)
@@ -216,7 +216,7 @@ filemanager
                 clearTimeout(item.__tapStartTimer__)
 
             if (!bodyScroll && !item.__tapLong__) {
-                self.selectOneFile(e)
+                self.selectOneItem(e)
             }
 
             if (tapLength < 500 && tapLength > 0) {
@@ -259,44 +259,57 @@ filemanager
             self.reload()
         }
 
-        self.setFileSelected = (file, value) => {
+        self.setItemSelected = (file, value) => {
             file.__selected__ = value
         }
 
-        self.selectOneFile = e => {
+        self.selectOneItem = e => {
             self.value.forEach(item => {
-                self.setFileSelected(item, false)
+                self.setItemSelected(item, false)
             })
-            self.setFileSelected(e.item, true)
+            self.setItemSelected(e.item, true)
         }
 
-        self.selectRangeFiles = function (start, end) {
+        self.selectRangeItems = function (start, end) {
             for (var i = 0; i < self.value.length; i++) {
                 if (i >= start && i <= end)
-                    self.setFileSelected(self.value[i], true)
+                    self.setItemSelected(self.value[i], true)
                 else
-                    self.setFileSelected(self.value[i], false)
+                    self.setItemSelected(self.value[i], false)
             }
             self.update()
         }
 
+        self.getSelectedDirectories = () => {
+            return self.value.filter(item => {
+                return item.__selected__ == true && item.isDir
+            })
+        }
+
         self.getSelectedFiles = () => {
+            return self.value.filter(item => {
+                return item.__selected__ == true && !item.isDir
+            })
+        }
+
+
+        self.getSelectedItems = () => {
             return self.value.filter(item => {
                 return item.__selected__ == true
             })
         }
 
-        self.getUnselectedFiles = () => {
+        self.getUnselectedItems = () => {
             return self.value.filter(item => {
                 return !item.__selected__
             })
         }
 
-        self.getSelectedFilesCount = () => {
-            return self.getSelectedFiles().length
+        self.getSelectedItemsCount = () => {
+            return self.getSelectedItems().length
         }
 
-        self.setUnselectAllFiles = () => {
+        self.setUnselectAllItems = () => {
             return self.value.map(item => {
                 item.__selected__ = false
             })
@@ -358,7 +371,7 @@ filemanager
 
         self.removeFiles = () => {
             let params = {path: self.path, files: []}
-            params.files = self.getSelectedFiles().map(i => i.name)
+            params.files = self.getSelectedItems().map(i => i.name)
 
             modals.create('bs-alert', {
                 type: 'modal-danger',
@@ -387,7 +400,7 @@ filemanager
         }
 
         self.renameFile = () => {
-            let item = self.getSelectedFiles()[0]
+            let item = self.getSelectedItems()[0]
             modals.create('filemanager-rename-modal', {
                 type: 'modal-primary',
                 title: item.isDir
@@ -443,7 +456,7 @@ filemanager
         }
 
         self.on('update', () => {
-            self.selectedCount = self.getSelectedFilesCount()
+            self.selectedCount = self.getSelectedItemsCount()
         })
 
 filemanager-rename-modal

@@ -15,8 +15,9 @@ brand-edit
                 i.fa.fa-refresh
         .h4 { item.name || 'Редактирование бренда' }
         ul.nav.nav-tabs.m-b-2
-            li.active #[a(data-toggle='tab', href='#brand-edit-home') Основная информация]
-            li #[a(data-toggle='tab', href='#brand-edit-seo') SEO]
+            li.active: a(data-toggle='tab', href='#brand-edit-home') Основная информация
+            li: a(data-toggle='tab', href='#brand-edit-content') Полное описание
+            li: a(data-toggle='tab', href='#brand-edit-seo') SEO
         form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
             .tab-content
                 #brand-edit-home.tab-pane.fade.in.active
@@ -24,7 +25,7 @@ brand-edit
                         .col-md-2
                             .form-group
                                 .well.well-sm
-                                    image-select(name='imageFile', section='shopbrand', alt='0', size='256', value='{ item.imageFile }')
+                                    image-select(name='imagePath', alt='0', size='256', value='{ item.imagePath }')
                         .col-md-10
                             .row
                                 .col-md-12
@@ -32,29 +33,37 @@ brand-edit
                                         label.control-label Наименование
                                         input.form-control(name='name', type='text', value='{ item.name }')
                                         .help-block { error.name }
+                            .row
                                 .col-md-12
                                     .form-group
                                         label.control-label URL страницы
-                                        input.form-control(name='code', type='text', value='{ item.code }')
+                                        input.form-control(name='url', type='text', value='{ item.url }')
                     .row
                         .col-md-12
                             .form-group
-                                label.control-label Краткое описание
-                                ckeditor(name='description', value='{ item.description }')
+                                label.control-label Описание
+                                textarea.form-control(rows='5', name='description',
+                                style='min-width: 100%; max-width: 100%;', value='{ item.description }')
+
+                #brand-edit-content.tab-pane.fade
+                    .row
+                        .col-md-12
+                            .form-group
+                                ckeditor(name='content', value='{ item.content }')
 
                 #brand-edit-seo.tab-pane.fade
                     .row
                         .col-md-12
                             .form-group
                                 label.control-label Заголовок
-                                input.form-control(name='seoHeader', type='text', value='{ item.seoHeader }')
+                                input.form-control(name='metaTitle', type='text', value='{ item.metaTitle }')
                             .form-group
                                 label.control-label Ключевые слова
-                                input.form-control(name='seoKeywords', type='text', value='{ item.seoKeywords }')
+                                input.form-control(name='metaKeywords', type='text', value='{ item.metaKeywords }')
                             .form-group
                                 label.control-label Описание
-                                textarea.form-control(rows='5', name='seoDescription',
-                                    style='min-width: 100%; max-width: 100%;', value='{ item.seoDescription }')
+                                textarea.form-control(rows='5', name='metaDescription',
+                                    style='min-width: 100%; max-width: 100%;', value='{ item.metaDescription }')
     script(type='text/babel').
         var self = this
 

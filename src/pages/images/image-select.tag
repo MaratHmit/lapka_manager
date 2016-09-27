@@ -82,7 +82,7 @@ image-select
             },
             set(value) {
                 self.value = value
-                self.valueAbsolute = `${app.config.projectURL}${value}`
+                self.valueAbsolute = app.getImageUrl(value)
             }
         })
 
@@ -96,9 +96,8 @@ image-select
                     let path = filemanager.path
 
                     if (items.length) {
-                        console.log(path, items[0].name)
-                        self.value = app.getImageRelativeUrl(path, items[0].name)
-                        self.valueAbsolute = `${app.config.projectURL}${self.value}`
+                        self.value = app.getImageRelativeUrl(path, items[0].name, '')
+                        self.valueAbsolute = app.getImageUrl(path, items[0].name)
                         changeEvent()
                         self.update()
                         this.modalHide()
@@ -109,7 +108,6 @@ image-select
 
         self.remove = () => {
             self.value = ''
-            self.valueAbsolute = ''
             changeEvent()
         }
 
