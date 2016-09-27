@@ -1,9 +1,11 @@
 | import 'components/ckeditor.tag'
 | import 'components/loader.tag'
+| import 'pages/images/images-modal.tag'
+| import 'pages/images/image-select.tag'
 
 brand-edit
     loader(if='{ loader }')
-    virtual(hide='{ loader }')
+    div
         .btn-group
             a.btn.btn-default(href='#products/brands') #[i.fa.fa-chevron-left]
             button.btn.btn-default(if='{ checkPermission("products", "0010") }', onclick='{ submit }', type='button')
@@ -102,7 +104,7 @@ brand-edit
                 method: 'Info',
                 data: params,
                 success(response) {
-                    self.item = response
+                    self.item = response || {}
                     self.loader = false
                     self.update()
                 },

@@ -103,12 +103,25 @@ app.restoreSession = user => {
     })
 }
 
-app.getImageUrl = function (name, section, lang = 'rus') {
-    return `${app.config.projectURL}images/${lang}/${section}/${name}`
+app.getImageRelativeUrl = function (path, name) {
+    if (name)
+        return `/images/${path}/${name}`
+    else
+        return `/images/${path}`
 }
 
-app.getImagePreviewURL = function (name, section, size = 64, lang = 'rus') {
-    return `${app.config.projectURL}lib/image.php?size=${size}&img=images/${lang}/${section}/${name}`
+app.getImageUrl = function (path, name) {
+    if (name)
+        return `${app.config.projectURL}images/${path}/${name}`
+    else
+        return `${app.config.projectURL}images/${path}`
+}
+
+app.getImagePreviewURL = function (path, name, size = 64) {
+    if (name)
+        return `${app.config.projectURL}lib/image.php?size=${size}&img=images/${path}/${name}`
+    else
+        return `${app.config.projectURL}lib/image.php?size=${size}&img=images/${path}`
 }
 
 app.insertText = function () {

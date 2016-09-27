@@ -10,8 +10,9 @@ brands-list
     dblclick='{ permission(brandOpen, "products", "1000") }')
         #{'yield'}(to='body')
             datatable-cell(name='id') { row.id }
+            datatable-cell(name='imageUrlPreview')
+                img(width='32px', height='32px', src='{ row.imageUrlPreview }')
             datatable-cell(name='name') { row.name }
-            datatable-cell(name='code') { row.code }
 
     style(scoped).
         .table td {
@@ -27,8 +28,8 @@ brands-list
 
         self.cols = [
             {name: 'id', value: '#'},
+            {name: 'imageUrlPreview', value: 'Картинка'},
             {name: 'name', value: 'Наименование' },
-            {name: 'code', value: 'URL' },
         ]
 
         self.add = e => {

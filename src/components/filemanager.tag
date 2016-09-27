@@ -42,7 +42,7 @@ filemanager
                             i.fa.fa-home
                     input.form-control(type='text', value='{ path }', readonly)
     .filemanager__body(onclick='{ setUnselectAllFiles }', ontouchmove='{ bodyScroll }')
-        loader(if='{ loader }')
+        loader(if='{ loader }', text='{ uploadStatus ? uploadStatus + "%" : "" }')
         .filemanager__file(each='{ value }', onclick='{ fileClick }', ontouchstart='{ fileTouchStart }',
         ontouchend='{ fileTouchEnd }', class='{ filemanager__file_selected: __selected__ }')
             .filemanager__file-icon(if='{ isDir }')
@@ -328,7 +328,8 @@ filemanager
         }
 
         self.uploadFile = e => {
-            var formData = new FormData();
+            self.loader = true
+            let formData = new FormData()
 
             for (var i = 0; i < e.target.files.length; i++) {
                 formData.append('file' + i, e.target.files[i], e.target.files[i].name)
@@ -348,7 +349,8 @@ filemanager
                     self.reload()
                 },
                 complete() {
-                    self.uploadStatus = 0
+                    self.loader = false
+                    self.uploadStatus = undefined
                     self.update()
                 }
             })
