@@ -22,7 +22,7 @@ filemanager
                         | Действия&nbsp;
                         span.caret
                     ul.dropdown-menu
-                        li: a.btn-file(href='#')
+                        li: a.btn-file
                             i.fa.fa-fw.fa-upload
                             input(type='file', onchange='{ uploadFile }', accept='image/*', multiple)
                             |  Загрузка
