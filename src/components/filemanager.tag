@@ -41,7 +41,7 @@ filemanager
                         button.btn.btn-default(type='button', title='Домой', onclick='{ goToHome }')
                             i.fa.fa-home
                     input.form-control(type='text', value='{ path }', readonly)
-    .filemanager__body(onclick='{ setUnselectAllItems }', ontouchmove='{ bodyScroll }')
+    .filemanager__body(onclick='{ unselectAllItems }', ontouchmove='{ bodyScroll }')
         loader(if='{ loader }', text='{ uploadStatus ? uploadStatus + "%" : "" }')
         .filemanager__file(each='{ value }', onclick='{ itemClick }', ontouchstart='{ itemTouchStart }',
         ontouchend='{ itemTouchEnd }', class='{ filemanager__file_selected: __selected__ }')
@@ -154,7 +154,7 @@ filemanager
 
         let lastSelectedRowIndex = 0
         self.itemClick = e => {
-            e.stopPropagation()
+            //e.stopPropagation()
 
             let currentSelectedRowIndex = self.value.indexOf(e.item)
             var currentClick = Date.now()
@@ -307,6 +307,12 @@ filemanager
 
         self.getSelectedItemsCount = () => {
             return self.getSelectedItems().length
+        }
+
+
+        self.unselectAllItems = e => {
+            if (e.target.classList.contains('filemanager__body'))
+                self.setUnselectAllItems()
         }
 
         self.setUnselectAllItems = () => {
