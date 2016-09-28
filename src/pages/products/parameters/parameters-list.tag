@@ -1,7 +1,6 @@
 | import 'components/catalog.tag'
 | import 'pages/products/parameters/parameter-new-modal.tag'
 
-
 parameters-list
     catalog(object='Feature', cols='{ cols }', search='true', reorder='true', handlers='{ handlers }', reload='true', store='parameters-list',
     add='{ permission(add, "products", "0100") }',
@@ -12,6 +11,7 @@ parameters-list
             datatable-cell(name='name') { row.name }
             datatable-cell(name='measure') { row.measure }
             datatable-cell(name='type') { handlers.featureName(row.type) }
+            datatable-cell(name='target') { row.target ? 'Модификация' : 'Характеристика' }
             datatable-cell(name='sort') { row.sort }
             datatable-cell(name='nameGroup') { row.nameGroup }
 
@@ -72,6 +72,7 @@ parameters-list
             {name: 'name', value: 'Наименование'},
             {name: 'measure', value: 'Ед. изм.'},
             {name: 'type', value: 'Тип параметра'},
+            {name: 'target', value: 'Назначение'},
             {name: 'sort', value: 'Индекс'},
             {name: 'nameGroup', value: 'Группа параметра'},
         ]
