@@ -30,7 +30,7 @@ parameter-edit
                     .col-md-3
                         .form-group(class='{ has-error: error.type }')
                             label.control-label Тип переменной
-                            select.form-control(name='type', value='{ item.type }')
+                            select.form-control(name='type', value='{ item.type }', disabled='{ item.target == 1 }')
                                 option(each='{ feature, i in featuresTypes }', value='{ feature.code }') { feature.name }
                             .help-block { error.type }
                     .col-md-3
