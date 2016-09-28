@@ -57,7 +57,6 @@ product-edit-images
                     let path = filemanager.path
 
                     items.forEach(item => {
-                        console.log(item)
                         self.value.push({
                             imagePath: `${path}/${item.name}`
                         })
