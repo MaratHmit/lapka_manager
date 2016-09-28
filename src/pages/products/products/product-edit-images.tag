@@ -59,7 +59,7 @@ product-edit-images
                     items.forEach(item => {
                         console.log(item)
                         self.value.push({
-                            imagePath: item.name
+                            imagePath: `${path}/${item.name}`
                         })
                     })
 
