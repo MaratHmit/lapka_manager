@@ -63,8 +63,8 @@ group-edit
                         label.hidden-xs &nbsp;
                         .checkbox
                             label
-                                input(name='isVisible', type='checkbox', checked='{ item.isVisible }')
-                                | Отображать на сайте
+                                input(name='isActive', type='checkbox', checked='{ item.isActive }')
+                                | Отображать в магазине
 
                 #group-edit-childs.tab-pane.fade(show='{ !isMulti }')
                     catalog-static(name='childs', rows='{ item.childs }', cols='{ childsCols }', add='{ addChild }',
