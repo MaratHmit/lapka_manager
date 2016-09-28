@@ -10,7 +10,7 @@
 
 group-edit
     loader(if='{ loader }')
-    virtual(hide='{ loader }')
+    div
         .btn-group
             a.btn.btn-default(href='#products/categories') #[i.fa.fa-chevron-left]
             button.btn.btn-default(if='{ checkPermission("products", "0010") }',
@@ -23,61 +23,49 @@ group-edit
         ul.nav.nav-tabs.m-b-2
             li(if='{ !isMulti }', class='{ active: !isMulti }') #[a(data-toggle='tab', href='#group-edit-home') Основная информация]
             li(if='{ !isMulti }') #[a(data-toggle='tab', href='#group-edit-childs') Подразделы]
-            li(if='{ !isMulti }') #[a(data-toggle='tab', href='#group-edit-full-text') Полное описание]
             li(class='{ active: isMulti }') #[a(data-toggle='tab', href='#group-edit-images') Картинки]
-            li #[a(data-toggle='tab', href='#group-edit-related-categories') Связанные категории]
-            li #[a(data-toggle='tab', href='#group-edit-parameters-filters') Фильтры параметров]
             li #[a(data-toggle='tab', href='#group-edit-discounts') Скидки]
             li #[a(data-toggle='tab', href='#group-edit-seo') SEO]
         form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
             .tab-content
                 #group-edit-home.tab-pane.fade(show='{ !isMulti }', class='{ "in active": !isMulti }')
                     .row
-                        .col-md-2
-                            .form-group
-                                .well.well-sm
-                                    image-select(name='picture', section='shopgroup', alt='0', size='256', value='{ item.picture }')
-
-                        .col-md-10
-                            .row
-                                .col-md-6
-                                    .form-group(class='{ has-error: error.name }')
-                                        label.control-label Наименование
-                                        input.form-control(name='name', type='text', value='{ item.name }')
-                                        .help-block { error.name }
-                                .col-md-6
-                                    .form-group
-                                        label.control-label Родитель
-                                        .input-group
-                                            input.form-control(name='nameGroup', value='{ item.nameParent }', readonly='{ true }')
-                                            span.input-group-addon.text-primary(onclick='{ selectGroup }')
-                                                i.fa.fa-plus
-                                            span.input-group-addon.text-primary(onclick='{ removeGroup }')
-                                                i.fa.fa-times
-                            .row
-                                .col-md-6
-                                    .form-group
-                                        label.control-label URL страницы
-                                        input.form-control(name='codeGr', type='text', value='{ item.codeGr }')
-                                .col-md-6
-                                    .form-group
-                                        label.control-label Группа модификаций по умолчанию
-                                        select.form-control(name='idModificationGroupDef', value='{ item.idModificationGroupDef }')
-                                            option(value='')
-                                            option(each='{ item.modificationsGroups }', value='{ id }',
-                                            selected='{ id == item.idModificationGroupDef }', no-reorder) { name }
-                            .row
-                                .col-md-12
-                                    label.hidden-xs &nbsp;
-                                    .checkbox
-                                        label
-                                            input(name='active', type='checkbox', checked='{ item.active == "Y" }')
-                                            | Отображать на сайте
+                        .col-md-6: .form-group(class='{ has-error: error.name }')
+                            label.control-label Наименование
+                            input.form-control(name='name', type='text', value='{ item.name }')
+                            .help-block { error.name }
+                        .col-md-6: .form-group
+                            label.control-label Родитель
+                            .input-group
+                                input.form-control(name='nameParent', value='{ item.nameParent }', readonly='{ true }')
+                                span.input-group-addon.text-primary(onclick='{ selectGroup }')
+                                    i.fa.fa-plus
+                                span.input-group-addon.text-primary(onclick='{ removeGroup }')
+                                    i.fa.fa-times
                     .row
-                        .col-md-12
-                            .form-group
-                                label.control-label Краткое описание
-                                ckeditor(name='commentary', value='{ item.commentary }')
+                        .col-md-6: .form-group
+                            label.control-label URL страницы
+                            input.form-control(name='url', type='text', value='{ item.url }')
+                        .col-md-6: .form-group
+                            label.control-label Тип товара
+                            select.form-control(name='idType', value='{ item.idType }')
+                                option(value='')
+                                option(each='{ item.productTypes }', value='{ id }',
+                                selected='{ id == item.productTypes }', no-reorder) { name }
+                    .row: .col-md-12: .form-group
+                        label.control-label Краткое описание
+                        textarea.form-control(rows='5', name='description', style='min-width: 100%; max-width: 100%;',
+                        value='{ item.description }')
+                    .row: .col-md-12: .form-group
+                        label.control-label Описание
+                        ckeditor(name='content', value='{ item.content }')
+                    .row: .col-md-12
+                        label.hidden-xs &nbsp;
+                        .checkbox
+                            label
+                                input(name='active', type='checkbox', checked='{ item.active == "Y" }')
+                                | Отображать на сайте
+
                 #group-edit-childs.tab-pane.fade(show='{ !isMulti }')
                     catalog-static(name='childs', rows='{ item.childs }', cols='{ childsCols }', add='{ addChild }',
                     reorder='true', dblclick='{ openGroup }')
@@ -86,50 +74,29 @@ group-edit
                             datatable-cell(name='name') { row.name }
                             datatable-cell(name='position') { parseInt(row.position) || 0 }
 
-                #group-edit-full-text.tab-pane.fade(show='{ !isMulti }')
-                    .row
-                        .col-md-12
-                            .form-group
-                                label.control-label Полный текст
-                                ckeditor(name='footertext', value='{ item.footertext }')
-
                 #group-edit-images.tab-pane.fade(class='{ "in active": isMulti }')
                     product-edit-images(name='images', value='{ item.images }', section='shopgroup')
-
-                #group-edit-related-categories.tab-pane.fade
-                    product-edit-additional-categories(name='linksGroups', value='{ item.linksGroups }')
-
-                #group-edit-parameters-filters.tab-pane.fade
-                    catalog-static(name='parametersFilters', add='{ addParametersFilters }', reorder='true',
-                    cols='{ parametersFiltersCols }', rows='{ item.parametersFilters }', handlers='{ parametersFiltersHandlers }')
-                        #{'yield'}(to='body')
-                            datatable-cell(name='isActive')
-                                i.fa.fa-fw(onclick='{ handlers.toggleCheckbox }',
-                                class='{row.isActive ? "fa-check-square-o" : "fa-square-o" }')
-                            datatable-cell(name='name') { row.name }
-                            datatable-cell(name='sortIndex') { row.sortIndex }
 
                 #group-edit-discounts.tab-pane.fade
                     product-edit-discounts(name='discounts', value='{ item.discounts }')
 
                 #group-edit-seo.tab-pane.fade
-                    .row
-                        .col-md-12
-                            .form-group
-                                button.btn.btn-primary.btn-sm(each='{ seoTags }', title='{ note }', type='button',
-                                    onclick='{ seoTag.insert }', no-reorder) { name }
-                            .form-group
-                                label.control-label Заголовок
-                                input.form-control(name='title', type='text', onfocus='{ seoTag.focus }',
-                                    value='{ item.title }')
-                            .form-group
-                                label.control-label Ключевые слова
-                                input.form-control(name='keywords', type='text',
-                                    onfocus='{ seoTag.focus }', value='{ item.keywords }')
-                            .form-group
-                                label.control-label Описание
-                                textarea.form-control(rows='5', name='description', onfocus='{ seoTag.focus }',
-                                    style='min-width: 100%; max-width: 100%;', value='{ item.description }')
+                    .row: .col-md-12
+                        .form-group
+                            button.btn.btn-primary.btn-sm(each='{ seoTags }', title='{ note }', type='button',
+                                onclick='{ seoTag.insert }', no-reorder) { name }
+                        .form-group
+                            label.control-label Заголовок
+                            input.form-control(name='metaTitle', type='text', onfocus='{ seoTag.focus }',
+                                value='{ item.metaTitle }')
+                        .form-group
+                            label.control-label Ключевые слова
+                            input.form-control(name='metaKeywords', type='text',
+                                onfocus='{ seoTag.focus }', value='{ item.metaKeywords }')
+                        .form-group
+                            label.control-label Описание
+                            textarea.form-control(rows='5', name='metaDescription', onfocus='{ seoTag.focus }',
+                                style='min-width: 100%; max-width: 100%;', value='{ item.metaDescription }')
     script(type='text/babel').
         var self = this
 
@@ -137,12 +104,6 @@ group-edit
         self.loader = false
         self.error = false
         self.seoTags = []
-
-        self.parametersFiltersCols = [
-            {name: 'isActive', value: '', width: '40px'},
-            {name: 'name', value: 'Наименование'},
-            {name: 'sortIndex', value: 'Индекс'}
-        ]
 
         self.childsCols = [
             {name: 'id', value: '#'},
@@ -209,7 +170,7 @@ group-edit
                     let items = this.tags['catalog-tree'].tags.treeview.getSelectedNodes()
 
                     if (items.length && items[0].id != self.item.id) {
-                        self.item.upid = items[0].id
+                        self.item.idParent = items[0].id
                         self.item.nameParent = items[0].name
                         self.update()
                         this.modalHide()
@@ -242,32 +203,6 @@ group-edit
             })
         }
 
-        self.addParametersFilters = () => {
-            modals.create('filters-select-modal', {
-                type: 'modal-primary',
-                size: 'modal-lg',
-                submit() {
-                    self.item.parametersFilters = self.item.parametersFilters || []
-
-                    let items = this.tags.catalog.tags.datatable.getSelectedRows()
-                    let ids = self.item.parametersFilters .map(item => item.id)
-
-                    items.forEach(item => {
-                        if (ids.indexOf(item.id) === -1)
-                            self.item.parametersFilters.push(item)
-                    })
-
-                    self.update()
-                    this.modalHide()
-                }
-            })
-        }
-
-        self.parametersFiltersHandlers = {
-            toggleCheckbox(e) {
-                this.row.isActive = !this.row.isActive
-            },
-        }
 
         self.removeGroup = e => {
             self.item.upid = null
@@ -348,21 +283,6 @@ group-edit
                     method: 'Sort',
                     data: params,
                     notFoundRedirect: false
-                })
-
-                self.update()
-            })
-            self.tags.parametersFilters.tags.datatable.on('reorder-end', (newIndex, oldIndex) => {
-                let {current, limit} = self.tags.childs.pages
-                let offset = current > 0 ? (current - 1) * limit : 0
-                self.tags.parametersFilters.value.splice(offset + newIndex, 0, self.tags.parametersFilters.value.splice(offset + oldIndex, 1)[0])
-                var temp = self.tags.parametersFilters.value
-                self.rows = []
-                self.update()
-                self.tags.parametersFilters.value = temp
-
-                self.tags.parametersFilters.items.forEach((item, sort) => {
-                    item.sortIndex = sort + offset
                 })
 
                 self.update()
