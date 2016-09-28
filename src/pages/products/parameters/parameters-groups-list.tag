@@ -12,7 +12,6 @@ parameters-groups-list
             datatable-cell(name='id') { row.id }
             datatable-cell(name='name') { row.name }
             datatable-cell(name='sort') { row.sort }
-            datatable-cell(name='description') { row.description }
 
     script(type='text/babel').
         var self = this
@@ -25,7 +24,6 @@ parameters-groups-list
             {name: 'id', value: '#'},
             {name: 'name', value: 'Наименование'},
             {name: 'sort', value: 'Индекс'},
-            {name: 'description', value: 'Описание'},
         ]
 
         self.addEdit = e => {
