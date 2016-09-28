@@ -71,7 +71,7 @@ groups-list
                         }
 
                         if (id)
-                            params = {name: _this.name.value, upid: id, sortIndex}
+                            params = {name: _this.name.value, idParent: id, sortIndex}
                         else
                             params = {name: _this.name.value, sortIndex}
 

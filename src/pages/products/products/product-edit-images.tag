@@ -9,9 +9,9 @@ product-edit-images
             catalog='{ catalog }', upload='{ upload }')
                 #{'yield'}(to='toolbar')
                     .form-group(if='{ checkPermission("images", "1000") }')
-                        button.btn.btn-success(onclick='{ opts.catalog }', type='button')
-                            i.fa.fa-picture-o
-                            |  Каталог
+                        button.btn.btn-primary(onclick='{ opts.catalog }', type='button')
+                            i.fa.fa-plus
+                            |  Добавить
                 #{'yield'}(to='body')
                     datatable-cell(name='')
                         img(src!='{ app.getImageUrl("/"+row.imagePath) }', height='64px', width='64px')
@@ -58,7 +58,7 @@ product-edit-images
 
                     items.forEach(item => {
                         self.value.push({
-                            imagePath: `${path}/${item.name}`
+                            imagePath: app.clearRelativeLink(`${path}/${item.name}`)
                         })
                     })
 
