@@ -5,7 +5,7 @@
 
 parameter-edit
     loader(if='{ loader }')
-    virtual(hide='{ loader }')
+    div
         .btn-group
             a.btn.btn-default(href='#products/parameters') #[i.fa.fa-chevron-left]
             button.btn.btn-default(if='{ checkPermission("products", "0010") }', onclick='{ submit }', type='button')
@@ -36,7 +36,10 @@ parameter-edit
                     .col-md-3
                         .form-group
                             label.control-label Единицы измерения
-                            input.form-control(name='measure', type='text', value='{ item.measure }')
+                            select.form-control(name='idMeasure', value='{ item.idMeasure }')
+                                option(value='')
+                                option(each='{ item.measure }', value='{ id }',
+                                selected='{ id == item.idMeasure }', no-reorder) { name }
                 .row
                     .col-md-3
                         .form-group
@@ -45,6 +48,12 @@ parameter-edit
                                 input.form-control(name='nameGroup', type='text', value='{ item.nameGroup }', readonly)
                                 span.input-group-addon(onclick='{ selectGroup }')
                                     i.fa.fa-list
+                    .col-md-3
+                        .form-group
+                            label.control-label Назначение
+                            select.form-control(name='target', value='{ item.target }')
+                                option(value=0) Характеристика
+                                option(value=1) Модификация
                 .row
                     .col-md-12
                         .form-group
@@ -75,7 +84,7 @@ parameter-edit
                         datatable-cell(name='value')
                             i.color(if='{ parent.parent.parent.item.type === "colorlist" }', style='background-color: \#{ row.color };')
                             | { row.value }
-            .row
+            //.row
                 .col-md-12
                     .form-group
                         .checkbox
@@ -100,6 +109,10 @@ parameter-edit
         self.mixin('permissions')
         self.mixin('change')
 
+        self.afterChange = e => {
+
+        }
+
         self.rules = {
             name: 'empty',
             type: 'empty'
@@ -109,6 +122,11 @@ parameter-edit
             let name = e.target.name
             delete self.error[name]
             self.error = {...self.error, ...self.validation.validate(self.item, self.rules, name)}
+
+            if (!name) return
+
+            if (name === 'target' && self.item[name] == 1)
+                self.item.type = 'list'
         }
 
         self.featuresValuesCols = [
@@ -200,7 +218,7 @@ parameter-edit
                     let items = this.tags.catalog.tags.datatable.getSelectedRows()
 
                     if (items.length) {
-                        self.item.idFeatureGroup = items[0].id
+                        self.item.idGroup = items[0].id
                         self.item.nameGroup = items[0].name
                         self.update()
                         this.modalHide()
