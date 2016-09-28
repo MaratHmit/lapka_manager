@@ -25,8 +25,10 @@ parameter-edit
                             .help-block { error.name }
                     .col-md-3
                         .form-group
-                            label.control-label Подсказка
-                            input.form-control(name='placeholder', type='text', value='{ item.placeholder }')
+                            label.control-label Назначение
+                            select.form-control(name='target', value='{ item.target }')
+                                option(value=0) Характеристика
+                                option(value=1) Модификация
                     .col-md-3
                         .form-group(class='{ has-error: error.type }')
                             label.control-label Тип переменной
@@ -48,12 +50,6 @@ parameter-edit
                                 input.form-control(name='nameGroup', type='text', value='{ item.nameGroup }', readonly)
                                 span.input-group-addon(onclick='{ selectGroup }')
                                     i.fa.fa-list
-                    .col-md-3
-                        .form-group
-                            label.control-label Назначение
-                            select.form-control(name='target', value='{ item.target }')
-                                option(value=0) Характеристика
-                                option(value=1) Модификация
                 .row
                     .col-md-12
                         .form-group
