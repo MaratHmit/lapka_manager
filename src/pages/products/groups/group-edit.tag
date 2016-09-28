@@ -59,11 +59,11 @@ group-edit
                     .row: .col-md-12: .form-group
                         label.control-label Описание
                         ckeditor(name='content', value='{ item.content }')
-                    .row: .col-md-12
+                    .row: .col-md-12: .form-group
                         label.hidden-xs &nbsp;
                         .checkbox
                             label
-                                input(name='active', type='checkbox', checked='{ item.active == "Y" }')
+                                input(name='isVisible', type='checkbox', checked='{ item.isVisible }')
                                 | Отображать на сайте
 
                 #group-edit-childs.tab-pane.fade(show='{ !isMulti }')
