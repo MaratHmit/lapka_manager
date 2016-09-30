@@ -19,15 +19,15 @@ comment-edit
                         label.control-label Дата
                         datetime-picker.form-control(name='date', format='YYYY-MM-DD', value='{ item.date }')
                 .col-md-4
-                    .form-group(class='{ has-error: error.idPrice }')
+                    .form-group(class='{ has-error: error.idProduct }')
                         label.control-label Товар
                         .input-group
-                            a.input-group-addon(if='{ item.idPrice }', href='#products/{ item.idPrice }', target='_blank')
+                            a.input-group-addon(if='{ item.idProduct }', href='#products/{ item.idProduct }', target='_blank')
                                 i.fa.fa-eye
                             input.form-control(name='nameProduct', type='text', value='{ item.nameProduct }', readonly)
                             span.input-group-addon(onclick='{ changeProduct }')
                                 i.fa.fa-list
-                        .help-block { error.idPrice }
+                        .help-block { error.idProduct }
             .row
                 .col-md-8
                     .form-group(class='{ has-error: error.name }')
@@ -65,7 +65,7 @@ comment-edit
         self.mixin('change')
 
         self.rules = {
-            idPrice: 'empty',
+            idProduct: 'empty',
             name: 'empty',
             email: 'email',
         }
@@ -121,7 +121,7 @@ comment-edit
                     let items = this.tags.catalog.tags.datatable.getSelectedRows()
 
                     if (items.length > 0) {
-                        self.item.idPrice = items[0].id
+                        self.item.idProduct = items[0].id
                         self.item.nameProduct = items[0].name
                         self.update()
                         this.modalHide()
