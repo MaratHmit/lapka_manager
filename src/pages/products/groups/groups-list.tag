@@ -58,22 +58,22 @@ groups-list
 
                     if (_this.name.value.toString().trim() != '' && !_this.error) {
 
-                        var params, sortIndex, childs
+                        var params, sort, childs
 
                         if (item) {
-                            sortIndex = item['childs'].length
+                            sort = item['childs'].length
                             item['childs'] = item['childs'] || []
                             childs = item['childs']
                         } else {
-                            sortIndex = self.tags['catalog-tree'].nodes.length
+                            sort = self.tags['catalog-tree'].nodes.length
                             self.tags['catalog-tree'].nodes = self.tags['catalog-tree'].nodes || []
                             childs = self.tags['catalog-tree'].nodes
                         }
 
                         if (id)
-                            params = {name: _this.name.value, idParent: id, sortIndex}
+                            params = {name: _this.name.value, idParent: id, sort}
                         else
-                            params = {name: _this.name.value, sortIndex}
+                            params = {name: _this.name.value, sort}
 
                         API.request({
                             object: 'Category',
