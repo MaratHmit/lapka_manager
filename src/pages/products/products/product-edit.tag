@@ -92,6 +92,8 @@ product-edit
                             .form-group
                                 label.control-label Шаг количества
                                 input.form-control(name='stepCount', type='number', min='0', step='0.01', value='{ parseFloat(item.stepCount) }')
+                    .row: .col-md-12
+                        product-edit-modifications(name='offers', value='{ item.offers }')
                     .row
                         .col-md-12
                             .form-group
