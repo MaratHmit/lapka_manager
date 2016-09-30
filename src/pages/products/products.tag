@@ -1,6 +1,5 @@
 | import 'pages/products/products/products-list.tag'
 | import 'pages/products/products/product-edit.tag'
-| import 'pages/products/specials/specials-list.tag'
 | import 'pages/products/groups/groups-list.tag'
 | import 'pages/products/groups/group-edit.tag'
 | import 'pages/products/brands/brands-list.tag'
@@ -8,8 +7,6 @@
 | import 'pages/products/parameters/parameters-groups-list.tag'
 | import 'pages/products/parameters/parameters-list.tag'
 | import 'pages/products/parameters/parameter-edit.tag'
-| import 'pages/products/modifications/modifications-list.tag'
-| import 'pages/products/modifications/modification-edit.tag'
 | import 'pages/products/discounts/discounts-list.tag'
 | import 'pages/products/discounts/discount-edit.tag'
 | import 'pages/products/coupons/coupons-list.tag'
@@ -58,13 +55,11 @@ products
 
         self.tabs = [
             {title: 'Список товаров', name: 'products', link: ''},
-            {title: 'Спец. предложения', name: 'specials', link: 'specials'},
             {title: 'Категории', name: 'categories', link: 'categories'},
             {title: 'Типы товаров', name: 'types', link: 'types'},
             {title: 'Бренды', name: 'brands', link: 'brands'},
             {title: 'Группы параметров', name: 'parameters-groups', link: 'parameters-groups'},
             {title: 'Параметры', name: 'parameters', link: 'parameters'},
-            {title: 'Модификации', name: 'modifications', link: 'modifications'},
             {title: 'Скидки', name: 'discounts', link: 'discounts'},
             {title: 'Купоны', name: 'coupons', link: 'coupons'},
         ]

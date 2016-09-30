@@ -22,15 +22,6 @@ products-list
                     .well.well-sm
                         .form-inline
                             .form-group
-                                .checkbox-inline
-                                    label
-                                        input(type='checkbox', data-name='flagHit', data-bool='Y,N')
-                                        | Хиты
-                                .checkbox-inline
-                                    label
-                                        input(type='checkbox', data-name='flagNew', data-bool='Y,N')
-                                        | Новинки
-                            .form-group
                                 label.control-label Скидки
                                 select.form-control(data-name='discount')
                                     option(value='') Все
@@ -107,9 +98,6 @@ products-list
                         button.btn.btn-primary(if='{ checkPermission("products", "0111") }',
                         type='button', onclick='{ parent.importProducts }', title='Импорт')
                             i.fa.fa-download
-                        //.btn.btn-file.btn-primary(if='{ checkPermission("products", "0111") }')
-                        //    input(type='file', onchange='{ parent.importProducts }', title='Импорт')
-                        //    i.fa.fa-download
 
                 #{'yield'}(to='body')
                     datatable-cell(name='id') { row.id }
@@ -120,20 +108,6 @@ products-list
                         ontouchstart='{ stopPropagation }',
                         disabled='{ !handlers.checkPermission("products", "0010") }')
                             i(class='fa { row.enabled == "Y" ? "fa-eye" : "fa-eye-slash text-muted" } ')
-                    datatable-cell(name='flagNew')
-                        button.btn.btn-default.btn-sm(type='button',
-                        onclick='{ handlers.permission(handlers.boolChange, "products", "0010") }',
-                        ontouchend='{ handlers.permission(handlers.boolChange, "products", "0010") }',
-                        ontouchstart='{ stopPropagation }',
-                        disabled='{ !handlers.checkPermission("products", "0010") }')
-                            i(class='fa { row.flagNew == "Y" ? "fa-asterisk" : "fa-asterisk text-muted" } ')
-                    datatable-cell(name='flagHit')
-                        button.btn.btn-default.btn-sm(type='button',
-                        onclick='{ handlers.permission(handlers.boolChange, "products", "0010") }',
-                        ontouchend='{ handlers.permission(handlers.boolChange, "products", "0010") }',
-                        ontouchstart='{ stopPropagation }',
-                        disabled='{ !handlers.checkPermission("products", "0010") }')
-                            i(class='fa { row.flagHit == "Y" ? "fa-star" : "fa-star text-muted" } ')
                     datatable-cell(name='article') { row.article }
                     datatable-cell(name='name') { row.name }
                     datatable-cell(name='nameBrand') { row.nameBrand }
@@ -194,8 +168,6 @@ products-list
         self.cols = [
             { name:'id', value:'#'},
             { name:'enabled', value:'Вид'},
-            { name:'flagNew', value:'Нв'},
-            { name:'flagHit', value:'Хит'},
             { name:'article', value:'Артикул'},
             { name:'name', value:'Наименование'},
             { name:'nameBrand', value:'Бренд'},
