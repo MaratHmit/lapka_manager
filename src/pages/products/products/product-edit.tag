@@ -15,7 +15,7 @@
 
 product-edit
     loader(if='{ loader }')
-    virtual(hide='{ loader }')
+    div
         .btn-group
             a.btn.btn-default(href='#products') #[i.fa.fa-chevron-left]
             button.btn.btn-default(if='{ checkPermission("products", "0010") }', onclick='{ submit }', type='button')
@@ -30,7 +30,6 @@ product-edit
             li #[a(data-toggle='tab', href='#product-edit-full-text') Полное описание]
             li #[a(data-toggle='tab', href='#product-edit-images') Картинки]
             li #[a(data-toggle='tab', href='#product-edit-parameters') Характеристики]
-            li #[a(data-toggle='tab', href='#product-edit-modifications') Модификации]
             li #[a(data-toggle='tab', href='#product-edit-similar-products') Похожие товары]
             li #[a(data-toggle='tab', href='#product-edit-accompanying-products') Сопутствующие товары]
             li #[a(data-toggle='tab', href='#product-edit-discounts') Скидки]
@@ -42,21 +41,12 @@ product-edit
             .tab-content
                 #product-edit-home.tab-pane.fade.in.active
                     .row
-                        .col-md-4(if='{ !isMulti }')
+                        .col-md-6(if='{ !isMulti }')
                             .form-group(class='{ has-error: error.name }')
                                 label.control-label Наименование
                                 input.form-control(name='name', type='text', value='{ item.name }')
                                 .help-block { error.name }
-                        .col-md-4
-                            .form-group
-                                label Категория
-                                .input-group
-                                    input.form-control(name='nameGroup', value='{ item.nameGroup }', readonly='{ true }')
-                                    span.input-group-addon(onclick='{ permission(selectGroup, "products", "0010") }')
-                                        i.fa.fa-list
-                                    span.input-group-addon(onclick='{ permission(removeGroup, "products", "0010") }')
-                                        i.fa.fa-times
-                        .col-md-4
+                        .col-md-6
                             .form-group
                                 label Бренд
                                 .input-group
@@ -65,23 +55,14 @@ product-edit
                                         i.fa.fa-list
                                     span.input-group-addon(onclick='{ permission(removeBrand, "products", "0010") }')
                                         i.fa.fa-times
-                    .row(if='{ !isMulti }')
-                        .col-md-6
-                            .form-group
-                                label.control-label Артикул
-                                input.form-control(name='article', type='text', value='{ item.article }')
-                        .col-md-6
+                    .row
+                        .col-md-6(if='{ !isMulti }')
                             .form-group
                                 label.control-label URL товара
                                 .input-group
                                     input.form-control(name='code', value='{ item.code }')
                                     span.input-group-addon(onclick='{ permission(translite, "products", "0010") }')
                                         | Транслитерация
-                    .row
-                        .col-md-6
-                            .form-group
-                                label.control-label Цена
-                                input.form-control(name='price', type='number', min='0', step='0.01', value='{ parseFloat(item.price) }')
                         .col-md-6
                             .form-group
                                 label.control-label Валюта
@@ -111,31 +92,20 @@ product-edit
                             .form-group
                                 label.control-label Шаг количества
                                 input.form-control(name='stepCount', type='number', min='0', step='0.01', value='{ parseFloat(item.stepCount) }')
-
+                    .row
+                        .col-md-12
+                            .form-group
+                                .checkbox-inline
+                                    label
+                                        input(type='checkbox', name='isActive', checked='{ item.isActive }')
+                                        | Отображать на сайте
+                #product-edit-full-text.tab-pane.fade
                     .row
                         .col-md-12
                             .form-group
                                 label.control-label Краткое описание
                                 textarea.form-control(rows='5', name='note',
                                 style='min-width: 100%; max-width: 100%;', value='{ item.note }')
-
-                    .row
-                        .col-md-12
-                            .form-group
-                                .checkbox-inline
-                                    label
-                                        input(type='checkbox', name='enabled', checked='{ (item.enabled == "Y") }', data-bool='Y,N')
-                                        | Отображать на сайте
-                                .checkbox-inline
-                                    label
-                                        input(type='checkbox', name='flagNew', checked='{ (item.flagNew == "Y") }', data-bool='Y,N')
-                                        | Новый
-                                .checkbox-inline
-                                    label
-                                        input(type='checkbox', name='flagHit', checked='{ (item.flagHit == "Y") }', data-bool='Y,N')
-                                        | Хит
-
-                #product-edit-full-text.tab-pane.fade
                     .row
                         .col-md-12
                             .form-group
@@ -147,15 +117,6 @@ product-edit
 
                 #product-edit-parameters.tab-pane.fade
                     product-edit-parameters(name='specifications', value='{ item.specifications }')
-                        #{'yield'}(to='toolbar')
-                            .form-group
-                                label.control-label Тип товара
-                                select.form-control(onchange='{ parent.parent.parametersChange }')
-                                    option(value='')
-                                    option(each='{ type, i in parent.parent.productTypes }', value='{ type.id }') { type.name }
-
-                #product-edit-modifications.tab-pane.fade
-                    product-edit-modifications(name='modifications', value='{ item.modifications }')
 
                 #product-edit-similar-products.tab-pane.fade
                     .row

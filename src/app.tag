@@ -132,16 +132,16 @@ app
         self.unsupported = app.checkUnsupported()
 
         self.sidebar = [
-            //{title: 'Заказы', name: 'orders', link: 'orders', permission: 'orders', icon: 'fa-shopping-cart'},
+            {title: 'Заказы', name: 'orders', link: 'orders', permission: 'orders', icon: 'fa-shopping-cart'},
             {title: 'Товары', name: 'products', link: 'products', permission: 'products', icon: 'fa-shopping-bag'},
             //{title: 'Платежи', name: 'payments', link: 'payments', permission: 'payments', icon: 'fa-money'},
             {title: 'Контакты', name: 'persons', link: 'persons', permission: 'contacts', icon: 'fa-users'},
-            //{title: 'Новости', name: 'news', link: 'news', permission: 'news', icon: 'fa-newspaper-o'},
-            //{title: 'Отзывы', name: 'reviews', link: 'reviews', permission: 'reviews', icon: 'fa-comment-o'},
-            //{title: 'Комментарии', name: 'comments', link: 'comments', permission: 'comments', icon: 'fa-comments-o'},
+            {title: 'Новости', name: 'news', link: 'news', permission: 'news', icon: 'fa-newspaper-o'},
+            {title: 'Отзывы', name: 'reviews', link: 'reviews', permission: 'reviews', icon: 'fa-comment-o'},
+            {title: 'Комментарии', name: 'comments', link: 'comments', permission: 'comments', icon: 'fa-comments-o'},
             {title: 'Картинки', name: 'images', link: 'images', permission: 'images', icon: 'fa-picture-o'},
             //{title: 'Аналитика', name: 'analytics', link: 'analytics', permission: '', icon: 'fa-area-chart '},
-            //{title: 'Настройки', name: 'settings', link: 'settings', permission: '', icon: 'fa-cogs'},
+            {title: 'Настройки', name: 'settings', link: 'settings', permission: '', icon: 'fa-cogs'},
         ]
 
         self.toggleSidebar = () => {
