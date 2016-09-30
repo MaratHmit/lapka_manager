@@ -36,7 +36,7 @@ persons-list
         self.cols = [
             {name: 'id', value: '#'},
             {name: 'createdAt', value: 'Время рег.'},
-            {name: 'name', value: 'Имя'},
+            {name: 'name', value: 'Название'},
             {name: 'login', value: 'Логин'},
             {name: 'email', value: 'E-mail'},
             {name: 'phone', value: 'Телефоны'},

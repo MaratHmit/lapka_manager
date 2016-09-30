@@ -135,7 +135,7 @@ app
             {title: 'Заказы', name: 'orders', link: 'orders', permission: 'orders', icon: 'fa-shopping-cart'},
             {title: 'Товары', name: 'products', link: 'products', permission: 'products', icon: 'fa-shopping-bag'},
             //{title: 'Платежи', name: 'payments', link: 'payments', permission: 'payments', icon: 'fa-money'},
-            {title: 'Контакты', name: 'persons', link: 'persons', permission: 'contacts', icon: 'fa-users'},
+            {title: 'Клиенты', name: 'persons', link: 'persons', permission: 'contacts', icon: 'fa-users'},
             {title: 'Новости', name: 'news', link: 'news', permission: 'news', icon: 'fa-newspaper-o'},
             {title: 'Отзывы', name: 'reviews', link: 'reviews', permission: 'reviews', icon: 'fa-comment-o'},
             {title: 'Комментарии', name: 'comments', link: 'comments', permission: 'comments', icon: 'fa-comments-o'},

@@ -59,7 +59,7 @@ review-edit
                     .form-group
                         label.control-label Товар
                         .input-group
-                            a.input-group-addon(if='{ item.idPrice }', href='#products/{ item.idPrice }', target='_blank')
+                            a.input-group-addon(if='{ item.idProduct }', href='#products/{ item.idProduct }', target='_blank')
                                 i.fa.fa-eye
                             input.form-control(name='nameProduct', type='text', value='{ item.nameProduct }', readonly)
                             span.input-group-addon(onclick='{ changeProduct }')
@@ -135,7 +135,7 @@ review-edit
 
                     if (items.length > 0) {
                         self.item.idUser = items[0].id
-                        self.item.nameUser = items[0].displayName
+                        self.item.nameUser = items[0].name
                         self.update()
                         this.modalHide()
                     }
@@ -151,7 +151,7 @@ review-edit
                     let items = this.tags.catalog.tags.datatable.getSelectedRows()
 
                     if (items.length > 0) {
-                        self.item.idPrice = items[0].id
+                        self.item.idProduct = items[0].id
                         self.item.nameProduct = items[0].name
                         self.update()
                         this.modalHide()
