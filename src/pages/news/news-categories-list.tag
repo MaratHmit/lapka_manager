@@ -5,7 +5,8 @@ news-categories-list
     reload='true', store='news-categories-list')
         #{'yield'}(to='body')
             datatable-cell(name='id') { row.id }
-            datatable-cell(name='title') { row.title }
+            datatable-cell(name='code') { row.code }
+            datatable-cell(name='name') { row.name }
 
     script(type='text/babel').
         var self = this
@@ -15,7 +16,8 @@ news-categories-list
 
         self.cols = [
             {name: 'id', value: '#'},
-            {name: 'title', value: 'Наименование'},
+            {name: 'code', value: 'Код'},
+            {name: 'name', value: 'Наименование'},
         ]
 
         self.addEdit = (e) => {

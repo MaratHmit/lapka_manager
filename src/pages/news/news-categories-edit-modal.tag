@@ -5,14 +5,14 @@ news-categories-edit-modal
         #{'yield'}(to="body")
             loader(if='{ loader }')
             form(if='{ !loader }', onchange='{ change }', onkeyup='{ change }')
-                .form-group(class='{ has-error: error.title }')
+                .form-group(class='{ has-error: error.name }')
                     label.control-label Наименование
-                    input.form-control(name='title', value='{ item.title }')
+                    input.form-control(name='name', value='{ item.name }')
                     .help-block { error.title }
-                .form-group(class='{ has-error: error.ident }')
+                .form-group(class='{ has-error: error.code }')
                     label.control-label Код
-                    input.form-control(name='ident', value='{ item.ident }')
-                    .help-block { error.ident }
+                    input.form-control(name='code', value='{ item.code }')
+                    .help-block { error.code }
         #{'yield'}(to='footer')
             button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Закрыть
             button(onclick='{ parent.opts.submit }', type='button', class='btn btn-primary btn-embossed') Выбрать
