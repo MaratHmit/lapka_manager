@@ -8,7 +8,7 @@ product-edit-modifications
                         input(name='article', value='{ row.article }', onchange='{ handlers.change }')
                     datatable-cell(name='price')
                         input(name='price', type='number', min='0', step='0.01', value='{ row.price }', onchange='{ handlers.change }')
-                    datatable-cell(each='{ item, i in parent.parent.parent.parent.newCols }', name='{ item.name }') { row.params[i].value }
+                    datatable-cell(each='{ item, i in parent.parent.parent.newCols }', name='{ item.name }') { row.params[i].value }
 
 
     script(type='text/babel').
@@ -27,10 +27,12 @@ product-edit-modifications
         self.on('update', () => {
             self.value = opts.value || []
             self.root.name = opts.name || null
+            self.newCols = []
 
-            if (self.value.params &&
-                self.value.params instanceof Array) {
-                self.newCols = self.value.params.map((item, i) => {
+            if (self.value.length &&
+                self.value[0].params &&
+                self.value[0].params instanceof Array) {
+                self.newCols = self.value[0].params.map((item, i) => {
                     return { name: i, value: item.name }
                 })
             }
