@@ -26,16 +26,16 @@ product-edit
         .h4 { isMulti ? item.name || 'Мультиредактирование товаров' : isClone ? 'Клонирование товара' : item.name || 'Редактирование товара' }
 
         ul.nav.nav-tabs.m-b-2
-            li.active #[a(data-toggle='tab', href='#product-edit-home') Основная информация]
-            li #[a(data-toggle='tab', href='#product-edit-full-text') Полное описание]
-            li #[a(data-toggle='tab', href='#product-edit-categories') Категории]
-            li #[a(data-toggle='tab', href='#product-edit-images') Картинки]
-            li #[a(data-toggle='tab', href='#product-edit-parameters') Характеристики]
-            li #[a(data-toggle='tab', href='#product-edit-similar-products') Похожие товары]
-            li #[a(data-toggle='tab', href='#product-edit-accompanying-products') Сопутствующие товары]
-            li #[a(data-toggle='tab', href='#product-edit-discounts') Скидки]
-            li #[a(data-toggle='tab', href='#product-edit-seo') SEO]
-            li #[a(data-toggle='tab', href='#product-edit-reviews') Отзывы]
+            li.active: a(data-toggle='tab', href='#product-edit-home') Основная информация
+            li: a(data-toggle='tab', href='#product-edit-full-text') Полное описание
+            li: a(data-toggle='tab', href='#product-edit-categories') Разделы
+            li: a(data-toggle='tab', href='#product-edit-images') Картинки
+            li: a(data-toggle='tab', href='#product-edit-parameters') Характеристики
+            li: a(data-toggle='tab', href='#product-edit-similar-products') Похожие товары
+            li: a(data-toggle='tab', href='#product-edit-accompanying-products') Сопутствующие товары
+            li: a(data-toggle='tab', href='#product-edit-discounts') Скидки
+            li: a(data-toggle='tab', href='#product-edit-seo') SEO
+            li: a(data-toggle='tab', href='#product-edit-reviews') Отзывы
 
         form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
             .tab-content
@@ -56,19 +56,23 @@ product-edit
                                     span.input-group-addon(onclick='{ permission(removeBrand, "products", "0010") }')
                                         i.fa.fa-times
                     .row
-                        .col-md-6(if='{ !isMulti }')
-                            .form-group
+                        .col-md-4(if='{ !isMulti }'): .form-group
                                 label.control-label URL товара
                                 .input-group
                                     input.form-control(name='code', value='{ item.code }')
                                     span.input-group-addon(onclick='{ permission(translite, "products", "0010") }')
                                         | Транслитерация
-                        .col-md-6
-                            .form-group
+                        .col-md-4: .form-group
                                 label.control-label Валюта
                                 select.form-control(name='currency', value='{ item.curr }')
                                     option(each='{ c, i in currencies }', value='{ c.name }',
                                     selected='{ c.name == item.curr }', no-reorder) { c.title }
+                        .col-md-4: .form-group
+                            label.control-label Тип товара
+                            select.form-control(name='idType', value='{ item.idType }')
+                                option(value='')
+                                option(each='{ item.productTypes }', value='{ id }',
+                                selected='{ id == item.productTypes }', no-reorder) { name }
                     .row
                         .col-md-3
                             .form-group(if='{ +item.presenceCount && (+item.presenceCount + 1) }')
@@ -306,6 +310,10 @@ product-edit
             if (!self.error) {
                 self.loader = true
 
+                if (self.item.groups.length) {
+                    self.item.groups[0].isMain = true
+                }
+
                 API.request({
                     object: 'Product',
                     method: 'Save',
@@ -441,19 +449,20 @@ product-edit
                             callback('error', null)
                         }
                     })
-                }, callback => {
-                    API.request({
-                        object: 'ProductType',
-                        method: 'Fetch',
-                        success(response) {
-                            self.productTypes = response.items
-                            callback(null, 'ProductType')
-                        },
-                        error(response) {
-                            callback('error', null)
-                        }
-                    })
-                }
+                },
+                //                  callback => {
+                //                      API.request({
+                //                          object: 'ProductType',
+                //                          method: 'Fetch',
+                //                          success(response) {
+                //                              self.productTypes = response.items
+                //                             callback(null, 'ProductType')
+                //                          },
+                //                          error(response) {
+                //                              callback('error', null)
+                //                          }
+                //                      })
+                //                  }
             ], (err, res) => {
                 if (typeof callback === 'function')
                     callback.bind(this)()
