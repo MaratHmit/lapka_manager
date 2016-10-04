@@ -56,18 +56,18 @@ product-edit
                                     span.input-group-addon(onclick='{ permission(removeBrand, "products", "0010") }')
                                         i.fa.fa-times
                     .row
-                        .col-md-4(if='{ !isMulti }'): .form-group
+                        .col-md-6(if='{ !isMulti }'): .form-group
                                 label.control-label URL товара
                                 .input-group
                                     input.form-control(name='url', value='{ item.url }')
                                     span.input-group-addon(onclick='{ permission(translite, "products", "0010") }')
                                         | Транслитерация
-                        .col-md-4: .form-group
+                        //.col-md-4: .form-group
                                 label.control-label Валюта
                                 select.form-control(name='currency', value='{ item.curr }')
                                     option(each='{ c, i in currencies }', value='{ c.name }',
                                     selected='{ c.name == item.curr }', no-reorder) { c.title }
-                        .col-md-4: .form-group
+                        .col-md-6: .form-group
                             label.control-label Тип товара
                             select.form-control(name='idType', value='{ item.idType }')
                                 option(value='')
