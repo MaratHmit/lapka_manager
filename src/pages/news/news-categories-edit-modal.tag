@@ -1,7 +1,7 @@
 news-categories-edit-modal
     bs-modal
         #{'yield'}(to="title")
-            .h4.modal-title Товары
+            .h4.modal-title Категория новости
         #{'yield'}(to="body")
             loader(if='{ loader }')
             form(if='{ !loader }', onchange='{ change }', onkeyup='{ change }')
@@ -14,8 +14,8 @@ news-categories-edit-modal
                     input.form-control(name='code', value='{ item.code }')
                     .help-block { error.code }
         #{'yield'}(to='footer')
-            button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Закрыть
-            button(onclick='{ parent.opts.submit }', type='button', class='btn btn-primary btn-embossed') Выбрать
+            button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Отмена
+            button(onclick='{ parent.opts.submit }', type='button', class='btn btn-primary btn-embossed') Сохранить
 
     script(type='text/babel').
         var self = this
@@ -28,7 +28,7 @@ news-categories-edit-modal
             modal.mixin('change')
 
             modal.rules = {
-                title: 'empty'
+                name: 'empty'
             }
 
             modal.afterChange = e => {

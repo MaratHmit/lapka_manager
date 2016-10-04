@@ -14,51 +14,43 @@ news-edit
                 i.fa.fa-refresh
         .h4  { isNew ? item.name || 'Добавление новости' : item.name || 'Редактирование новости' }
 
-        ul.nav.nav-tabs.m-b-2
-            li.active #[a(data-toggle='tab', href='#news-edit-home') Основная информация]
-            li #[a(data-toggle='tab', href='#news-edit-images') Картинки]
-
         form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
-            .tab-content
-                #news-edit-home.tab-pane.fade.in.active
+            .row
+                .col-md-2
+                    .form-group
+                        .well.well-sm
+                            image-select(name='imagePath', alt='0', size='256', value='{ item.imagePath }')
+                .col-md-10
+                    .row
+                        .col-md-12
+                            .form-group(class='{ has-error: error.name }')
+                                label.control-label Заголовок
+                                input.form-control(name='name', type='text', value='{ item.name }')
+                                .help-block { error.name }
                     .row
                         .col-md-2
                             .form-group
-                                .well.well-sm
-                                    image-select(name='imageFile', section='newsimg', alt='0', size='256', value='{ item.imageFile }')
+                                label.control-label Дата публикации
+                                datetime-picker.form-control(name='date', format='DD.MM.YYYY', value='{ item.date }')
                         .col-md-10
-                            .row
-                                .col-md-12
-                                    .form-group(class='{ has-error: error.name }')
-                                        label.control-label Заголовок
-                                        input.form-control(name='name', type='text', value='{ item.name }')
-                                        .help-block { error.name }
-                            .row
-                                .col-md-2
-                                    .form-group
-                                        label.control-label Дата публикации
-                                        datetime-picker.form-control(name='publicationDate', format='DD.MM.YYYY', value='{ item.publicationDateDisplay }')
-                                .col-md-10
-                                    .form-group
-                                        label.control-label Категория
-                                        .input-group
-                                            input.form-control(name='nameCategory', value='{ item.nameCategory }', readonly)
-                                            span.input-group-addon(onclick='{ changeCategory }')
-                                                i.fa.fa-list
-                    .row
-                        .col-md-12
                             .form-group
-                                label.control-label Текст новости
-                                ckeditor(name='fullDescription', value='{ item.fullDescription }')
-                    .row
-                        .col-md-12
-                            .form-group
-                                .checkbox-inline
-                                    label
-                                        input(type='checkbox', name='isActive', checked='{ item.isActive }')
-                                        | Отображать на сайте
-                #news-edit-images.tab-pane.fade
-                    product-edit-images(name='images', value='{ item.images }', section='newsimg')
+                                label.control-label Категория
+                                .input-group
+                                    input.form-control(name='nameGroup', value='{ item.nameGroup }', readonly)
+                                    span.input-group-addon(onclick='{ changeGroup }')
+                                        i.fa.fa-list
+            .row
+                .col-md-12
+                    .form-group
+                        label.control-label Текст новости
+                        ckeditor(name='content', value='{ item.content }')
+            .row
+                .col-md-12
+                    .form-group
+                        .checkbox-inline
+                            label
+                                input(type='checkbox', name='isActive', checked='{ item.isActive }')
+                                | Отображать на сайте
 
     script(type='text/babel').
         var self = this
@@ -104,15 +96,15 @@ news-edit
             }
         }
 
-        self.changeCategory = () => {
+        self.changeGroup = () => {
             modals.create('new-categories-list-modal', {
                 type: 'modal-primary',
                 submit() {
                     let items = this.tags.catalog.tags.datatable.getSelectedRows()
 
                     if (items.length > 0) {
-                        self.item.idCategory = items[0].id
-                        self.item.nameCategory = items[0].title
+                        self.item.idGroup = items[0].id
+                        self.item.nameGroup = items[0].title
                         self.update()
                         this.modalHide()
                     }
@@ -121,13 +113,13 @@ news-edit
         }
 
         observable.on('news-new', item => {
-            let { category, name } = item
+            let { group, name } = item
             self.error = false
             self.isNew = true
             self.item = {
                 publicationDate: (new Date()).toLocaleDateString(),
                 publicationDateDisplay: (new Date()).toLocaleDateString(),
-                idCategory: category,
+                idGroup: group,
                 nameCategory: decodeURI(name)
             }
             self.update()

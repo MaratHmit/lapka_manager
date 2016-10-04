@@ -17,9 +17,9 @@ news-list
                             option(each='{ category, i in parent.newsCategories }', value='{ category.id }', no-reorder) { category.title }
         #{'yield'}(to='body')
             datatable-cell(name='id') { row.id }
-            datatable-cell(name='imageFile')
-                img(if='{ row.imageUrlPreview.trim() !== "" }', src='{ row.imageUrlPreview }')
-            datatable-cell(name='publicationDate') { row.publicationDateDisplay }
+            datatable-cell(name='imageUrlPreview')
+                img(src='{ row.imageUrlPreview }', alt='', width='32', height='32')
+            datatable-cell(name='date') { row.date }
             datatable-cell(name='name') { row.name }
 
     script(type='text/babel').
@@ -32,7 +32,7 @@ news-list
         self.cols = [
             {name: 'id', value: '#'},
             {name: 'imageFile', value: 'Фото'},
-            {name: 'publicationDate', value: 'Дата публ.'},
+            {name: 'date', value: 'Дата публ.'},
             {name: 'name', value: 'Заголовок'}
         ]
 
