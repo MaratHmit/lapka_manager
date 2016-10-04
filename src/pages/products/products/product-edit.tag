@@ -75,18 +75,17 @@ product-edit
                                 selected='{ id == item.idType }', no-reorder) { name }
                     .row
                         .col-md-3
-                            .form-group(if='{ +item.presenceCount && (+item.presenceCount + 1) }')
+                            .form-group(if='{ !item.isUnlimited }')
                                 label.control-label Количество
-                                input.form-control(name='presenceCount', type='number', min='0', step='1', value='{ parseInt(item.presenceCount) || 1 }')
-                            .form-group(if='{ !item.presenceCount || +item.presenceCount < 1 }')
+                                p.form-control { count || 0 }
+                            .form-group(if='{ item.isUnlimited }')
                                 label.control-label Текст при неогр. кол-ве
-                                input.form-control(name='presence', value='{ item.presence }')
+                                input.form-control(name='availableInfo', value='{ item.availableInfo }')
                         .col-md-3
                             label.hidden-xs &nbsp;
                             .checkbox
                                 label
-                                    input(type='checkbox', checked='{ !item.presenceCount || item.presenceCount < 1 }',
-                                    onchange='{ presenceChange }')
+                                    input(name='isUnlimited', type='checkbox', checked='{ item.isUnlimited }')
                                     | Неограниченное
                         .col-md-3
                             .form-group
@@ -154,7 +153,8 @@ product-edit
                     product-edit-discounts(name='discounts', value='{ item.discounts }')
 
                 #product-edit-categories.tab-pane.fade
-                    product-edit-additional-categories(name='groups', value='{ item.groups }')
+                    product-edit-additional-categories(name='groups', value='{ item.groups }',
+                    cols='{ isUnlimited ? modicationsCols : modicationsColsWOCount  }')
 
                 #product-edit-seo.tab-pane.fade
                     .row
@@ -216,6 +216,19 @@ product-edit
         self.rules = {
             name: 'empty'
         }
+
+        self.modificationsCols = [
+            {name: 'id', value: '#'},
+            {name: 'article', value: 'Артикул'},
+            {name: 'price', value: 'Цена'},
+            {name: 'count', value: 'Кол-во'},
+        ]
+
+        self.modicationsColsWOCount = [
+            {name: 'id', value: '#'},
+            {name: 'article', value: 'Артикул'},
+            {name: 'price', value: 'Цена'},
+        ]
 
         self.afterChange = e => {
             let name = e.target.name
@@ -290,13 +303,6 @@ product-edit
                     this.modalHide()
                 }
             })
-        }
-
-        self.presenceChange = e => {
-            if (e.target.checked)
-                self.item.presenceCount = null
-            else
-                self.item.presenceCount = 1
         }
 
         self.submit = e => {
@@ -418,6 +424,9 @@ product-edit
                         data: params,
                         success(response) {
                             self.item = response
+                            self.count = self.item.offers
+                                .map(i => i.count)
+                                .reduce((s,c) => +s + +c, 0)
                             callback(null, 'Product')
                         },
                         error(response) {
