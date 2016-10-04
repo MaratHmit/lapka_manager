@@ -28,12 +28,12 @@ product-edit
         ul.nav.nav-tabs.m-b-2
             li.active #[a(data-toggle='tab', href='#product-edit-home') Основная информация]
             li #[a(data-toggle='tab', href='#product-edit-full-text') Полное описание]
+            li #[a(data-toggle='tab', href='#product-edit-categories') Категории]
             li #[a(data-toggle='tab', href='#product-edit-images') Картинки]
             li #[a(data-toggle='tab', href='#product-edit-parameters') Характеристики]
             li #[a(data-toggle='tab', href='#product-edit-similar-products') Похожие товары]
             li #[a(data-toggle='tab', href='#product-edit-accompanying-products') Сопутствующие товары]
             li #[a(data-toggle='tab', href='#product-edit-discounts') Скидки]
-            li #[a(data-toggle='tab', href='#product-edit-additional-categories') Доп. категории]
             li #[a(data-toggle='tab', href='#product-edit-seo') SEO]
             li #[a(data-toggle='tab', href='#product-edit-reviews') Отзывы]
 
@@ -147,8 +147,8 @@ product-edit
                 #product-edit-discounts.tab-pane.fade
                     product-edit-discounts(name='discounts', value='{ item.discounts }')
 
-                #product-edit-additional-categories.tab-pane.fade
-                    product-edit-additional-categories(name='crossGroups', value='{ item.crossGroups }')
+                #product-edit-categories.tab-pane.fade
+                    product-edit-additional-categories(name='groups', value='{ item.groups }')
 
                 #product-edit-seo.tab-pane.fade
                     .row
