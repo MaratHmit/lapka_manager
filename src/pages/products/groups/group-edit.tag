@@ -51,7 +51,7 @@ group-edit
                             select.form-control(name='idType', value='{ item.idType }')
                                 option(value='')
                                 option(each='{ item.productTypes }', value='{ id }',
-                                selected='{ id == item.productTypes }', no-reorder) { name }
+                                selected='{ id == item.idType }', no-reorder) { name }
                     .row: .col-md-12: .form-group
                         label.control-label Краткое описание
                         textarea.form-control(rows='5', name='description', style='min-width: 100%; max-width: 100%;',

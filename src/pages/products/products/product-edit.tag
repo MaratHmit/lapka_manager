@@ -59,7 +59,7 @@ product-edit
                         .col-md-4(if='{ !isMulti }'): .form-group
                                 label.control-label URL товара
                                 .input-group
-                                    input.form-control(name='code', value='{ item.code }')
+                                    input.form-control(name='url', value='{ item.url }')
                                     span.input-group-addon(onclick='{ permission(translite, "products", "0010") }')
                                         | Транслитерация
                         .col-md-4: .form-group
@@ -72,7 +72,7 @@ product-edit
                             select.form-control(name='idType', value='{ item.idType }')
                                 option(value='')
                                 option(each='{ item.productTypes }', value='{ id }',
-                                selected='{ id == item.productTypes }', no-reorder) { name }
+                                selected='{ id == item.idType }', no-reorder) { name }
                     .row
                         .col-md-3
                             .form-group(if='{ +item.presenceCount && (+item.presenceCount + 1) }')
@@ -375,7 +375,7 @@ product-edit
         }
 
         self.translite = e => {
-            var params = {vars:[self.item.code]}
+            var params = {vars:[self.item.url]}
 
             API.request({
                 object: 'Functions',
