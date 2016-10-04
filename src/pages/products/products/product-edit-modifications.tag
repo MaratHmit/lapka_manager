@@ -20,15 +20,16 @@ product-edit-modifications
         self.cols = []
         self.newCols = []
 
-        self.initCols = [
-            {name: 'id', value: '#'},
-            {name: 'article', value: 'Артикул'},
-            {name: 'price', value: 'Цена'},
-            {name: 'count', value: 'Кол-во'},
-        ]
-
         self.on('update', () => {
             self.value = opts.value || []
+
+            self.initCols = opts.cols || [
+                {name: 'id', value: '#'},
+                {name: 'article', value: 'Артикул'},
+                {name: 'price', value: 'Цена'},
+                {name: 'count', value: 'Кол-во'},
+            ]
+
             self.root.name = opts.name || ''
             self.newCols = []
 

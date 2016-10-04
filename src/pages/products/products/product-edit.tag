@@ -75,23 +75,25 @@ product-edit
                                 selected='{ id == item.idType }', no-reorder) { name }
                     .row
                         .col-md-3
-                            .form-group(if='{ +item.presenceCount && (+item.presenceCount + 1) }')
+                            .form-group(if='{ !item.isUnlimited }')
                                 label.control-label Количество
-                                input.form-control(name='presenceCount', type='number', min='0', step='1', value='{ parseInt(item.presenceCount) || 1 }')
-                            .form-group(if='{ !item.presenceCount || +item.presenceCount < 1 }')
+                                p.form-control { count || 0 }
+                            .form-group(if='{ item.isUnlimited }')
                                 label.control-label Текст при неогр. кол-ве
-                                input.form-control(name='presence', value='{ item.presence }')
+                                input.form-control(name='availableInfo', value='{ item.availableInfo }')
                         .col-md-3
                             label.hidden-xs &nbsp;
                             .checkbox
                                 label
-                                    input(type='checkbox', checked='{ !item.presenceCount || item.presenceCount < 1 }',
-                                    onchange='{ presenceChange }')
+                                    input(name='isUnlimited', type='checkbox', checked='{ item.isUnlimited }')
                                     | Неограниченное
                         .col-md-3
                             .form-group
-                                label.control-label Ед. измерения
-                                input.form-control(name='measure', value='{ item.measure }')
+                                label.control-label Единицы измерения
+                                select.form-control(name='idMeasure', value='{ item.idMeasure }')
+                                    option(value='')
+                                    option(each='{ item.measures }', value='{ id }',
+                                    selected='{ id == item.idMeasure }', no-reorder) { name }
                         .col-md-3
                             .form-group
                                 label.control-label Шаг количества
@@ -110,13 +112,12 @@ product-edit
                         .col-md-12
                             .form-group
                                 label.control-label Краткое описание
-                                textarea.form-control(rows='5', name='note',
-                                style='min-width: 100%; max-width: 100%;', value='{ item.note }')
+                                ckeditor(name='description', value='{ item.description }')
                     .row
                         .col-md-12
                             .form-group
                                 label.control-label Полный текст
-                                ckeditor(name='text', value='{ item.text }')
+                                ckeditor(name='content', value='{ item.content }')
 
                 #product-edit-images.tab-pane.fade
                     product-edit-images(name='images', value='{ item.images }', section='shopprice')
@@ -152,7 +153,8 @@ product-edit
                     product-edit-discounts(name='discounts', value='{ item.discounts }')
 
                 #product-edit-categories.tab-pane.fade
-                    product-edit-additional-categories(name='groups', value='{ item.groups }')
+                    product-edit-additional-categories(name='groups', value='{ item.groups }',
+                    cols='{ isUnlimited ? modicationsCols : modicationsColsWOCount  }')
 
                 #product-edit-seo.tab-pane.fade
                     .row
@@ -162,16 +164,16 @@ product-edit
                                 onclick='{ seoTag.insert }', no-reorder) { name }
                             .form-group
                                 label.control-label  Заголовок
-                                input.form-control(name='title', type='text',
-                                onfocus='{ seoTag.focus }', value='{ item.title }')
+                                input.form-control(name='metaTitle', type='text',
+                                onfocus='{ seoTag.focus }', value='{ item.metaTitle }')
                             .form-group
                                 label.control-label  Ключевые слова
-                                input.form-control(name='keywords', type='text',
-                                onfocus='{ seoTag.focus }', value='{ item.keywords }')
+                                input.form-control(name='metaKeywords', type='text',
+                                onfocus='{ seoTag.focus }', value='{ item.metaKeywords }')
                             .form-group
                                 label.control-label  Описание
-                                textarea.form-control(rows='5', name='description', onfocus='{ seoTag.focus }',
-                                style='min-width: 100%; max-width: 100%;', value='{ item.description }')
+                                textarea.form-control(rows='5', name='metaDescription', onfocus='{ seoTag.focus }',
+                                style='min-width: 100%; max-width: 100%;', value='{ item.metaDescription }')
                 #product-edit-reviews.tab-pane.fade
                     .row
                         .col-md-12
@@ -214,6 +216,19 @@ product-edit
         self.rules = {
             name: 'empty'
         }
+
+        self.modificationsCols = [
+            {name: 'id', value: '#'},
+            {name: 'article', value: 'Артикул'},
+            {name: 'price', value: 'Цена'},
+            {name: 'count', value: 'Кол-во'},
+        ]
+
+        self.modicationsColsWOCount = [
+            {name: 'id', value: '#'},
+            {name: 'article', value: 'Артикул'},
+            {name: 'price', value: 'Цена'},
+        ]
 
         self.afterChange = e => {
             let name = e.target.name
@@ -288,13 +303,6 @@ product-edit
                     this.modalHide()
                 }
             })
-        }
-
-        self.presenceChange = e => {
-            if (e.target.checked)
-                self.item.presenceCount = null
-            else
-                self.item.presenceCount = 1
         }
 
         self.submit = e => {
@@ -416,6 +424,9 @@ product-edit
                         data: params,
                         success(response) {
                             self.item = response
+                            self.count = self.item.offers
+                                .map(i => i.count)
+                                .reduce((s,c) => +s + +c, 0)
                             callback(null, 'Product')
                         },
                         error(response) {
