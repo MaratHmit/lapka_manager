@@ -40,7 +40,7 @@ parameter-edit
                             label.control-label Единицы измерения
                             select.form-control(name='idMeasure', value='{ item.idMeasure }')
                                 option(value='')
-                                option(each='{ item.measure }', value='{ id }',
+                                option(each='{ item.measures }', value='{ id }',
                                 selected='{ id == item.idMeasure }', no-reorder) { name }
                 .row
                     .col-md-3

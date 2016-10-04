@@ -90,8 +90,11 @@ product-edit
                                     | Неограниченное
                         .col-md-3
                             .form-group
-                                label.control-label Ед. измерения
-                                input.form-control(name='measure', value='{ item.measure }')
+                                label.control-label Единицы измерения
+                                select.form-control(name='idMeasure', value='{ item.idMeasure }')
+                                    option(value='')
+                                    option(each='{ item.measures }', value='{ id }',
+                                    selected='{ id == item.idMeasure }', no-reorder) { name }
                         .col-md-3
                             .form-group
                                 label.control-label Шаг количества
@@ -110,13 +113,12 @@ product-edit
                         .col-md-12
                             .form-group
                                 label.control-label Краткое описание
-                                textarea.form-control(rows='5', name='note',
-                                style='min-width: 100%; max-width: 100%;', value='{ item.note }')
+                                ckeditor(name='description', value='{ item.description }')
                     .row
                         .col-md-12
                             .form-group
                                 label.control-label Полный текст
-                                ckeditor(name='text', value='{ item.text }')
+                                ckeditor(name='content', value='{ item.content }')
 
                 #product-edit-images.tab-pane.fade
                     product-edit-images(name='images', value='{ item.images }', section='shopprice')
@@ -162,16 +164,16 @@ product-edit
                                 onclick='{ seoTag.insert }', no-reorder) { name }
                             .form-group
                                 label.control-label  Заголовок
-                                input.form-control(name='title', type='text',
-                                onfocus='{ seoTag.focus }', value='{ item.title }')
+                                input.form-control(name='metaTitle', type='text',
+                                onfocus='{ seoTag.focus }', value='{ item.metaTitle }')
                             .form-group
                                 label.control-label  Ключевые слова
-                                input.form-control(name='keywords', type='text',
-                                onfocus='{ seoTag.focus }', value='{ item.keywords }')
+                                input.form-control(name='metaKeywords', type='text',
+                                onfocus='{ seoTag.focus }', value='{ item.metaKeywords }')
                             .form-group
                                 label.control-label  Описание
-                                textarea.form-control(rows='5', name='description', onfocus='{ seoTag.focus }',
-                                style='min-width: 100%; max-width: 100%;', value='{ item.description }')
+                                textarea.form-control(rows='5', name='metaDescription', onfocus='{ seoTag.focus }',
+                                style='min-width: 100%; max-width: 100%;', value='{ item.metaDescription }')
                 #product-edit-reviews.tab-pane.fade
                     .row
                         .col-md-12
