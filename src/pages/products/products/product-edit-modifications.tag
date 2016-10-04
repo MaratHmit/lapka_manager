@@ -7,9 +7,9 @@ product-edit-modifications
                     datatable-cell(name='article')
                         input(name='article', value='{ row.article }', onchange='{ handlers.change }')
                     datatable-cell(name='price')
-                        input(name='price', type='number', min='0', step='0.01', value='{ row.count }', onchange='{ handlers.change }')
+                        input(name='price', type='number', min='0', step='0.01', value='{ row.price }', onchange='{ handlers.change }')
                     datatable-cell(name='count')
-                        input(name='count', type='number', min='1', step='1', value='{ row.price }', onchange='{ handlers.change }')
+                        input(name='count', type='number', min='1', step='1', value='{ row.count }', onchange='{ handlers.change }')
                     datatable-cell(each='{ item, i in parent.parent.parent.newCols }', name='{ item.name }') { row.params[i].value }
 
 
