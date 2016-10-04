@@ -1,7 +1,7 @@
 | import 'components/catalog-static.tag'
 | import 'pages/products/groups/group-select-modal.tag'
 
-product-edit-additional-categories
+product-edit-categories
     .row
         .col-md-12
             catalog-static(name='{ opts.name }', add='{ add }', cols='{ cols }', rows='{ value }')

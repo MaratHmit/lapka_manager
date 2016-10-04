@@ -4,7 +4,7 @@
 | import 'pages/products/products/product-edit-images.tag'
 | import 'pages/products/products/product-edit-modifications.tag'
 | import 'pages/products/products/product-edit-parameters.tag'
-| import 'pages/products/products/product-edit-additional-categories.tag'
+| import 'pages/products/products/product-edit-categories.tag'
 | import 'pages/products/products/product-edit-discounts.tag'
 | import 'pages/products/groups/group-select-modal.tag'
 | import 'pages/products/parameters/parameters-list-select-modal.tag'
@@ -153,8 +153,7 @@ product-edit
                     product-edit-discounts(name='discounts', value='{ item.discounts }')
 
                 #product-edit-categories.tab-pane.fade
-                    product-edit-additional-categories(name='groups', value='{ item.groups }',
-                    cols='{ isUnlimited ? modicationsCols : modicationsColsWOCount  }')
+                    product-edit-categories(name='groups', value='{ item.groups }')
 
                 #product-edit-seo.tab-pane.fade
                     .row
