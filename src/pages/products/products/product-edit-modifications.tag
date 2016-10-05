@@ -1,7 +1,8 @@
 product-edit-modifications
     .row
         .col-md-12
-            catalog-static(name='{ opts.name }', cols='{ cols }', rows='{ value }', handless='{ handlers }')
+            catalog-static(name='{ opts.name }', cols='{ cols }', rows='{ value }', handlers='{ handlers }',
+            add='{ opts.add }')
                 #{'yield'}(to='body')
                     datatable-cell(name='id') { row.id }
                     datatable-cell(name='article')
@@ -20,15 +21,45 @@ product-edit-modifications
         self.cols = []
         self.newCols = []
 
+        self.handlers = {
+            change(e) {
+                if (!e.target.name) return
+
+                var bannedTypes = ['checkbox', 'file', 'color', 'range', 'number']
+
+                if (e.target && bannedTypes.indexOf(e.target.type) === -1) {
+                    var selectionStart = e.target.selectionStart
+                    var selectionEnd = e.target.selectionEnd
+                }
+
+                if (e.target && e.target.type === 'checkbox' && e.target.name)
+                    e.item.row[e.target.name] = e.target.checked
+                if (e.target && e.target.type !== 'checkbox' && e.target.name)
+                    e.item.row[e.target.name] = e.target.value
+                if (e.currentTarget.tagName !== 'FORM' && e.currentTarget.name !== '')
+                    e.item.row[e.currentTarget.name] = e.currentTarget.value
+
+                if (e.target && bannedTypes.indexOf(e.target.type) === -1) {
+                    this.update()
+                    e.target.selectionStart = selectionStart
+                    e.target.selectionEnd = selectionEnd
+                }
+            }
+        }
+
         self.on('update', () => {
             self.value = opts.value || []
 
-            self.initCols = opts.cols || [
+            self.initCols = [
                 {name: 'id', value: '#'},
                 {name: 'article', value: 'Артикул'},
                 {name: 'price', value: 'Цена'},
                 {name: 'count', value: 'Кол-во'},
             ]
+
+            if (opts.isUnlimited) {
+                self.initCols[3].hidden = true
+            }
 
             self.root.name = opts.name || ''
             self.newCols = []
@@ -42,4 +73,33 @@ product-edit-modifications
             }
 
             self.cols = [...self.initCols, ...self.newCols]
+        })
+
+product-edit-modifications-add-modal
+    bs-modal
+        #{'yield'}(to="title")
+            .h4.modal-title Модификация
+        #{'yield'}(to="body")
+            form(onchange='{ change }')
+        #{'yield'}(to='footer')
+            button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Закрыть
+            button(onclick='{ parent.opts.submit.bind(this) }', type='button', class='btn btn-primary btn-embossed') Выбрать
+
+    script(type='text/babel').
+        var self = this
+
+        self.on('mount', () => {
+            let modal = self.tags['bs-modal']
+            modal.mixin('change')
+            modal.item = {}
+
+            API.request({
+                object: 'ProductType',
+                method: 'Info',
+                data: {id: opts.idType},
+                success(response) {
+                    self.item.features = response.features.filter(i => i.target == 1)
+                },
+
+            })
         })

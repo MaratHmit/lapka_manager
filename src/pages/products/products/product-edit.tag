@@ -99,7 +99,8 @@ product-edit
                                 label.control-label Шаг количества
                                 input.form-control(name='stepCount', type='number', min='0', step='0.01', value='{ parseFloat(item.stepCount) }')
                     .row: .col-md-12
-                        product-edit-modifications(name='offers', value='{ item.offers }')
+                        product-edit-modifications(name='offers', value='{ item.offers }', is-unlimited='{ item.isUnlimited }',
+                        add='{ item.idType ? modificationAdd : "" }')
                     .row
                         .col-md-12
                             .form-group
@@ -216,19 +217,6 @@ product-edit
             name: 'empty'
         }
 
-        self.modificationsCols = [
-            {name: 'id', value: '#'},
-            {name: 'article', value: 'Артикул'},
-            {name: 'price', value: 'Цена'},
-            {name: 'count', value: 'Кол-во'},
-        ]
-
-        self.modicationsColsWOCount = [
-            {name: 'id', value: '#'},
-            {name: 'article', value: 'Артикул'},
-            {name: 'price', value: 'Цена'},
-        ]
-
         self.afterChange = e => {
             let name = e.target.name
             delete self.error[name]
@@ -300,6 +288,16 @@ product-edit
 
                     self.update()
                     this.modalHide()
+                }
+            })
+        }
+
+        self.modificationAdd = () => {
+            modals.create('product-edit-modifications-add-modal', {
+                type: 'modal-primary',
+                idType: self.item.idType,
+                submit() {
+
                 }
             })
         }

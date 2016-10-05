@@ -275,6 +275,12 @@ datatable
         }
 
         self.on('update', function () {
+            if (self.cols && self.cols instanceof Array) {
+                var colsHidden = self.getHiddenColumns()
+                colsHidden.forEach(function (item) {
+                    self.showColumn(item.name)
+                })
+            }
             self.reload()
         })
 
