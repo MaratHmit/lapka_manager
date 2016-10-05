@@ -1,3 +1,5 @@
+| import 'components/checkbox-list.tag'
+
 notice-edit
     loader(if='{ loader }')
     virtual(hide='{ loader }')
@@ -8,49 +10,45 @@ notice-edit
                 |  Сохранить
             button.btn.btn-default(if='{ !isNew }', onclick='{ reload }', title='Обновить', type='button')
                 i.fa.fa-refresh
-        .h4 { item.name || 'Редактирование уведомления' }
-
-        ul.nav.nav-tabs.m-b-2
-            li.active: a(data-toggle='tab', href='#notice-edit-home') Основная информация
-            li: a(data-toggle='tab', href='#notice-edit-triggers') Триггеры
+        .h4 { isNew ? 'Новое уведомление' : 'Редактирование уведомления' }
 
         form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
-            .tab-content
-                #notice-edit-home.tab-pane.fade.in.active
-                    .row
-                        .col-md-6: .form-group(class='{ has-error: error.name }')
-                            label.control-label Наименование
-                            input.form-control(name='name', type='text', value='{ item.name }')
-                            .help-block { error.name }
-                        .col-md-6: .form-group(class='{ has-error: error.subject }')
-                            label.control-label Тема
-                            input.form-control(name='subject', type='text', value='{ item.subject }')
-                            .help-block { error.subject }
-                    .row
-                        .col-md-6: .form-group
-                            label.control-label Получатель
-                            input.form-control(name='recipient', type='text', value='{ item.recipient }')
-                        .col-md-6: .form-group
-                            label.control-label Отправитель
-                            input.form-control(name='sender', type='text', value='{ item.sender }')
-                    .row
-                        .col-md-6: .form-group
-                           label.control-label Назначение
-                           select.form-control(name='target', value='{ item.target }')
-                               option(value='email') Email
-                               option(value='sms') SMS
-                               option(value='telegram') Telegram
-                           .help-block { error.target }
+            .row
+                .col-md-6: .form-group(class='{ has-error: error.name }')
+                    label.control-label Наименование
+                    input.form-control(name='name', type='text', value='{ item.name }')
+                    .help-block { error.name }
+                .col-md-6: .form-group(class='{ has-error: error.subject }')
+                    label.control-label Тема
+                    input.form-control(name='subject', type='text', value='{ item.subject }')
+                    .help-block { error.subject }
+            .row
+                .col-md-6: .form-group
+                   label.control-label Назначение
+                   select.form-control(name='target', value='{ item.target }')
+                       option(value='email') Email
+                       option(value='sms') SMS
+                       option(value='telegram') Telegram
+                   .help-block { error.target }
+                .col-md-3: .form-group
+                    label.control-label Получатель
+                    input.form-control(name='recipient', type='text', value='{ item.recipient }')
+                .col-md-3: .form-group
+                    label.control-label Отправитель
+                    input.form-control(name='sender', type='text', value='{ item.sender }')
+            .form-group
+                label.control-label Триггеры
+                checkbox-list(items='{ triggers }')
+            .form-group
+                   label.control-label Шаблон
+                   ckeditor(name='content', value='{ item.content }')
+            .row
+                .col-md-12
                     .form-group
-                       label.control-label Шаблон
-                       ckeditor(name='content', value='{ item.content }')
-
-                #notice-edit-triggers.tab-pane.fade
-                    .row
-                        .col-md-12: .form-group(class='{ has-error: error.name }')
-                            label.control-label Наименование
-                            input.form-control(name='name', type='text', value='{ item.name }')
-                            .help-block { error.name }
+                        .checkbox-inline
+                            label
+                                input(type='checkbox', name='isActive', checked='{ item.isActive }')
+                                | Включено
 
     script(type='text/babel').
         var self = this
@@ -105,7 +103,6 @@ notice-edit
             self.isNew = false
             self.item = {}
             self.loader = true
-            self.update()
 
             API.request({
                 object: 'Notice',
