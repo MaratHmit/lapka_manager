@@ -1,7 +1,7 @@
 checkbox-list
     .checkbox(each='{ items }')
         label
-            input(id='{ id }', type='checkbox', value='{ isChecked }', onclick='{ click }')
+            input(id='{ id }', type='checkbox', checked='{ isChecked }', onclick='{ click }')
         | { name }
 
     script(type='text/babel').
@@ -21,6 +21,7 @@ checkbox-list
         }
 
         self.on('update', () => {
+            console.log(opts.items)
             self.items = opts.items
         })
 
