@@ -10,35 +10,47 @@ notice-edit
                 i.fa.fa-refresh
         .h4 { item.name || 'Редактирование уведомления' }
 
-        form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
-            .row
-                .col-md-6: .form-group(class='{ has-error: error.name }')
-                        label.control-label Наименование
-                        input.form-control(name='name', type='text', value='{ item.name }')
-                        .help-block { error.name }
-                .col-md-6: .form-group(class='{ has-error: error.subject }')
-                        label.control-label Тема
-                        input.form-control(name='subject', type='text', value='{ item.subject }')
-                        .help-block { error.subject }
-            .row
-                .col-md-6: .form-group
-                        label.control-label Получатель
-                        input.form-control(name='recipient', type='text', value='{ item.recipient }')
-                .col-md-6: .form-group
-                        label.control-label Отправитель
-                        input.form-control(name='sender', type='text', value='{ item.sender }')
-            .row
-                .col-md-6: .form-group
-                       label.control-label Назначение
-                       select.form-control(name='target', value='{ item.target }')
-                           option(value='email') Email
-                           option(value='sms') SMS
-                           option(value='telegram') Telegram
-                       .help-block { error.target }
+        ul.nav.nav-tabs.m-b-2
+            li.active: a(data-toggle='tab', href='#notice-edit-home') Основная информация
+            li: a(data-toggle='tab', href='#notice-edit-triggers') Триггеры
 
-            .form-group
-                label.control-label Шаблон
-                ckeditor(name='content', value='{ item.content }')
+        form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
+            .tab-content
+                #notice-edit-home.tab-pane.fade.in.active
+                    .row
+                        .col-md-6: .form-group(class='{ has-error: error.name }')
+                            label.control-label Наименование
+                            input.form-control(name='name', type='text', value='{ item.name }')
+                            .help-block { error.name }
+                        .col-md-6: .form-group(class='{ has-error: error.subject }')
+                            label.control-label Тема
+                            input.form-control(name='subject', type='text', value='{ item.subject }')
+                            .help-block { error.subject }
+                    .row
+                        .col-md-6: .form-group
+                            label.control-label Получатель
+                            input.form-control(name='recipient', type='text', value='{ item.recipient }')
+                        .col-md-6: .form-group
+                            label.control-label Отправитель
+                            input.form-control(name='sender', type='text', value='{ item.sender }')
+                    .row
+                        .col-md-6: .form-group
+                           label.control-label Назначение
+                           select.form-control(name='target', value='{ item.target }')
+                               option(value='email') Email
+                               option(value='sms') SMS
+                               option(value='telegram') Telegram
+                           .help-block { error.target }
+                    .form-group
+                       label.control-label Шаблон
+                       ckeditor(name='content', value='{ item.content }')
+
+                #notice-edit-triggers.tab-pane.fade
+                    .row
+                        .col-md-12: .form-group(class='{ has-error: error.name }')
+                            label.control-label Наименование
+                            input.form-control(name='name', type='text', value='{ item.name }')
+                            .help-block { error.name }
 
     script(type='text/babel').
         var self = this
