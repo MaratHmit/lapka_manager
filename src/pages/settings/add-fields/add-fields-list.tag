@@ -9,7 +9,7 @@ add-fields-list
             dblclick='{ permission(addEdit, "settings", "1010") }')
                 #{'yield'}(to='body')
                     datatable-cell(name='id') { row.id }
-                    datatable-cell(name='enabled') { row.enabled == 0 ? 'Нет' : 'Да' }
+                    datatable-cell(name='isActive') { row.enabled == 0 ? 'Нет' : 'Да' }
                     datatable-cell(name='code') { row.code }
                     datatable-cell(name='name') { row.name }
                     datatable-cell(name='type') { handlers.types[row.type] }
@@ -71,7 +71,7 @@ add-fields-list
 
         self.cols = [
             {name: 'id', value: '#'},
-            {name: 'enabled', value: 'Активно'},
+            {name: 'isActive', value: 'Активно'},
             {name: 'code', value: 'Код'},
             {name: 'name', value: 'Наименование'},
             {name: 'type', value: 'Тип переменной'},

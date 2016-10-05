@@ -2,8 +2,8 @@
 | import 'pages/settings/currencies/currencies.tag'
 | import 'pages/settings/paysystems/pay-systems.tag'
 | import 'pages/settings/paysystems/pay-system-edit.tag'
-| import 'pages/settings/letter/letter.tag'
-| import 'pages/settings/letter/letter-edit.tag'
+| import 'pages/settings/notice/notice.tag'
+| import 'pages/settings/notice/notice-edit.tag'
 | import 'pages/settings/delivery/delivery.tag'
 | import 'pages/settings/delivery/delivery-edit.tag'
 | import 'pages/settings/seo-vars/seo-vars.tag'
@@ -31,7 +31,7 @@ settings
             settings-main(if='{ tab == "main" }')
             delivery(if='{ tab == "delivery" && !edit}')
             pay-systems(if='{ tab == "pay-systems" && !edit }')
-            letter(if='{ tab == "letter" && !edit }')
+            notice(if='{ tab == "notice" && !edit }')
             currencies(if='{ tab == "currencies" }')
             permissions(if='{ tab == "permissions" && !edit }')
             seo-vars(if='{ tab == "seo-variables" }')
@@ -44,7 +44,7 @@ settings
         .col-md-12
             delivery-edit(if='{ tab == "delivery" && edit }')
             pay-system-edit(if='{ tab == "pay-systems" && edit }')
-            letter-edit(if='{ tab == "letter" && edit }')
+            notice-edit(if='{ tab == "notice" && edit }')
             permission-rights-edit(if='{ tab == "permissions" && edit }')
             sms-template-edit(if='{ tab == "sms" && edit }')
 
@@ -94,9 +94,9 @@ settings
             observable.trigger('delivery-new')
         })
 
-        route('/settings/letter/new', tab => {
-            self.update({edit: true, tab: 'letter'})
-            observable.trigger('letter-new')
+        route('/settings/notice/new', tab => {
+            self.update({edit: true, tab: 'notice'})
+            observable.trigger('notice-new')
         })
 
         route('/settings/sms/new', tab => {
@@ -114,14 +114,14 @@ settings
             {title: 'Основные настройки', name: 'main', link: 'main', permission: 'settings'},
             {title: 'Доставки', name: 'delivery', link: 'delivery', permission: 'deliveries'},
             {title: 'Платежные системы', name: 'pay-systems', link: 'pay-systems', permission: 'paysystems'},
-            {title: 'Шаблоны писем', name: 'letter', link: 'letter', permission: 'mails'},
-            {title: 'Валюты', name: 'currencies', link: 'currencies', permission: 'currencies'},
-            {title: 'Права доступа', name: 'permissions', link: 'permissions', permission: 'settings', admin: true},
+            {title: 'Уведомления', name: 'notice', link: 'notice', permission: 'notices'},
+            //{title: 'Валюты', name: 'currencies', link: 'currencies', permission: 'currencies'},
+            //{title: 'Права доступа', name: 'permissions', link: 'permissions', permission: 'settings', admin: true},
             {title: 'SEO переменные', name: 'seo-variables', link: 'seo-variables', permission: 'settings'},
             {title: 'Поля', name: 'fields', link: 'fields', permission: 'settings'},
             {title: 'SMS уведомления', name: 'sms', link: 'sms', permission: 'settings'},
             //{title: 'Яндекс.Фотки', name: 'yandex-photos', link: 'yandex-photos', permission: 'settings'},
-            {title: 'Интеграция с 1С', name: 'settings-synhro-1c', link: 'settings-synhro-1c', permission: 'settings'},
+            //{title: 'Интеграция с 1С', name: 'settings-synhro-1c', link: 'settings-synhro-1c', permission: 'settings'},
         ]
 
         self.menuSelect = e => riot.route(`/settings/${e.target.value}`)
