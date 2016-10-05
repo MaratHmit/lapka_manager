@@ -21,7 +21,6 @@ checkbox-list
         }
 
         self.on('update', () => {
-            console.log(opts.items)
             self.items = opts.items
         })
 
