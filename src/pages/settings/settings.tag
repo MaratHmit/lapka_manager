@@ -111,7 +111,7 @@ settings
 
         self.tab = ''
         self.tabs = [
-            {title: 'Основные настройки', name: 'main', link: 'main', permission: 'settings'},
+            {title: 'Настройки магазина', name: 'main', link: 'main', permission: 'settings'},
             {title: 'Доставки', name: 'delivery', link: 'delivery', permission: 'deliveries'},
             {title: 'Платежные системы', name: 'pay-systems', link: 'pay-systems', permission: 'paysystems'},
             {title: 'Уведомления', name: 'notice', link: 'notice', permission: 'notices'},

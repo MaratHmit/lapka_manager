@@ -1,14 +1,14 @@
 checkbox-list
     .checkbox(each='{ items }')
         label
-            input(id='{ id }', type='checkbox', checked='{ isChecked }', onclick='{ click }')
+            input(data-id='{ id }', type='checkbox', checked='{ isChecked }', onclick='{ click }')
         | { name }
 
     script(type='text/babel').
         var self = this
 
         self.click = e => {
-            let id = e.target.id
+            let id = e.target.dataset.id
             let isChecked = e.target.checked
             self.items.forEach(item => {
                 if (item.id == id)

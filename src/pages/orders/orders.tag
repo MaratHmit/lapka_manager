@@ -1,34 +1,12 @@
 | import 'pages/orders/orders-list.tag'
 | import 'pages/orders/order-edit.tag'
-| import 'pages/orders/pre-orders-list.tag'
-| import 'pages/orders/pending-orders-list.tag'
-| import 'pages/orders/pending-order-info.tag'
 
 orders
-    ul(if='{ !edit }').nav.nav-tabs.m-b-2
-        li(each='{ tabs }', class='{ active: name == tab }')
-            a(href='#orders/{ link }')
-                span { title }
-
-    .column(if='{ !notFound }')
-        orders-list(if='{ tab == "orders" && !edit }')
-        order-edit(if='{ tab == "orders" && edit }')
-
-        pre-orders-list(if='{ tab == "pre-orders" && !edit }')
-        pending-orders-list(if='{ tab == "pending-orders" && !edit }')
-        pending-order-info(if='{ tab == "pending-orders" && edit }')
+    orders-list(if='{ tab == "orders" && !edit }')
+    order-edit(if='{ tab == "orders" && edit }')
 
     script(type='text/babel').
         var self = this
-
-
-        self.tab = ''
-
-        self.tabs = [
-            {title: 'Заказы', name: 'orders', link: ''},
-            {title: 'Предзаказы', name: 'pre-orders', link: 'pre-orders'},
-            {title: 'Незавершенные', name: 'pending-orders', link: 'pending-orders'},
-        ]
 
         self.edit = false
         self.notFound = false
@@ -47,14 +25,6 @@ orders
             self.edit = true
             self.notFound = false
             self.tab = 'orders'
-            self.update()
-        })
-
-        route('/orders/pending-orders/([0-9]+)', id => {
-            observable.trigger('pending-order-info', id)
-            self.edit = true
-            self.notFound = false
-            self.tab = 'pending-orders'
             self.update()
         })
 
