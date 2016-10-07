@@ -13,6 +13,8 @@
 | import 'pages/settings/synhro-1c/settings-synhro-1c.tag'
 | import 'pages/settings/sms/sms.tag'
 | import 'pages/settings/sms/sms-template-edit.tag'
+| import 'pages/settings/services/services.tag'
+| import 'pages/settings/services/service-edit.tag'
 
 settings
     .row
@@ -39,7 +41,7 @@ settings
             settings-yandex-photos(if='{ tab == "yandex-photos" }')
                 h4 Яндекс.Фотки - в разработке
             settings-synhro-1c(if='{ tab == "settings-synhro-1c" && !edit }')
-            sms(if='{ tab == "sms" && !edit }')
+            services(if='{ tab == "services" && !edit }')
 
         .col-md-12
             delivery-edit(if='{ tab == "delivery" && edit }')
@@ -47,6 +49,7 @@ settings
             notice-edit(if='{ tab == "notice" && edit }')
             permission-rights-edit(if='{ tab == "permissions" && edit }')
             sms-template-edit(if='{ tab == "sms" && edit }')
+            service-edit(if='{ tab == "services" && edit }')
 
     script(type='text/babel').
         var self = this,
@@ -99,11 +102,6 @@ settings
             observable.trigger('notice-new')
         })
 
-        route('/settings/sms/new', tab => {
-            self.update({edit: true, tab: 'sms'})
-            observable.trigger('sms-new')
-        })
-
         route('/settings..', () => {
             self.update({edit: true, tab: 'not-found'})
             observable.trigger('not-found')
@@ -119,7 +117,7 @@ settings
             //{title: 'Права доступа', name: 'permissions', link: 'permissions', permission: 'settings', admin: true},
             {title: 'SEO переменные', name: 'seo-variables', link: 'seo-variables', permission: 'settings'},
             {title: 'Поля', name: 'fields', link: 'fields', permission: 'settings'},
-            {title: 'SMS уведомления', name: 'sms', link: 'sms', permission: 'settings'},
+            {title: 'Параметры сервисов', name: 'services', link: 'services', permission: 'settings'},
             //{title: 'Яндекс.Фотки', name: 'yandex-photos', link: 'yandex-photos', permission: 'settings'},
             //{title: 'Интеграция с 1С', name: 'settings-synhro-1c', link: 'settings-synhro-1c', permission: 'settings'},
         ]
