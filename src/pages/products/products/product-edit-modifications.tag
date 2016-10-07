@@ -10,7 +10,7 @@ product-edit-modifications
                     datatable-cell(name='price')
                         input(name='price', type='number', min='0', step='0.01', value='{ row.price }', onchange='{ handlers.change }')
                     datatable-cell(name='count')
-                        input(name='count', type='number', min='1', step='1', value='{ row.count }', onchange='{ handlers.change }')
+                        input(name='count', type='number', min='0', step='1', value='{ row.count }', onchange='{ handlers.change }')
                     datatable-cell(each='{ item, i in parent.parent.parent.newCols }', name='{ item.name }') { row.params[i].value }
 
 
@@ -81,6 +81,10 @@ product-edit-modifications-add-modal
             .h4.modal-title Модификация
         #{'yield'}(to="body")
             form(onchange='{ change }')
+                .form-group(each='{ item, i in features }')
+                    label.control-label { item.name }
+                    select.form-control(name='{ item.id }', value='{ item.value }')
+                        option(each='{ values, i in item.values }', value='{ values.id }') { values.value }
         #{'yield'}(to='footer')
             button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Закрыть
             button(onclick='{ parent.opts.submit.bind(this) }', type='button', class='btn btn-primary btn-embossed') Выбрать
@@ -90,15 +94,38 @@ product-edit-modifications-add-modal
 
         self.on('mount', () => {
             let modal = self.tags['bs-modal']
-            modal.mixin('change')
+            //modal.mixin('change')
             modal.item = {}
+
+            modal.change = e => {
+                let id = e.target.name
+                let item = modal.item.filter(i => i.idFeature == id)
+                let originalItem = modal.features.filter(i => i.id == id)
+
+                if (!item.length) return
+                if (!originalItem.length) return
+
+                item[0].idValue = e.target.value
+                item[0].value = originalItem[0].values.filter(i => i.id == e.target.value)[0].value
+            }
 
             API.request({
                 object: 'ProductType',
                 method: 'Info',
                 data: {id: opts.idType},
                 success(response) {
-                    self.item.features = response.features.filter(i => i.target == 1)
+                    modal.features = response.features.filter(i => i.target == 1)
+                    modal.item = modal.features.map(item => {
+                        let newItem = {
+                            idFeature: item.id,
+                            name: item.name,
+                            idValue: null,
+                            value: null
+                        }
+
+                        return {...newItem}
+                    })
+                    self.update()
                 },
 
             })

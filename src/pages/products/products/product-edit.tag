@@ -292,12 +292,24 @@ product-edit
             })
         }
 
-        self.modificationAdd = () => {
+        self.modificationAdd = e => {
+            var item
+            if (e) item = e.item.row ? e.item.row : {}
             modals.create('product-edit-modifications-add-modal', {
                 type: 'modal-primary',
+                item,
                 idType: self.item.idType,
                 submit() {
-
+                    let params = this.item
+                    self.item.offers.push({
+                        idProduct: self.item.id,
+                        article: '',
+                        price: 0,
+                        count: 0,
+                        params
+                    })
+                    self.update()
+                    this.modalHide()
                 }
             })
         }
