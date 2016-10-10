@@ -81,32 +81,44 @@ product-edit-modifications-add-modal
             .h4.modal-title Модификация
         #{'yield'}(to="body")
             form(onchange='{ change }')
-                .form-group(each='{ item, i in features }')
+                .form-group(each='{ item, i in features }', class='{ has-error: parent.error[item.id] }')
                     label.control-label { item.name }
                     select.form-control(name='{ item.id }', value='{ item.value }')
+                        option(value='') Выберите значение
                         option(each='{ values, i in item.values }', value='{ values.id }') { values.value }
+                    .help-block { parent.error[item.id] }
         #{'yield'}(to='footer')
             button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Закрыть
-            button(onclick='{ parent.opts.submit.bind(this) }', type='button', class='btn btn-primary btn-embossed') Выбрать
+            button(onclick='{ submit }', type='button', class='btn btn-primary btn-embossed') Выбрать
 
     script(type='text/babel').
         var self = this
 
         self.on('mount', () => {
             let modal = self.tags['bs-modal']
-            //modal.mixin('change')
-            modal.item = {}
+            modal.mixin('validation')
+            modal.objectItem = {}
+            modal.item = []
+            modal.error = {}
 
             modal.change = e => {
                 let id = e.target.name
                 let item = modal.item.filter(i => i.idFeature == id)
                 let originalItem = modal.features.filter(i => i.id == id)
 
-                if (!item.length) return
-                if (!originalItem.length) return
+                modal.objectItem[id] = e.target.value
 
-                item[0].idValue = e.target.value
-                item[0].value = originalItem[0].values.filter(i => i.id == e.target.value)[0].value
+                if (item.length || originalItem.length || e.target.value) {
+                    item[0].idValue = e.target.value
+                    if (originalItem[0].values.filter(i => i.id == e.target.value).length)
+                        item[0].value = originalItem[0].values.filter(i => i.id == e.target.value)[0].value
+                }
+
+                {
+                    let name = e.target.name
+                    delete modal.error[name]
+                    modal.error = {...modal.error, ...modal.validation.validate(modal.objectItem, modal.rules(), name)}
+                }
             }
 
             API.request({
@@ -125,8 +137,23 @@ product-edit-modifications-add-modal
 
                         return {...newItem}
                     })
-                    self.update()
                 },
-
+                complete() {
+                    self.update()
+                }
             })
+
+            modal.rules = () => {
+                let result = {}
+                modal.item.forEach(item => {
+                    result[item.idFeature] = 'empty'
+                })
+                return result
+            }
+
+            modal.submit = () => {
+                modal.error = modal.validation.validate(modal.objectItem, modal.rules())
+                if (!modal.error && typeof opts.submit === 'function')
+                    opts.submit.apply(modal)
+            }
         })

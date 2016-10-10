@@ -301,6 +301,16 @@ product-edit
                 idType: self.item.idType,
                 submit() {
                     let params = this.item
+                    let modifications = self.item.offers.map(item => item.params.map(item => item.idValue))
+                    let newModification = params.map(item => item.idValue).toString()
+
+                    for(let i = 0; i < modifications.length; i++) {
+                        if (modifications[i].toString() === newModification) {
+                            popups.create({title: 'Ошибка!', text: 'Такая модификация уже существует', style: 'popup-danger'})
+                            return
+                        }
+                    }
+
                     self.item.offers.push({
                         idProduct: self.item.id,
                         article: '',
@@ -308,6 +318,7 @@ product-edit
                         count: 0,
                         params
                     })
+
                     self.update()
                     this.modalHide()
                 }
