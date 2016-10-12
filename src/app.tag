@@ -10,6 +10,7 @@
 | import 'pages/settings/settings.tag'
 | import 'pages/payments/payments.tag'
 | import 'pages/analytics/analytics.tag'
+| import 'pages/import/import.tag'
 | import 'pages/not-found.tag'
 | import 'modals/account-add-modal.tag'
 | import 'modals/account-settings-modal.tag'
@@ -77,6 +78,7 @@ app
                 images(if='{ tab == "images" }')
                 analytics(if='{ tab == "analytics" }')
                 settings(if='{ tab == "settings" }')
+                import(if='{ tab == "import" }')
                 not-found(if='{ tab == "not-found" }')
 
 
@@ -120,7 +122,10 @@ app
                     self.headTitle = item[0].title
                     self.tab = tab
                 } else {
-                    observable.trigger('not-found')
+                    if (tab == "import") {
+                        self.headTitle = "Импорт"
+                        self.tab = tab
+                    } else observable.trigger('not-found')
                 }
             }
             self.sidebarShow = false

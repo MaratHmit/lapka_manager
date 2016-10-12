@@ -81,8 +81,8 @@ products-list
                                     i.fa.fa-fw
                                     |  Произвести наценку
                     #{'yield'}(to='head')
-                        button.btn.btn-primary(type='button', onclick='{ parent.exportProducts }', title='Экспорт')
-                            i.fa.fa-upload
+                        //button.btn.btn-primary(type='button', onclick='{ parent.exportProducts }', title='Экспорт')
+                        //    i.fa.fa-upload
                         button.btn.btn-primary(if='{ checkPermission("products", "0111") }',
                         type='button', onclick='{ parent.importProducts }', title='Импорт')
                             i.fa.fa-download
@@ -431,23 +431,7 @@ products-list
             })
         })
 
-        self.importProducts = (e) => {
-            modals.create('import-products-modal', {
-                type: 'modal-primary',
-            })
-            //var formData = new FormData();
-            //for (var i = 0; i < e.target.files.length; i++) {
-            //   formData.append('file' + i, e.target.files[i], e.target.files[i].name)
-            //}
-            //
-            //API.upload({
-            //    object: 'Product',
-            //    data: formData,
-            //    success(response) {
-            //        self.update();
-            //    }
-            //})
-        }
+        self.importProducts = () => riot.route(`/import`)
 
         self.exportProducts = () => {
             API.request({
