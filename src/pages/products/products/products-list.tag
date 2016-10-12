@@ -22,18 +22,6 @@ products-list
                     .well.well-sm
                         .form-inline
                             .form-group
-                                label.control-label Скидки
-                                select.form-control(data-name='discount')
-                                    option(value='') Все
-                                    option(value='Y') Со скидкой
-                                    option(value='N') Без скидки
-                            .form-group
-                                label.control-label Видимость
-                                select.form-control(data-name='enabled')
-                                    option(value='') Все
-                                    option(value='Y') Отображаемые
-                                    option(value='N') Неотображаемые
-                            .form-group
                                 label.control-label Бренды
                                 select.form-control(data-name='idBrand', onchange='{ parent.selectBrand }')
                                     option(value='') Все
@@ -401,8 +389,10 @@ products-list
         self.productOpen = e => riot.route(`/products/${e.item.row.id}`)
 
         self.getBrands = () => {
+            let data = { sortBy: "name", sortOrder: "asc", limit: 1000 }
             API.request({
                 object: 'Brand',
+                data: data,
                 method: 'Fetch',
                 success(response) {
                     self.brands = response.items

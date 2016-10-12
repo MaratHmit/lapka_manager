@@ -61,7 +61,7 @@ product-edit-modifications
             ]
 
             if (opts.isUnlimited) {
-                self.initCols[3].hidden = true
+                self.initCols[4].hidden = true
             }
 
             self.root.name = opts.name || ''
