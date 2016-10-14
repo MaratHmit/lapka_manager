@@ -28,14 +28,13 @@ orders-list
                             option(value='T') Тест
 
         #{'yield'}(to="body")
-            datatable-cell(name='id') { row.id }
-            datatable-cell(name='dateOrder') { row.dateOrder }
+            datatable-cell(name='num') { row.num }
+            datatable-cell(name='date') { row.date }
             datatable-cell(name='customer') { row.customer }
             datatable-cell(name='customerPhone') { row.customerPhone }
-            datatable-cell.text-right(name='amount') { row.amount }
-            datatable-cell(name='status', class='{ handlers.orderText.colors[row.status] }')
-                | { handlers.orderText.text[row.status] }
-            datatable-cell(name='commentary') { row.commentary }
+            datatable-cell(name='amount') { row.amount }
+            datatable-cell(name='status', style='{ getColorStatus(row.idStatus} ')
+                | Завершенный
         #{'yield'}(to='aggregation')
             strong Сумма заказов: { (parent.totalAmount || 0) +  " " }
 
@@ -45,31 +44,16 @@ orders-list
         self.mixin('permissions')
         self.mixin('remove')
         self.collection = 'Order'
+        self.statuses = []
 
         self.cols = [
-            { name: 'id' , value: '#' },
+            { name: 'num' , value: '№' },
             { name: 'dateOrder' , value: 'Дата заказа' },
             { name: 'customer' , value: 'Заказчик' },
             { name: 'customerPhone' , value: 'Телефон' },
             { name: 'amount' , value: 'Сумма' },
             { name: 'status' , value: 'Статус заказа' },
-            { name: 'commentary' , value: 'Примечание' },
         ]
-
-        self.orderText = {
-            text: {
-                Y: 'Оплачен', N: 'Не оплачен', K: 'Кредит', P: 'Подарок', W: 'В ожидании', C: 'Возврат', T: 'Тест'
-            },
-            colors: {
-                //Y: '#98FB98', N: '#FFC1C1', K: '#FFAAAA', P: null, W: null, C: null, T: null
-                Y: 'bg-success', N: 'bg-danger', K: 'bg-warning', P: null, W: null, C: null, T: null
-            }
-        }
-
-        self.handlers = {
-            orderText: self.orderText,
-            deliveryText: self.deliveryText
-        }
 
         self.orderOpen = function (e) {
             riot.route(`/orders/${e.item.row.id}`)
@@ -81,9 +65,28 @@ orders-list
 
         self.add = () => riot.route('/orders/new')
 
+        self.getStatuses = () => {
+            let data = { sortBy: "id", sortOrder: "asc", limit: 1000 }
+            API.request({
+                object: 'OrderStatus',
+                data: data,
+                method: 'Fetch',
+                success(response) {
+                    self.statuses = response.items
+                    self.update()
+                }
+            })
+        }
+
+        self.getColorStatus = (idStatus) => {
+
+        }
+
         observable.on('orders-reload', function () {
             self.tags.catalog.reload()
         })
+
+        self.getStatuses()
 
 
 
