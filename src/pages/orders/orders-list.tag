@@ -3,6 +3,7 @@
 orders-list
 
     catalog(object='Order', search='true', sortable='true', cols='{ cols }', handlers='{ handlers }', reload='true',
+    add='{ permission(add, "orders", "0100") }',
     remove='{ permission(remove, "orders", "0001") }',
     dblclick='{ permission(orderOpen, "orders", "1000") }',
     before-success='{ getAggregation }',store='orders-list', new-filter='true')
@@ -11,30 +12,25 @@ orders-list
                 .form-inline
                     .form-group
                         label.control-label От даты
-                        datetime-picker.form-control(data-name='dateOrder', data-sign='>=', format='YYYY-MM-DD')
+                        datetime-picker.form-control(data-name='date', data-sign='>=', format='YYYY-MM-DD')
                     .form-group
                         label.control-label До даты
-                        datetime-picker.form-control(data-name='dateOrder', data-sign='<=', format='YYYY-MM-DD')
+                        datetime-picker.form-control(data-name='date', data-sign='<=', format='YYYY-MM-DD')
                     .form-group
                         label.control-label Статус заказа
-                        select.form-control(data-name='status')
+                        select.form-control(data-name='idStatus')
                             option(value='') Все
-                            option(value='Y') Оплачен
-                            option(value='N') Не оплачен
-                            option(value='K') Кредит
-                            option(value='P') Подарок
-                            option(value='W') В ожидании
-                            option(value='C') Возврат
-                            option(value='T') Тест
+                            option(each='{ parent.statuses }', value='{ id }', no-reorder) { name }
 
         #{'yield'}(to="body")
             datatable-cell(name='num') { row.num }
-            datatable-cell(name='date') { row.date }
+            datatable-cell(name='date') { row.dateDisplay }
             datatable-cell(name='customer') { row.customer }
             datatable-cell(name='customerPhone') { row.customerPhone }
             datatable-cell(name='amount') { row.amount }
-            datatable-cell(name='status', style='{ getColorStatus(row.idStatus} ')
-                | Завершенный
+            datatable-cell(name='status', style='background-color:{ handlers.statuses.colors[row.idStatus]  } ')
+                | { handlers.statuses.text[row.idStatus]  }
+
         #{'yield'}(to='aggregation')
             strong Сумма заказов: { (parent.totalAmount || 0) +  " " }
 
@@ -45,7 +41,11 @@ orders-list
         self.mixin('remove')
         self.collection = 'Order'
         self.statuses = []
+        self.statusesMap = { text: {}, colors: {} }
 
+        self.handlers = {
+            statuses: self.statusesMap
+        }
         self.cols = [
             { name: 'num' , value: '№' },
             { name: 'dateOrder' , value: 'Дата заказа' },
@@ -73,13 +73,13 @@ orders-list
                 method: 'Fetch',
                 success(response) {
                     self.statuses = response.items
+                    self.statuses.forEach(function(item) {
+                        self.statusesMap.text[item.id] = item.name
+                        self.statusesMap.colors[item.id] = "#" + item.color
+                    })
                     self.update()
                 }
             })
-        }
-
-        self.getColorStatus = (idStatus) => {
-
         }
 
         observable.on('orders-reload', function () {

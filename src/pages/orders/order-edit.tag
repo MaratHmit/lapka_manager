@@ -1,6 +1,7 @@
 | import 'components/datetime-picker.tag'
 | import 'pages/settings/delivery/delivery-list-modal.tag'
 | import 'pages/payments/payments-list-modal.tag'
+| import 'pages/products/products/offers-list-select-modal.tag'
 | import 'components/loader.tag'
 
 order-edit
@@ -14,7 +15,7 @@ order-edit
                 |  Сохранить
             button.btn.btn-default(if='{ !isNew }', onclick='{ reload }', title='Обновить', type='button')
                 i.fa.fa-refresh
-        .h4 { isNew ? 'Новый заказ' : 'Редактирование заказа № ' + item.id }
+        .h4 { isNew ? 'Новый заказ' : 'Редактирование заказа № ' + item.num }
 
         ul.nav.nav-tabs.m-b-2
             li.active #[a(data-toggle='tab', href='#order-edit-home') Основная информация]
@@ -27,39 +28,33 @@ order-edit
             #order-edit-home.tab-pane.fade.in.active
                 form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
                     .row
-                        .col-md-1(if='{ !isNew }')
+                        .col-md-1
                             .form-group
-                                label.control-label Ид
-                                input.form-control(name='id', value='{ item.id }', readonly)
-                        .col-md-2(if='{ !isNew }')
+                                label.control-label №
+                                input.form-control(name='num', value='{ item.num }')
+                        .col-md-2
                             .form-group
                                 label.control-label Дата заказа
-                                datetime-picker.form-control(name='dateOrder',
-                                format='YYYY-MM-DD', value='{ item.dateOrder }', icon='glyphicon glyphicon-calendar')
+                                datetime-picker.form-control(name='date',
+                                format='DD.MM.YYYY HH:mm', value='{ item.dateDisplay }', icon='glyphicon glyphicon-calendar')
                         .col-md-3
-                            .form-group(class='{ has-error: (error.idAuthor || error.idCompany) }')
+                            .form-group(class='{ has-error: (error.idUser) }')
                                 label.control-label Заказчик
                                 .input-group
-                                    a.input-group-addon(if='{ (item.idAuthor || item.idCompany) }',
-                                    href='{item.idAuthor ? "#persons/" + item.idAuthor : "#persons/companies/" + item.idCompany }', target='_blank')
+                                    a.input-group-addon(if='{ item.idUser }',
+                                    href='{ "#persons/" + item.idUser }', target='_blank')
                                         i.fa.fa-eye
-                                    input.form-control(name='idAuthor',
-                                    value='{ (item.idAuthor || item.idCompany) ? (item.idAuthor || item.idCompany) + " - " + item.customer : "" }', readonly)
+                                    input.form-control(name='idUser',
+                                    value='{ item.idUser ? item.idUser + " - " + item.customer : "" }', readonly)
                                     span.input-group-addon(onclick='{ changeCustomer }')
                                         i.fa.fa-list
-                                .help-block { (error.idAuthor || error.idCompany) }
+                                .help-block { error.idUser }
                         .col-md-3
                             .form-group
-                                label.control-label Статус заказа
-                                select.form-control(name='status')
-                                    option(each='{ key, value in orderItems }', value='{ key }',
-                                    selected='{ key == item.status }', no-reorder) { value }
-                        .col-md-3
-                            .form-group
-                                label.control-label Статус доставки
-                                select.form-control(name='deliveryStatus')
-                                    option(each='{ key, value in deliveryItems }', value='{ key }',
-                                    selected='{ key == item.deliveryStatus }', no-reorder) { value }
+                                label.control-label Статус
+                                select.form-control(name='idStatus')
+                                    option(each='{ statuses }', value='{ id }',
+                                    selected='{ id == item.idStatus }', no-reorder) { name }
                     .row
                         .col-md-12
                             .well.well-sm
@@ -88,12 +83,6 @@ order-edit
 
                     .row
                         .col-md-12
-                            .form-group
-                                label.control-label Комментарий к заказу
-                                input.form-control(name='commentary', value='{ item.commentary }')
-
-                    .row
-                        .col-md-12
                             .h4 Суммы
                             .row
                                 .col-md-3
@@ -103,8 +92,8 @@ order-edit
                                 .col-md-3
                                     .form-group
                                         label.control-label Доставка
-                                        input.form-control(name='deliveryPayee', type='number',
-                                        value='{ (item.deliveryPayee / 1).toFixed(2) }', min='0.00', step='0.01')
+                                        input.form-control(name='sumDelivery', type='number',
+                                        value='{ (item.sumDelivery / 1).toFixed(2) }', min='0.00', step='0.01')
                                 .col-md-3
                                     .form-group
                                         label.control-label Скидка
@@ -155,9 +144,7 @@ order-edit
                         .col-md-12
                             catalog-static(name='payments', rows='{ item.payments }', cols='{ paymentsCols }' )
                                 #{'yield'}(to='body')
-                                    datatable-cell(name='id') { row.id }
-                                    datatable-cell(name='num') { row.num }
-                                    datatable-cell(name='date') { row.date }
+                                    datatable-cell(name='date') { row.dateDisplay }
                                     datatable-cell(name='name') { row.name }
                                     datatable-cell(name='payer') { row.payer }
                                     datatable-cell(name='amount') { row.amount }
@@ -192,10 +179,10 @@ order-edit
                 },
             }
 
-            if (self.item && self.item.idAuthor && self.item.idCompany)
+            if (self.item && self.item.idUser)
                 return { ...rules }
             else
-                return { ...rules, idAuthor: 'empty' }
+                return { ...rules, idUser: 'empty' }
         }
 
         self.afterChange = e => {
@@ -233,8 +220,6 @@ order-edit
         ]
 
         self.paymentsCols = [
-            {name: 'id', value: '#'},
-            {name: 'num', value: '№'},
             {name: 'date', value: 'Дата'},
             {name: 'name', value: 'Наименование'},
             {name: 'payer', value: 'Плательщик'},
@@ -247,63 +232,31 @@ order-edit
                 this.row[this.opts.name] = e.target.value
             },
             addProducts() {
-                modals.create('products-list-select-modal', {
+                modals.create('offers-list-select-modal', {
                     type: 'modal-primary',
                     size: 'modal-lg',
                     submit() {
                         let _this = this
                         let items = _this.tags.catalog.tags.datatable.getSelectedRows()
                         self.item.items = self.item.items || []
-
                         if (items.length > 0) {
-                            if ('countModifications' in items[0] &&
-                                items[0].countModifications > 0) {
-                                modals.create('modifications-list-modal', {
-                                    type: 'modal-primary',
-                                    size: 'modal-lg',
-                                    id: items[0].id,
-                                    submit() {
-                                        let items = this.tags['catalog-static'].tags.datatable.getSelectedRows()
-                                        items.forEach(item => {
-                                            self.item.items.push({...item, count: 1, discount: 0, id: null, idPrice: item.id})
-                                        })
-                                        self.update()
-                                        this.modalHide()
-                                        _this.modalHide()
-
-                                        let event = document.createEvent('Event')
-                                        event.initEvent('change', true, true)
-                                        self.tags.items.root.dispatchEvent(event)
-                                    }
-                                })
-                            } else {
-                                let ids = self.item.items.map(item => item.id)
-
-                                items.forEach(item => {
-                                    if (ids.indexOf(item.id) === -1)
-                                        self.item.items.push({...item, count: 1, discount: 0, id: null, idPrice: item.id})
-                                })
-
-                                self.update()
-                                _this.modalHide()
-
-                                let event = document.createEvent('Event')
-                                event.initEvent('change', true, true)
-                                self.tags.items.root.dispatchEvent(event)
-                            }
+                            let ids = self.item.items.map(item => item.id)
+                            items.forEach(item => {
+                                if (ids.indexOf(item.id) === -1)
+                                    self.item.items.push({...item, count: 1, discount: 0, id: null, idOffer: item.id})
+                            })
+                            self.update()
+                            _this.modalHide()
+                            let event = document.createEvent('Event')
+                            event.initEvent('change', true, true)
+                            self.tags.items.root.dispatchEvent(event)
                         }
                     }
                 })
             }
         }
 
-        self.orderItems = {
-            Y: 'Оплачен', N: 'Не оплачен', K: 'Кредит', P: 'Подарок', W: 'В ожидании', C: 'Возврат', T: 'Тест'
-        }
-
-        self.deliveryItems = {
-            Y: 'Доставлен', N: 'Не доставлен', M: 'В работе', P: 'Отправлен'
-        }
+        self.statuses = []
 
         self.changeDelivery = () => {
             modals.create('delivery-list-modal', {
@@ -319,25 +272,17 @@ order-edit
         }
 
         self.changeCustomer = () => {
-            modals.create('persons-company-list-modal',{
+            modals.create('persons-list-select-modal',{
                 type: 'modal-primary',
                 size: 'modal-lg',
                 submit() {
-                    let items = this.tags[this.tab].tags.datatable.getSelectedRows()
-                    if (!items.length) return
-
-                    if (this.tab == 'contacts') {
-                        self.item.idAuthor = items[0].id
-                        self.item.customer = items[0].displayName
-                        self.item.idCompany = null
-                    } else {
-                        self.item.idCompany = items[0].id
+                    let items = this.tags.catalog.tags.datatable.getSelectedRows()
+                    if (items.length > 0) {
+                        self.item.idUser = items[0].id
                         self.item.customer = items[0].name
-                        self.item.idAuthor = null
+                        self.update()
+                        this.modalHide()
                     }
-
-                    self.update()
-                    this.modalHide()
                 }
             })
         }
@@ -373,6 +318,7 @@ order-edit
             self.error = self.validation.validate(self.item, self.rules())
 
             if (!self.error) {
+                console.log("ok")
                 API.request({
                     object: 'Order',
                     method: 'Save',
@@ -398,19 +344,47 @@ order-edit
             if (self.item && self.item.items) {
                 self.sumProducts = self.item.items.map(i => i.count * i.price - i.discount).reduce((p, c) => p + c, 0)
                 if (parseFloat(self.sumProducts) > 0)
-                    self.total = parseFloat(self.sumProducts || 0) + parseFloat(self.item.deliveryPayee || 0) - parseFloat(self.item.discount || 0)
+                    self.total = parseFloat(self.sumProducts || 0) + parseFloat(self.item.sumDelivery || 0) - parseFloat(self.item.discount || 0)
                 else
                     self.total = 0
             }
         })
 
+        self.getStatuses = () => {
+            let data = { sortBy: "id", sortOrder: "asc", limit: 1000 }
+            API.request({
+                object: 'OrderStatus',
+                data: data,
+                method: 'Fetch',
+                success(response) {
+                    self.statuses = response.items
+                    if (!self.item.idStatus) {
+                        self.statuses.forEach((item) => {
+                            if (item.code == "new") {
+                                self.item.idStatus = item.id
+                                return
+                            }
+                        })
+                    }
+                    self.update()
+                }
+            })
+        }
+
         observable.on('order-new', () => {
             self.error = false
             self.isNew = true
-            self.item = { deliveryPayee: 0, discount: 0, statusOrder: 'N', statusDelivery: 'N' }
-            self.update()
+            self.item = {sumDelivery: 0, discount: 0}
+            self.item.dateDisplay = (new Date()).toLocaleString()
+            API.request({
+                object: 'Order',
+                method: 'Info',
+                success(response) {
+                    self.item.num = response.maxNum + 1
+                    self.update()
+                }
+            })
         })
-
 
         observable.on('orders-edit', id => {
             var params = {id}
@@ -435,3 +409,5 @@ order-edit
         self.on('mount', () => {
             riot.route.exec()
         })
+
+        self.getStatuses()
