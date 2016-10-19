@@ -30,4 +30,8 @@ import-file
                 option(value='\\9') Табуляция
     .row
         .col-md-3: .form-group
+            label.control-label Пропустить строк
+            input.form-control(name='skipCountRows', type='number', min='0', step='1', value='{ parent.item.skipCountRows }')
+    .row
+        .col-md-3: .form-group
             button.btn.btn-primary(onclick='{ parent.loadFile }', type='button', disabled='{ !parent.fileSelected }') Загрузить

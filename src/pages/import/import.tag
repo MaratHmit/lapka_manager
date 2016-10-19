@@ -19,7 +19,8 @@ import
 
         self.item = {
             encoding: "auto",
-            separator: "auto"
+            separator: "auto",
+            skipCountRows: 1
         }
         self.loader = false
         self.step = "file"
@@ -37,6 +38,8 @@ import
             let target = importForm.file
             formData.append('separator', self.item.separator)
             formData.append('encoding', self.item.encoding)
+            formData.append('filename', target.files[0].name)
+            formData.append('skipCountRows', self.item.skipCountRows)
             formData.append('file', target.files[0], target.files[0].name)
             self.loader = true
             self.update()
@@ -47,7 +50,6 @@ import
                 success(response) {
                     self.step = "fields"
                     self.item = response
-                    self.item.filename = target.files[0].name
                 },
                 complete() {
                     self.loader = false
@@ -74,7 +76,7 @@ import
 
                 },
                 complete() {
-                    self.step = "result"
+                    //self.step = "result"
                     self.loader = false
                     self.update()
                 }
