@@ -10,7 +10,7 @@ import-fields
     .row
         .col-md-3: .form-group
             button.btn.btn-danger(onclick='{ parent.back }', type='button') Назад
-            button.btn.btn-primary(onclick='{ parent.exec }', type='button') Далее
+            button.btn.btn-primary(onclick='{ parent.setSettings }', type='button') Далее
 
     script(type='text/babel').
         var self = this

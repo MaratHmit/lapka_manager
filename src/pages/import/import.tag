@@ -1,5 +1,6 @@
 | import './import-file.tag'
 | import './import-fields.tag'
+| import './import-settings.tag'
 | import './import-result.tag'
 
 import
@@ -7,11 +8,13 @@ import
     loader(if='{ loader }')
     h4(if='{ step == "file" }') Шаг 1. Файл данных
     h4(if='{ step == "fields" }') Шаг 2. Структура данных
+    h4(if='{ step == "settings" }') Шаг 3. Настройки импорта
     h4(if='{ step == "result" }') Результат импорта
 
     form(onchange='{ change }', onkeyup='{ change }')
         import-file(if='{ step == "file" }')
         import-fields(if='{ step == "fields" }')
+        import-settings(if='{ step == "settings" }')
         import-result(if='{ step == "result" }')
 
     script(type='text/babel').
@@ -20,11 +23,13 @@ import
         self.item = {
             encoding: "auto",
             separator: "auto",
-            skipCountRows: 1
+            skipCountRows: 1,
         }
+
         self.loader = false
         self.step = "file"
         self.fileSelected = false
+        self.groups = []
 
         self.changeFile = (e) => {
             self.item.filename = e.target.files[0].name
@@ -50,6 +55,10 @@ import
                 success(response) {
                     self.step = "fields"
                     self.item = response
+                    if (!self.item.keyField)
+                        self.item.keyField = "article"
+                    if (!self.item.folderImages)
+                        self.item.folderImages = "/"
                 },
                 complete() {
                     self.loader = false
@@ -58,9 +67,16 @@ import
             })
         }
 
+        self.setSettings = () => {
+            self.step = "settings"
+            self.update()
+        }
+
         self.back = () => {
             if (self.step == "fields")
                 self.step = "file"
+            if (self.step == "settings")
+                self.step = "fields"
             self.update()
         }
 
@@ -82,3 +98,17 @@ import
                 }
             })
         }
+
+        self.loadGroups = () => {
+            let data = { sortBy: "name", sortOrder: "asc" }
+            API.request({
+                object: 'Category',
+                method: 'Fetch',
+                data: data,
+                success(response) {
+                    self.groups = response.items
+                }
+            })
+        }
+
+        self.loadGroups()
