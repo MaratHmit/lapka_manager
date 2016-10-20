@@ -26,10 +26,13 @@ import
             skipCountRows: 1,
         }
 
+        self.mixin('change')
+
         self.loader = false
         self.step = "file"
         self.fileSelected = false
         self.groups = []
+        self.brands = []
 
         self.changeFile = (e) => {
             self.item.filename = e.target.files[0].name
@@ -41,6 +44,7 @@ import
             let formData = new FormData()
             let importForm = self.tags["import-file"]
             let target = importForm.file
+
             formData.append('separator', self.item.separator)
             formData.append('encoding', self.item.encoding)
             formData.append('filename', target.files[0].name)
@@ -92,11 +96,25 @@ import
 
                 },
                 complete() {
-                    //self.step = "result"
+                    self.step = "result"
                     self.loader = false
                     self.update()
                 }
             })
+        }
+
+        self.catalog = () => riot.route(`/products`)
+
+        self.newImport = () => {
+            self.item = {
+                encoding: "auto",
+                separator: "auto",
+                skipCountRows: 1,
+            }
+
+            self.loader = false
+            self.step = "file"
+            self.update()
         }
 
         self.loadGroups = () => {
@@ -111,4 +129,17 @@ import
             })
         }
 
+        self.loadBrands = () => {
+            let data = { sortBy: "name", sortOrder: "asc", limit: 1000 }
+            API.request({
+                object: 'Brand',
+                data: data,
+                method: 'Fetch',
+                success(response) {
+                    self.brands = response.items
+                }
+            })
+        }
+
         self.loadGroups()
+        self.loadBrands()
