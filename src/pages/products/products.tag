@@ -12,6 +12,7 @@
 | import 'pages/products/coupons/coupons-list.tag'
 | import 'pages/products/coupons/coupon-edit.tag'
 | import 'pages/products/products-types/products-types-list.tag'
+| import 'pages/products/pets/pets-list.tag'
 
 products
     ul(if='{ !edit }').nav.nav-tabs.m-b-2
@@ -47,6 +48,8 @@ products
         coupons-list(if='{ tab == "coupons" && !edit }')
         coupon-edit(if='{ tab == "coupons" && edit }')
 
+        pets-list(if='{ tab == "pets" && !edit }')
+
     script(type='text/babel').
         var self = this
 
@@ -62,6 +65,7 @@ products
             {title: 'Параметры', name: 'parameters', link: 'parameters'},
             {title: 'Скидки', name: 'discounts', link: 'discounts'},
             {title: 'Купоны', name: 'coupons', link: 'coupons'},
+            {title: 'Животные', name: 'pets', link: 'pets'},
         ]
 
         var route = riot.route.create()

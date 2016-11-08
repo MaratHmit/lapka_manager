@@ -1,7 +1,7 @@
 | import './add-fields-group-edit-modal.tag'
 
 add-fields-groups
-    catalog(object='CustomFieldGroup', cols='{ cols }', filters='{ filters }'
+    catalog(object='CustomFieldGroup', cols='{ cols }',
     add='{ permission(addEdit, "settings", "0100") }',
     remove='{ permission(remove, "settings", "0001") }',
     dblclick='{ permission(addEdit, "settings", "1010") }',
@@ -14,11 +14,6 @@ add-fields-groups
         self.mixin('permissions')
         self.mixin('remove')
         self.collection = 'CustomFieldGroup'
-
-        self.filters = [{
-            field: 'data',
-            value: opts.type,
-        }]
 
         self.addEdit = e => {
             let id

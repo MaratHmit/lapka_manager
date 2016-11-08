@@ -28,7 +28,11 @@ person-edit
             .tab-content
                 #person-edit-home.tab-pane.fade.in.active
                     .row
-                        .col-md-12
+                        .col-md-2
+                            .form-group
+                                .well.well-sm
+                                    image-select(name='imagePath', alt='0', size='256', value='{ item.imagePath }')
+                        .col-md-10
                             .form-group
                                 label.control-label Имя
                                 input.form-control(name='name', type='text', value='{ item.name }')

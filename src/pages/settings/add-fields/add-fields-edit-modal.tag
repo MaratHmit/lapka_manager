@@ -41,7 +41,7 @@ add-fields-edit-modal
                 .form-group
                     .checkbox-inline
                         label
-                            input(name='enabled', type='checkbox', checked='{ parseInt(item.enabled) }', data-bool='1,0')
+                            input(name='isActive', type='checkbox', checked='{ parseInt(item.isActive) }', data-bool='1,0')
                             | Активный
                     .checkbox-inline
                         label
@@ -62,7 +62,7 @@ add-fields-edit-modal
 
             if (opts.data)
                 filters.push({
-                    field: 'data',
+                    field: 'target',
                     value: opts.data
                 })
 
@@ -105,7 +105,6 @@ add-fields-edit-modal
                         API.request({
                             object: 'CustomFieldGroup',
                             method: 'Fetch',
-                            data: {filters},
                             success(response) {
                                 modal.groups = response.items
                                 callback(null, 'AddFieldOrderGroup')
@@ -123,7 +122,6 @@ add-fields-edit-modal
                 API.request({
                     object: 'CustomFieldGroup',
                     method: 'Fetch',
-                    data: {filters},
                     success(response) {
                         modal.groups = response.items
                         modal.loader = false

@@ -11,6 +11,6 @@ add-fields
 
     .tab-content
         #add-fields-orders.tab-pane.fade.in.active
-            add-fields-list(type='{ "order" }')
+            add-fields-list(type='{ "1" }')
         #add-fields-contacts.tab-pane.fade
-            add-fields-list(type='{ "user" }')
+            add-fields-list(type='{ "0" }')

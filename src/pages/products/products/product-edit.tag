@@ -163,15 +163,15 @@ product-edit
                                 button.btn.btn-primary.btn-sm(each='{ seoTags }', title='{ note }', type='button'
                                 onclick='{ seoTag.insert }', no-reorder) { name }
                             .form-group
-                                label.control-label  Заголовок
+                                label.control-label  Head title
                                 input.form-control(name='metaTitle', type='text',
                                 onfocus='{ seoTag.focus }', value='{ item.metaTitle }')
                             .form-group
-                                label.control-label  Ключевые слова
+                                label.control-label  Meta keywords
                                 input.form-control(name='metaKeywords', type='text',
                                 onfocus='{ seoTag.focus }', value='{ item.metaKeywords }')
                             .form-group
-                                label.control-label  Описание
+                                label.control-label  Meta description
                                 textarea.form-control(rows='5', name='metaDescription', onfocus='{ seoTag.focus }',
                                 style='min-width: 100%; max-width: 100%;', value='{ item.metaDescription }')
                 #product-edit-reviews.tab-pane.fade

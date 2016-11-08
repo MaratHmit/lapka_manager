@@ -25,7 +25,7 @@ add-fields-list
         self.collection = 'CustomField'
 
         self.filter = [{
-            field: 'data',
+            field: 'target',
             value: opts.type, //order, contacts, company
         }]
 
