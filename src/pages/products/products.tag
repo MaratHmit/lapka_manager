@@ -65,7 +65,7 @@ products
             {title: 'Параметры', name: 'parameters', link: 'parameters'},
             {title: 'Скидки', name: 'discounts', link: 'discounts'},
             {title: 'Купоны', name: 'coupons', link: 'coupons'},
-            {title: 'Животные', name: 'pets', link: 'pets'},
+            {title: 'Виды животных', name: 'pets', link: 'pets'},
         ]
 
         var route = riot.route.create()

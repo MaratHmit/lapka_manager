@@ -38,16 +38,16 @@ pets-list
 
                     if (!_this.error) {
                         API.request({
-                        object: 'Pet',
-                        method: 'Save',
-                        data: _this.item,
-                        success(response) {
-                            popups.create({title: 'Успех!', text: 'Информация сохранена!', style: 'popup-success'})
-                            observable.trigger('pets-reload')
-                            if (!id)
-                            _this.modalHide()
-                            },
-                        })
+                            object: 'Pet',
+                            method: 'Save',
+                            data: _this.item,
+                            success(response) {
+                                popups.create({title: 'Успех!', text: 'Информация сохранена!', style: 'popup-success'})
+                                    observable.trigger('pets-reload')
+                                    if (!id)
+                                    _this.modalHide()
+                                },
+                            })
                     }
                 }
             })

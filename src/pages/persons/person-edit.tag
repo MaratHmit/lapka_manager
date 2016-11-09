@@ -4,6 +4,7 @@
 | import 'pages/persons/person-balance-modal.tag'
 | import 'pages/persons/persons-list-select-modal.tag'
 | import 'pages/settings/add-fields/add-fields-edit-block.tag'
+| import 'pages/persons/person-pet-modal.tag'
 | import md5 from 'blueimp-md5/js/md5.min.js'
 
 person-edit
@@ -21,6 +22,7 @@ person-edit
         ul.nav.nav-tabs.m-b-2
             li.active #[a(data-toggle='tab', href='#person-edit-home') Информация]
             li(if='{ checkPermission("products", "1000") }') #[a(data-toggle='tab', href='#person-edit-groups') Группы]
+            li(if='{ checkPermission("products", "1000") }') #[a(data-toggle='tab', href='#person-edit-pets') Животные]
             li(if='{ item.customFields && item.customFields.length }')
                 a(data-toggle='tab', href='#person-edit-fields') Доп. информация
 
@@ -74,6 +76,15 @@ person-edit
                         #{'yield'}(to='body')
                             datatable-cell(name='id') { row.id }
                             datatable-cell(name='name') { row.name }
+                #person-edit-pets.tab-pane.fade(if='{ checkPermission("products", "1000") }')
+                    catalog-static(name='pets', cols='{ petsCols }', rows='{ item.pets }', add='{ addEditPet }',
+                    dblclick='{ addEditPet }', remove='{ removePets }')
+                        #{'yield'}(to='body')
+                            datatable-cell(name='imageUrlPreview')
+                                img(width='32px', height='32px', src='{ row.imageUrlPreview }')
+                            datatable-cell(name='birthday') { row.birthday }
+                            datatable-cell(name='name') { row.name }
+                            datatable-cell(name='weight') { row.weight }
                 #person-edit-fields.tab-pane.fade(if='{ item.customFields && item.customFields.length }')
                     add-fields-edit-block(name='customFields', value='{ item.customFields }')
 
@@ -114,6 +125,13 @@ person-edit
             {name: 'name', value: 'Наименование'}
         ]
 
+        self.petsCols = [
+            {name: 'imageUrlPreview', value: 'Фото'},
+            {name: 'birthday', value: 'Дата рождения'},
+            {name: 'name', value: 'Наименование'},
+            {name: 'weight', value: 'Вес (гр.)'}
+        ]
+
         self.addGroup = () => {
             modals.create('persons-category-select-modal', {
                 type: 'modal-primary',
@@ -141,6 +159,33 @@ person-edit
             self.groupsSelectedCount = 0
             self.item.groups = self.tags.groups.getUnselectedRows()
             self.update()
+        }
+
+        self.addEditPet = (e) => {
+            let pet = {}
+            if (e && e.item && e.item.row)
+                pet = e.item.row
+            modals.create('person-pet-modal', {
+                type: 'modal-primary',
+                pet,
+                submit() {
+                    let _this = this
+                    _this.error = _this.validation.validate(_this.item, _this.rules)
+                    if (!_this.error) {
+                        if (e && e.item && e.item.row) {
+                            if (_this.item.imagePath)
+                                _this.item.imageUrlPreview = app.getImageUrl(_this.item.imagePath)
+                            e.item.row = _this.item
+                        } else {
+                            if (_this.item.imagePath)
+                                _this.item.imageUrlPreview = app.getImageUrl(_this.item.imagePath)
+                            self.item.pets.push(_this.item)
+                        }
+                        _this.modalHide()
+                        self.update()
+                    }
+                }
+            })
         }
 
         self.submit = e => {
