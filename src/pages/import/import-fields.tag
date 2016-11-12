@@ -7,6 +7,9 @@ import-fields
                 option(value="")
                 optgroup(each="{ fields }", label="{ title }")
                     option(each="{ items }", value='{ name }', selected='{ name == code }') { title }
+            | Пример данных:
+            nbsp
+            b { sample }
     .row
         .col-md-3: .form-group
             button.btn.btn-danger(onclick='{ parent.back }', type='button') Назад

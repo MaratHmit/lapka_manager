@@ -38,7 +38,7 @@ notice-edit
                     input.form-control(name='sender', type='text', value='{ item.sender }')
             .form-group
                 label.control-label Триггеры
-                checkbox-list(items='{ triggers }')
+                checkbox-list(items='{ item.triggers }')
             .form-group
                    label.control-label Шаблон
                    ckeditor(name='content', value='{ item.content }')
@@ -55,7 +55,6 @@ notice-edit
 
         self.loader = false
         self.item = {}
-        self.triggers = []
 
         self.mixin('permissions')
         self.mixin('validation')
@@ -110,7 +109,6 @@ notice-edit
                 data: params,
                 success: (response, xhr) => {
                     self.item = response
-                    self.triggers = response.triggers
                     self.loader = false
                     self.update()
                 },
@@ -131,7 +129,7 @@ notice-edit
                 object: 'Trigger',
                 method: 'Fetch',
                 success: (response, xhr) => {
-                    self.triggers = response.items
+                    self.item.triggers = response.items
                     self.loader = false
                     self.update()
                 },

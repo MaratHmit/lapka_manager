@@ -10,9 +10,9 @@ import-file
                     i.fa.fa-fw.fa-folder-open
         .col-md-3: .form-group
             label.control-label Профиль загрузки
-            select.form-control(name='profile', value='{ parent.item.idProfile }')
+            select.form-control(name='profile', value='{ parent.item.idProfile }', onchange='{ parent.selectProfile }')
                 option(value='')
-                option(each='{ parent.item.profiles }', value='{ id }',
+                option(each='{ parent.profiles }', value='{ id }',
                 selected='{ id == parent.item.idProfile }', no-reorder) { name }
     .row
         .col-md-3: .form-group

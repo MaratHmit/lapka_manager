@@ -2,6 +2,7 @@
 | import './import-fields.tag'
 | import './import-settings.tag'
 | import './import-result.tag'
+| import './profile-modal.tag'
 
 import
     h3 Импорт из XLSX, XLS, CSV
@@ -21,6 +22,7 @@ import
         var self = this
 
         self.item = {
+            idProfile: 0,
             encoding: "auto",
             separator: "auto",
             skipCountRows: 1,
@@ -28,11 +30,12 @@ import
 
         self.mixin('change')
 
-        self.loader = false
+        self.loader = true
         self.step = "file"
         self.fileSelected = false
         self.groups = []
         self.brands = []
+        self.profiles = []
 
         self.changeFile = (e) => {
             self.item.filename = e.target.files[0].name
@@ -44,13 +47,15 @@ import
             let formData = new FormData()
             let importForm = self.tags["import-file"]
             let target = importForm.file
+            let profileName = self.item.profileName
 
+            formData.append('idProfile', self.item.idProfile)
             formData.append('separator', self.item.separator)
             formData.append('encoding', self.item.encoding)
             formData.append('filename', target.files[0].name)
             formData.append('skipCountRows', self.item.skipCountRows)
             formData.append('file', target.files[0], target.files[0].name)
-            self.loader = true
+            self.loader = false
             self.update()
 
             API.upload({
@@ -59,6 +64,7 @@ import
                 success(response) {
                     self.step = "fields"
                     self.item = response
+                    self.item.profileName = profileName
                     if (!self.item.keyField)
                         self.item.keyField = "article"
                     if (!self.item.folderImages)
@@ -87,6 +93,7 @@ import
         self.exec = () => {
             self.loader = true
             self.update()
+            let item = self.item
 
             API.request({
                 object: 'Import',
@@ -99,11 +106,35 @@ import
                     self.step = "result"
                     self.loader = false
                     self.update()
+                    modals.create('profile-modal', {
+                        type: 'modal-primary',
+                        item,
+                        submit() {
+                            let _this = this
+                            let rules = { profileName: 'empty' }
+                            _this.error = _this.validation.validate(_this.item, rules)
+
+                            if (!_this.error) {
+                                API.request({
+                                    object: 'Import',
+                                    method: 'Save',
+                                    data: _this.item,
+                                    success(response) {
+                                        popups.create({title: 'Успех!', text: 'Профиль сохранен!', style: 'popup-success'})
+                                        _this.modalHide()
+                                    },
+                                })
+                            }
+                        }
+                    })
                 }
             })
         }
 
-        self.catalog = () => riot.route(`/products`)
+        self.catalog = () => {
+            observable.trigger('products-reload')
+            riot.route(`/products`)
+        }
 
         self.newImport = () => {
             self.item = {
@@ -115,6 +146,21 @@ import
             self.loader = false
             self.step = "file"
             self.update()
+        }
+
+        self.selectProfile = (e) => {
+            let idProfile = e.target.value
+            self.profiles.forEach(function(item) {
+                if (item.id == idProfile) {
+                    let fileName = self.item.filename
+                    self.item = JSON.parse(item.settings)
+                    self.item.filename = fileName
+                    self.item.idProfile = idProfile
+                    self.item.profileName = item.name
+                    self.update()
+                    return
+                }
+            })
         }
 
         self.loadGroups = () => {
@@ -141,5 +187,27 @@ import
             })
         }
 
+        self.loadProfiles = () => {
+            API.request({
+                object: 'ImportProfile',
+                method: 'Fetch',
+                success(response) {
+                    self.profiles = response.items
+                },
+                complete() {
+                    self.loader = false
+                    self.update()
+                }
+            })
+        }
+
         self.loadGroups()
         self.loadBrands()
+
+        self.on('mount', () => {
+            self.loadProfiles()
+        })
+
+        observable.on('import-start', () => {
+            self.newImport()
+        })

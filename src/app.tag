@@ -125,6 +125,7 @@ app
                     if (tab == "import") {
                         self.headTitle = "Импорт"
                         self.tab = tab
+                        observable.trigger('import-start')
                     } else observable.trigger('not-found')
                 }
             }

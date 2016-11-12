@@ -1,6 +1,5 @@
 import-result
     | Импорт завершен
-
     .row
         .col-md-3: .form-group
             button.btn.btn-danger(onclick='{ parent.newImport }', type='button') Новый импорт
