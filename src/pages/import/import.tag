@@ -143,8 +143,9 @@ import
                 skipCountRows: 1,
             }
 
-            self.loader = false
+            self.loader = true
             self.step = "file"
+            self.loadProfiles()
             self.update()
         }
 
@@ -205,7 +206,7 @@ import
         self.loadBrands()
 
         self.on('mount', () => {
-            self.loadProfiles()
+            self.newImport()
         })
 
         observable.on('import-start', () => {
