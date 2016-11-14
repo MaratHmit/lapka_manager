@@ -14,13 +14,13 @@ import-settings
             select.form-control(name='idGroup', value='{ parent.item.idGroup }')
                 option(value='')
                 option(each='{ parent.groups }', value='{ id }',
-                selected='{ id == parent.item.idGroup }', no-reorder) { name }
+                selected='{ id == parent.parent.item.idGroup }', no-reorder) { name }
         .col-md-3: .form-group
             label.control-label Бренд по умолчанию
             select.form-control(name='idBrand', value='{ parent.item.idBrand }')
                 option(value='')
                 option(each='{ parent.brands }', value='{ id }',
-                selected='{ id == parent.item.idBrand }', no-reorder) { name }
+                selected='{ id == parent.parent.item.idBrand }', no-reorder) { name }
     .row
         .col-md-3: .form-group
             button.btn.btn-danger(onclick='{ parent.back }', type='button') Назад

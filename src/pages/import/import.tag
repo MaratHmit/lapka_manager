@@ -22,7 +22,6 @@ import
         var self = this
 
         self.item = {
-            idProfile: 0,
             encoding: "auto",
             separator: "auto",
             skipCountRows: 1,
@@ -36,6 +35,7 @@ import
         self.groups = []
         self.brands = []
         self.profiles = []
+        self.importResult = {}
 
         self.changeFile = (e) => {
             self.item.filename = e.target.files[0].name
@@ -47,9 +47,10 @@ import
             let formData = new FormData()
             let importForm = self.tags["import-file"]
             let target = importForm.file
-            let profileName = self.item.profileName
+            let oldItem = self.item
 
-            formData.append('idProfile', self.item.idProfile)
+            if (self.item.idProfile)
+                formData.append('idProfile', self.item.idProfile)
             formData.append('separator', self.item.separator)
             formData.append('encoding', self.item.encoding)
             formData.append('filename', target.files[0].name)
@@ -64,7 +65,9 @@ import
                 success(response) {
                     self.step = "fields"
                     self.item = response
-                    self.item.profileName = profileName
+                    for (let key in oldItem)
+                        if (!(key in self.item))
+                            self.item[key] = oldItem[key]
                     if (!self.item.keyField)
                         self.item.keyField = "article"
                     if (!self.item.folderImages)
@@ -99,8 +102,8 @@ import
                 object: 'Import',
                 method: 'Exec',
                 data: self.item,
-                success() {
-
+                success(response) {
+                    self.importResult = response
                 },
                 complete() {
                     self.step = "result"
