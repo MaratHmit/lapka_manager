@@ -103,6 +103,7 @@ products-list
                     datatable-cell(name='nameBrand') { row.nameBrand }
                     datatable-cell(name='price')
                         span { (row.price / 1).toFixed(2) }
+                    datatable-cell(name='count') { row.countDisplay }
                     datatable-cell(name='nameGroup') { row.nameGroup }
 
     style(scoped).
@@ -156,14 +157,15 @@ products-list
         }
 
         self.cols = [
-            { name:'id', value:'#'},
-            { name:'imageUrlPreview', value:''},
-            { name:'enabled', value:'Вид'},
-            { name:'article', value:'Артикул'},
-            { name:'name', value:'Наименование'},
-            { name:'nameBrand', value:'Бренд'},
-            { name:'price', value:'Цена'},
-            { name:'nameGroup', value:'Группа'},
+            { name: 'id', value: '#'},
+            { name: 'imageUrlPreview', value: ''},
+            { name: 'enabled', value: 'Вид'},
+            { name: 'article', value: 'Артикул'},
+            { name: 'name', value: 'Наименование'},
+            { name: 'nameBrand', value: 'Бренд'},
+            { name: 'price', value: 'Цена'},
+            { name: 'count', value: 'Остаток'},
+            { name: 'nameGroup', value: 'Группа'},
         ]
 
 
