@@ -15,6 +15,7 @@ import 'moment/locale/en-gb'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
 import 'app.tag'
+import 'scripts/autofocus'
 import 'scripts/permissions'
 import 'scripts/riot-mixins'
 import 'scripts/validation'
