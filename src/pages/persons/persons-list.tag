@@ -38,7 +38,7 @@ persons-list
             {name: 'createdAt', value: 'Время рег.'},
             {name: 'name', value: 'Название'},
             {name: 'login', value: 'Логин'},
-            {name: 'email', value: 'E-mail'},
+            {name: 'email', value: 'Email'},
             {name: 'phone', value: 'Телефоны'},
             {name: 'countOrders', value: 'Кол-во зак.'},
             {name: 'amountOrders', value: 'Сумма/оплач. зак.'},

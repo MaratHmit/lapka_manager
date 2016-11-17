@@ -19,6 +19,7 @@ import 'scripts/autofocus'
 import 'scripts/permissions'
 import 'scripts/riot-mixins'
 import 'scripts/validation'
+import 'scripts/autofocus'
 
 if (!app.checkUnsupported()) {
     $(document).ready(() => {

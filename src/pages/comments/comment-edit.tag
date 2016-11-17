@@ -17,28 +17,34 @@ comment-edit
                 .col-md-2
                     .form-group
                         label.control-label Дата
-                        datetime-picker.form-control(name='date', format='YYYY-MM-DD', value='{ item.date }')
+                        datetime-picker.form-control(name='date', format='DD.MM.YYYY HH:mm', value='{ item.dateDisplay }')
                 .col-md-4
                     .form-group(class='{ has-error: error.idProduct }')
                         label.control-label Товар
                         .input-group
                             a.input-group-addon(if='{ item.idProduct }', href='#products/{ item.idProduct }', target='_blank')
                                 i.fa.fa-eye
-                            input.form-control(name='nameProduct', type='text', value='{ item.nameProduct }', readonly)
+                            input.form-control(name='productName', type='text', value='{ item.productName }', readonly)
                             span.input-group-addon(onclick='{ changeProduct }')
                                 i.fa.fa-list
                         .help-block { error.idProduct }
-            .row
-                .col-md-8
-                    .form-group(class='{ has-error: error.name }')
-                        label.control-label Автор комментария
-                        input.form-control(name='name', type='text', value='{ item.name }')
-                        .help-block { error.name }
                 .col-md-4
-                    .form-group(class='{ has-error: error.email }')
+                    .form-group(class='{ has-error: (error.idUser) }')
+                        label.control-label Автор комментария
+                        .input-group
+                            a.input-group-addon(if='{ item.idUser }',
+                            href='{ "#persons/" + item.idUser }', target='_blank')
+                                i.fa.fa-eye
+                            input.form-control(name='idUser',
+                                value='{ item.idUser ? item.idUser + " - " + item.userName : "" }', readonly)
+                            span.input-group-addon(onclick='{ changePerson }')
+                                i.fa.fa-list
+                        .help-block { error.idUser }
+                .col-md-2
+                    .form-group(class='{ has-error: error.userEmail }')
                         label.control-label Email
-                        input.form-control(name='email', type='text', value='{ item.email }')
-                        .help-block { error.email }
+                        input.form-control(name='userEmail', type='text', value='{ item.userEmail }', readonly)
+                        .help-block { error.userEmail }
             .row
                 .col-md-12
                     .form-group
@@ -52,13 +58,21 @@ comment-edit
                             b Ответ администратора
                         textarea.form-control(rows='5', name='response',
                         style='min-width: 100%; max-width: 100%;', value='{ item.response }')
-
+            .row
+                .col-md-12
+                    .form-group
+                        .checkbox-inline
+                            label
+                                input(name='isActive', type='checkbox', checked='{ item.isActive }')
+                                | Отображать комментарий на сайте
 
 
     script(type='text/babel').
         var self = this
 
-        self.item = {}
+        self.item = {
+            isActive: 1
+        }
 
         self.mixin('validation')
         self.mixin('permissions')
@@ -66,8 +80,7 @@ comment-edit
 
         self.rules = {
             idProduct: 'empty',
-            name: 'empty',
-            email: 'email',
+            idUser: 'empty',
         }
 
         self.afterChange = e => {
@@ -105,7 +118,8 @@ comment-edit
 
                     if (items.length > 0) {
                         self.item.idUser = items[0].id
-                        self.item.nameUser = items[0].displayName
+                        self.item.userName = items[0].name
+                        self.item.userEmail = items[0].email
                         self.update()
                         this.modalHide()
                     }
@@ -122,7 +136,7 @@ comment-edit
 
                     if (items.length > 0) {
                         self.item.idProduct = items[0].id
-                        self.item.nameProduct = items[0].name
+                        self.item.productName = items[0].name
                         self.update()
                         this.modalHide()
                     }
@@ -156,7 +170,9 @@ comment-edit
 
         observable.on('comment-new', () => {
             self.isNew = true
-            self.item = {}
+            self.item = {
+                isActive: 1
+            }
             self.update()
         })
 

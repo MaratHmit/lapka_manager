@@ -18,7 +18,7 @@ review-edit
                 .col-md-2
                     .form-group
                         label.control-label Дата
-                        datetime-picker.form-control(name='date', format='YYYY.MM.DD HH:mm', value='{ item.date }')
+                        datetime-picker.form-control(name='date', format='YYYY.MM.DD HH:mm', value='{ item.dateDisplay }')
                 .col-md-2
                     .form-group
                         label.control-label Оценка
@@ -35,14 +35,14 @@ review-edit
                     .form-group
                         label.control-label Лайков
                         .input-group
-                            input.form-control(type='number', value='{ item.likes }', min='0')
+                            input.form-control(name='likes', type='number', value='{ item.likes }', min='0')
                             span.input-group-addon
                                 i.fa.fa-thumbs-o-up
                 .col-md-3
                     .form-group
                         label.control-label Дислайков
                         .input-group
-                            input.form-control(type='number', value='{ item.dislikes }', min='0')
+                            input.form-control(name='dislikes', type='number', value='{ item.dislikes }', min='0')
                             span.input-group-addon
                                 i.fa.fa-thumbs-o-down
             .row
@@ -52,7 +52,7 @@ review-edit
                         .input-group
                             a.input-group-addon(if='{ item.idUser }', href='#persons/{ item.idUser }', target='_blank')
                                 i.fa.fa-eye
-                            input.form-control(name='nameUser', type='text', value='{ item.nameUser }', readonly)
+                            input.form-control(name='userName', type='text', value='{ item.userName }', readonly)
                             span.input-group-addon(onclick='{ changePerson }')
                                 i.fa.fa-list
                 .col-md-4
@@ -61,7 +61,7 @@ review-edit
                         .input-group
                             a.input-group-addon(if='{ item.idProduct }', href='#products/{ item.idProduct }', target='_blank')
                                 i.fa.fa-eye
-                            input.form-control(name='nameProduct', type='text', value='{ item.nameProduct }', readonly)
+                            input.form-control(name='productName', type='text', value='{ item.productName }', readonly)
                             span.input-group-addon(onclick='{ changeProduct }')
                                 i.fa.fa-list
                 .col-md-4
@@ -84,17 +84,17 @@ review-edit
             .row
                 .col-md-12
                     .form-group
-                        label.control-label Отзыв
-                        textarea.form-control(rows='5', name='comment',
-                        style='min-width: 100%; max-width: 100%;', value='{ item.comment }')
+                        label.control-label Комментарий
+                        textarea.form-control(rows='5', name='commentary',
+                        style='min-width: 100%; max-width: 100%;', value='{ item.commentary }')
 
             .row
                 .col-md-12
                     .form-group
                         .checkbox-inline
                             label
-                                input(name='isActive', type='checkbox', value='{ parseInt(item.isActive) }')
-                                | Активен
+                                input(name='isActive', type='checkbox', checked='{ item.isActive }')
+                                | Отображать отзыв на сайте
 
 
     script(type='text/babel').
@@ -135,7 +135,7 @@ review-edit
 
                     if (items.length > 0) {
                         self.item.idUser = items[0].id
-                        self.item.nameUser = items[0].name
+                        self.item.userName = items[0].name
                         self.update()
                         this.modalHide()
                     }
@@ -152,7 +152,7 @@ review-edit
 
                     if (items.length > 0) {
                         self.item.idProduct = items[0].id
-                        self.item.nameProduct = items[0].name
+                        self.item.productName = items[0].name
                         self.update()
                         this.modalHide()
                     }

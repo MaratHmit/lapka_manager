@@ -7,6 +7,7 @@ persons-list-select-modal
                 #{'yield'}(to='body')
                     datatable-cell(name='id') { row.id }
                     datatable-cell(name='name') { row.name }
+                    datatable-cell(name='email') { row.email }
         #{'yield'}(to='footer')
             button(onclick='{ modalHide }', type='button', class='btn btn-default btn-embossed') Закрыть
             button(onclick='{ parent.opts.submit.bind(this) }', type='button', class='btn btn-primary btn-embossed') Выбрать
@@ -17,5 +18,6 @@ persons-list-select-modal
         self.cols = [
             {name: 'id', value: '#'},
             {name: 'name', value: 'Название'},
+            {name: 'email', value: 'Email'},
         ]
 

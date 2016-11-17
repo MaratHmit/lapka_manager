@@ -1,5 +1,5 @@
 | import 'components/catalog.tag'
-
+| import 'lodash/lodash'
 | import 'components/star-rating.tag'
 
 reviews-list
@@ -10,16 +10,16 @@ reviews-list
     dblclick='{ permission(open, "reviews", "1000") }')
         #{'yield'}(to='body')
             datatable-cell(name='id') { row.id }
-            datatable-cell(name='dateTime') { row.dateTimeTitle }
-            datatable-cell(name='nameProduct') { row.nameProduct }
-            datatable-cell(name='nameUser') { row.nameUser }
+            datatable-cell(name='dateDisplay') { row.dateDisplay }
+            datatable-cell(name='productName') { row.productName }
+            datatable-cell(name='userName') { row.userName }
             datatable-cell(name='mark')
                 star-rating(count='5', value='{ row.mark }')
             datatable-cell(name='likes') { row.likes }
             datatable-cell(name='dislikes') { row.dislikes }
-            datatable-cell(name='comment') { row.comment }
-            datatable-cell(name='merits') { row.merits }
-            datatable-cell(name='demerits') { row.demerits }
+            datatable-cell(name='commentary') { _.truncate(row.commentary.replace( /<.*?>/g, '' ), {length: 50}) }
+            datatable-cell(name='merits') { _.truncate(row.merits.replace( /<.*?>/g, '' ), {length: 50}) }
+            datatable-cell(name='demerits') { _.truncate(row.demerits.replace( /<.*?>/g, '' ), {length: 50}) }
 
 
     script(type='text/babel').
@@ -31,13 +31,13 @@ reviews-list
 
         self.cols = [
             {name: 'id', value: '#'},
-            {name: 'dateTime', value: 'Дата'},
-            {name: 'nameProduct', value: 'Наименование товара'},
-            {name: 'nameUser', value: 'Пользователь'},
+            {name: 'dateDisplay', value: 'Дата'},
+            {name: 'productName', value: 'Наименование товара'},
+            {name: 'userName', value: 'Пользователь'},
             {name: 'mark', value: 'Звёзд'},
             {name: 'likes', value: 'Лайков'},
             {name: 'dislikes', value: 'Дислайков'},
-            {name: 'comment', value: 'Отзыв'},
+            {name: 'commentary', value: 'Отзыв'},
             {name: 'merits', value: 'Достоинства'},
             {name: 'demerits', value: 'Недостатки'}
         ]

@@ -1,6 +1,7 @@
 | import 'components/ckeditor.tag'
 | import 'components/loader.tag'
 | import 'components/autocomplete.tag'
+| import 'lodash/lodash'
 | import 'pages/products/products/product-edit-images.tag'
 | import 'pages/products/products/product-edit-modifications.tag'
 | import 'pages/products/products/product-edit-parameters.tag'
@@ -27,7 +28,7 @@ product-edit
 
         ul.nav.nav-tabs.m-b-2
             li.active: a(data-toggle='tab', href='#product-edit-home') Основная информация
-            li: a(data-toggle='tab', href='#product-edit-full-text') Полное описание
+            li: a(data-toggle='tab', href='#product-edit-full-text') Описание
             li: a(data-toggle='tab', href='#product-edit-categories') Разделы
             li: a(data-toggle='tab', href='#product-edit-images') Картинки
             li: a(data-toggle='tab', href='#product-edit-parameters') Характеристики
@@ -36,6 +37,7 @@ product-edit
             li: a(data-toggle='tab', href='#product-edit-discounts') Скидки
             li: a(data-toggle='tab', href='#product-edit-seo') SEO
             li: a(data-toggle='tab', href='#product-edit-reviews') Отзывы
+            li: a(data-toggle='tab', href='#product-edit-comments') Комментарии
 
         form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
             .tab-content
@@ -133,10 +135,7 @@ product-edit
                             cols='{ productsCols }', rows='{ item.similarProducts }')
                                 #{'yield'}(to='body')
                                     datatable-cell(name='id') { row.id }
-                                    datatable-cell(name='code') { row.code }
-                                    datatable-cell(name='article') { row.article }
                                     datatable-cell(name='name') { row.name }
-                                    datatable-cell(name='price') { row.price }
 
                 #product-edit-accompanying-products.tab-pane.fade
                     .row
@@ -145,10 +144,7 @@ product-edit
                             cols='{ productsCols }', rows='{ item.accompanyingProducts }')
                                 #{'yield'}(to='body')
                                     datatable-cell(name='id') { row.id }
-                                    datatable-cell(name='code') { row.code }
-                                    datatable-cell(name='article') { row.article }
                                     datatable-cell(name='name') { row.name }
-                                    datatable-cell(name='price') { row.price }
 
                 #product-edit-discounts.tab-pane.fade
                     product-edit-discounts(name='discounts', value='{ item.discounts }')
@@ -180,15 +176,27 @@ product-edit
                             catalog-static(name='reviews', dblclick='{ editReview }',
                                 cols='{ reviewsCols }', rows='{ item.reviews }')
                                 #{'yield'}(to='body')
-                                    datatable-cell(name='date') { row.date }
-                                    datatable-cell(name='nameUser') { row.nameUser }
+                                    datatable-cell(name='date') { row.dateDisplay }
+                                    datatable-cell(name='userName') { row.userName }
                                     datatable-cell(name='mark')
                                         star-rating(count='5', value='{ row.mark }')
                                     datatable-cell(name='likes') { row.likes }
                                     datatable-cell(name='dislikes') { row.dislikes }
-                                    datatable-cell(name='comment') { row.comment }
-                                    datatable-cell(name='merits') { row.merits }
-                                    datatable-cell(name='demerits') { row.demerits }
+                                    datatable-cell(name='commentary') { _.truncate(row.commentary.replace( /<.*?>/g, '' ), {length: 50}) }
+                                    datatable-cell(name='merits') { _.truncate(row.merits.replace( /<.*?>/g, '' ), {length: 50}) }
+                                    datatable-cell(name='demerits') { _.truncate(row.demerits.replace( /<.*?>/g, '' ), {length: 50}) }
+                #product-edit-comments.tab-pane.fade
+                    .row
+                        .col-md-12
+                            catalog-static(name='comments',
+                            cols='{ commentsCols }', rows='{ item.comments }')
+                                #{'yield'}(to='body')
+                                    datatable-cell(name='id') { row.id }
+                                    datatable-cell(name='date') { row.dateDisplay }
+                                    datatable-cell(name='userName') { row.userName }
+                                    datatable-cell(name='userEmail') { row.userEmail }
+                                    datatable-cell(name='commentary') { _.truncate(row.commentary.replace( /<.*?>/g, '' ), {length: 50}) }
+                                    datatable-cell(name='response') { _.truncate(row.response.replace( /<.*?>/g, '' ), {length: 50}) }
 
     style(scoped).
         .color {
@@ -225,21 +233,27 @@ product-edit
 
         self.productsCols = [
             {name: 'id', value: '#'},
-            {name: 'code', value: 'Код'},
-            {name: 'article', value: 'Артикул'},
             {name: 'name', value: 'Наименование'},
-            {name: 'price', value: 'Цена'},
         ]
 
         self.reviewsCols = [
             {name: 'date', value: 'Дата/время'},
-            {name: 'nameUser', value: 'Пользователь'},
+            {name: 'userName', value: 'Пользователь'},
             {name: 'mark', value: 'Звёзд'},
             {name: 'likes', value: 'Лайков'},
             {name: 'dislikes', value: 'Дислайков'},
-            {name: 'comment', value: 'Отзыв'},
+            {name: 'commentary', value: 'Отзыв'},
             {name: 'merits', value: 'Достоинства'},
             {name: 'demerits', value: 'Недостатки'}
+        ]
+
+        self.commentsCols = [
+            {name: 'id', value: '#'},
+            {name: 'date', value: 'Дата/время'},
+            {name: 'userName', value: 'Пользователь'},
+            {name: 'userEmail', value: 'Email пользователя'},
+            {name: 'commentary', value: 'Комментарий'},
+            {name: 'response', value: 'Ответ администратора'}
         ]
 
         self.addSimilarProducts = () => {
