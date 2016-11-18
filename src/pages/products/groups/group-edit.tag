@@ -26,6 +26,7 @@ group-edit
             li(class='{ active: isMulti }') #[a(data-toggle='tab', href='#group-edit-images') Картинки]
             li #[a(data-toggle='tab', href='#group-edit-discounts') Скидки]
             li #[a(data-toggle='tab', href='#group-edit-seo') SEO]
+            li #[a(data-toggle='tab', href='#group-edit-food') Порции корма]
         form(action='', onchange='{ change }', onkeyup='{ change }', method='POST')
             .tab-content
                 #group-edit-home.tab-pane.fade(show='{ !isMulti }', class='{ "in active": !isMulti }')
@@ -101,6 +102,15 @@ group-edit
                             label.control-label Meta description
                             textarea.form-control(rows='5', name='metaDescription', onfocus='{ seoTag.focus }',
                                 style='min-width: 100%; max-width: 100%;', value='{ item.metaDescription }')
+                #group-edit-food.tab-pane.fade
+                    h4 Расход товара (корма) гр./день
+                    .row(each='{ item.foods }')
+                        .col-md-5
+                            .form-group
+                                label.col-sm-2.control-label { name }
+                                .col-md-3
+                                    input.form-control(data-id='{ idPet }', type='number', value='{ portion }', onchange='{ foodChange }')
+
     script(type='text/babel').
         var self = this
 
@@ -129,6 +139,16 @@ group-edit
             let name = e.target.name
             delete self.error[name]
             self.error = {...self.error, ...self.validation.validate(self.item, self.rules, name)}
+        }
+
+        self.foodChange = e => {
+            let idPet = e.target.dataset.id
+            let portion = e.target.value
+
+            self.item.foods.forEach(item => {
+                if (item.idPet == idPet)
+                    item.portion = portion
+            })
         }
 
         self.submit = e => {
@@ -250,7 +270,7 @@ group-edit
                             callback('error', null)
                         }
                     })
-                }
+                },
             ], (err, res) => {
                 self.loader = false
                 self.update()
