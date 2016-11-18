@@ -103,6 +103,9 @@ product-edit
                     .row: .col-md-12
                         product-edit-modifications(name='offers', value='{ item.offers }', is-unlimited='{ item.isUnlimited }',
                         add='{ item.idType ? modificationAdd : "" }')
+                    .row: .col-md-12
+                        .form-group
+                            checkbox-list(items='{ item.labels }')
                     .row
                         .col-md-12
                             .form-group

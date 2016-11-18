@@ -13,6 +13,8 @@
 | import 'pages/products/coupons/coupon-edit.tag'
 | import 'pages/products/products-types/products-types-list.tag'
 | import 'pages/products/pets/pets-list.tag'
+| import 'pages/products/labels/labels-list.tag'
+| import 'pages/products/labels/label-edit.tag'
 
 products
     ul(if='{ !edit }').nav.nav-tabs.m-b-2
@@ -28,6 +30,9 @@ products
 
         groups-list(if='{ tab == "categories" && !edit }')
         group-edit(if='{ tab == "categories" && edit }')
+
+        labels-list(if='{ tab == "labels" && !edit }')
+        label-edit(if='{ tab == "labels" && edit }')
 
         products-types-list(if='{ tab == "types" && !edit }')
 
@@ -59,6 +64,7 @@ products
         self.tabs = [
             {title: 'Список товаров', name: 'products', link: ''},
             {title: 'Категории', name: 'categories', link: 'categories'},
+            {title: 'Ярлыки', name: 'labels', link: 'labels'},
             {title: 'Типы товаров', name: 'types', link: 'types'},
             {title: 'Бренды', name: 'brands', link: 'brands'},
             {title: 'Группы параметров', name: 'parameters-groups', link: 'parameters-groups'},
@@ -127,6 +133,11 @@ products
         route('/products/coupons/new', tab => {
             self.update({edit: true, tab: 'coupons'})
             observable.trigger('coupons-new')
+        })
+
+        route('/products/labels/new', tab => {
+            self.update({edit: true, tab: 'labels'})
+            observable.trigger('label-new')
         })
 
         route('/products', () => {

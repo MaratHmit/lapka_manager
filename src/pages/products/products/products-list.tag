@@ -43,17 +43,9 @@ products-list
                                     |  Клонирование товара
                             li.divider
                             li(onclick='{ handlers.toggleSelected }')
-                                a(href='#', data-field='enabled')
+                                a(href='#', data-field='isActive')
                                     i.fa.fa-fw.fa-eye
                                     |  Видимость (вкл/выкл)
-                            li(onclick='{ handlers.toggleSelected }')
-                                a(href='#', data-field='flagNew')
-                                    i.fa.fa-fw.fa-asterisk
-                                    |  Новинка (вкл/выкл)
-                            li(onclick='{ handlers.toggleSelected }')
-                                a(href='#', data-field='flagHit')
-                                    i.fa.fa-fw.fa-star
-                                    |  Хит (вкл/выкл)
                             li.divider
                             li(onclick='{ handlers.setCategory }')
                                 a(href='#')
@@ -403,6 +395,19 @@ products-list
             })
         }
 
+        self.getLabels = () => {
+            let data = { sortBy: "id", sortOrder: "asc", limit: 1000 }
+            API.request({
+                object: 'Label',
+                data: data,
+                method: 'Fetch',
+                success(response) {
+                    self.labels = response.items
+                    self.update()
+                }
+            })
+        }
+
         self.selectBrand = e => {
             self.selectedBrand = e.target.value || undefined
         }
@@ -418,6 +423,7 @@ products-list
         self.one('updated', () => {
             self.tags.catalog.on('reload', () => {
                 self.getBrands()
+                self.getLabels()
             })
             self.tags['catalog-tree'].tags.treeview.on('nodeselect', node => {
                 self.selectedCategory = node.__selected__ ? node.id : undefined
@@ -452,3 +458,4 @@ products-list
 
 
         self.getBrands()
+        self.getLabels()
