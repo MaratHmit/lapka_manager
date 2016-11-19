@@ -13,6 +13,7 @@
 | import 'pages/products/coupons/coupon-edit.tag'
 | import 'pages/products/products-types/products-types-list.tag'
 | import 'pages/products/pets/pets-list.tag'
+| import 'pages/products/pets/pets-edit.tag'
 | import 'pages/products/labels/labels-list.tag'
 | import 'pages/products/labels/label-edit.tag'
 
@@ -54,6 +55,7 @@ products
         coupon-edit(if='{ tab == "coupons" && edit }')
 
         pets-list(if='{ tab == "pets" && !edit }')
+        pets-edit(if='{ tab == "pets" && edit }')
 
     script(type='text/babel').
         var self = this
@@ -71,7 +73,7 @@ products
             {title: 'Параметры', name: 'parameters', link: 'parameters'},
             {title: 'Скидки', name: 'discounts', link: 'discounts'},
             {title: 'Купоны', name: 'coupons', link: 'coupons'},
-            {title: 'Виды животных', name: 'pets', link: 'pets'},
+            {title: 'Питомцы', name: 'pets', link: 'pets'},
         ]
 
         var route = riot.route.create()
@@ -138,6 +140,11 @@ products
         route('/products/labels/new', tab => {
             self.update({edit: true, tab: 'labels'})
             observable.trigger('label-new')
+        })
+
+        route('/products/pets/new', tab => {
+            self.update({edit: true, tab: 'pets'})
+            observable.trigger('pets-new')
         })
 
         route('/products', () => {
