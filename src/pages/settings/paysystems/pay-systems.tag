@@ -5,9 +5,14 @@ pay-systems
     dblclick='{ permission(paySystemOpen, "paysystems", "1000") }')
         #{'yield'}(to='body')
             datatable-cell(name='id') { row.id }
-            datatable-cell(name='imageFile')
-                img(if='{ row.imageUrlPreview.trim() !== "" }', src='{ row.imageUrlPreview }')
+            datatable-cell(name='imageUrlPreview')
+                img(width='32px', height='32px', src='{ row.imageUrlPreview }')
             datatable-cell(name='name') { row.name }
+
+    style(scoped).
+        .table td {
+            vertical-align: middle !important;
+        }
 
     script(type='text/babel').
         var self = this

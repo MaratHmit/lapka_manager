@@ -13,7 +13,7 @@ discount-edit
                 |  Сохранить
             button.btn.btn-default(if='{ !isNew }', onclick='{ reload }', title='Обновить', type='button')
                 i.fa.fa-refresh
-        .h4 { isNew ? item.title || 'Добавление скидки' : item.title || 'Редактирование скидки' }
+        .h4 { isNew ? item.title || 'Добавление скидки' : item.name || 'Редактирование скидки' }
         ul.nav.nav-tabs.m-b-2
             li.active #[a(data-toggle='tab', href='#discount-edit-parameters') Параметры]
             li #[a(data-toggle='tab', href='#discount-edit-groups') Группы товаров]
@@ -25,10 +25,10 @@ discount-edit
                 #discount-edit-parameters.tab-pane.fade.in.active
                     .row
                         .col-md-4
-                            .form-group(class='{ has-error: error.title }')
+                            .form-group(class='{ has-error: error.name }')
                                 label.control-label Наименование
-                                input.form-control(name='title', value='{ item.title }')
-                                .help-block { error.title }
+                                input.form-control(name='name', value='{ item.name }')
+                                .help-block { error.name }
                         .col-md-2
                             .form-group
                                 label.control-label Тип контакта
@@ -130,8 +130,8 @@ discount-edit
                 #discount-edit-groups.tab-pane.fade
                     .row
                         .col-md-12
-                            catalog-static(name='listGroupsProducts', add='{ addGroupsProductsPersons("group-select-modal") }',
-                            cols='{ cols }', rows='{ item.listGroupsProducts }')
+                            catalog-static(name='categories', add='{ addGroupsProductsPersons("group-select-modal") }',
+                            cols='{ cols }', rows='{ item.categories }')
                                 #{'yield'}(to='body')
                                     datatable-cell(name='id') { row.id }
                                     datatable-cell(name='name') { row.name }
@@ -139,19 +139,19 @@ discount-edit
                 #discount-edit-products.tab-pane.fade
                     .row
                         .col-md-12
-                            catalog-static(name='listProducts', add='{ addGroupsProductsPersons("products-list-select-modal") }',
-                            cols='{ cols }', rows='{ item.listProducts }')
+                            catalog-static(name='products', add='{ addGroupsProductsPersons("products-list-select-modal") }',
+                            cols='{ cols }', rows='{ item.products }')
                                 #{'yield'}(to='body')
                                     datatable-cell(name='id') { row.id }
                                     datatable-cell(name='name') { row.name }
                 #discount-edit-persons.tab-pane.fade
                     .row
                         .col-md-12
-                            catalog-static(name='listContacts', add='{ addGroupsProductsPersons("persons-list-select-modal") }',
-                            cols='{ cols }', rows='{ item.listContacts }')
+                            catalog-static(name='users', add='{ addGroupsProductsPersons("persons-list-select-modal") }',
+                            cols='{ cols }', rows='{ item.users }')
                                 #{'yield'}(to='body')
                                     datatable-cell(name='id') { row.id }
-                                    datatable-cell(name='lastName') { [row.lastName, row.firstName, row.secondName].join(' ') }
+                                    datatable-cell(name='name') { row.name }
 
     script(type='text/babel').
         var self = this
@@ -165,7 +165,7 @@ discount-edit
         self.item = {}
 
         self.rules = {
-            title: 'empty'
+            name: 'empty'
         }
 
         self.afterChange = e => {

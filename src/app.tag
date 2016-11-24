@@ -11,6 +11,7 @@
 | import 'pages/payments/payments.tag'
 | import 'pages/analytics/analytics.tag'
 | import 'pages/import/import.tag'
+| import 'pages/mailing/mailing.tag'
 | import 'pages/not-found.tag'
 | import 'modals/account-add-modal.tag'
 | import 'modals/account-settings-modal.tag'
@@ -79,6 +80,7 @@ app
                 analytics(if='{ tab == "analytics" }')
                 settings(if='{ tab == "settings" }')
                 import(if='{ tab == "import" }')
+                mailing(if='{ tab == "mailing" }')
                 not-found(if='{ tab == "not-found" }')
 
 
@@ -142,6 +144,7 @@ app
             {title: 'Товары', name: 'products', link: 'products', permission: 'products', icon: 'fa-shopping-bag'},
             //{title: 'Платежи', name: 'payments', link: 'payments', permission: 'payments', icon: 'fa-money'},
             {title: 'Клиенты', name: 'persons', link: 'persons', permission: 'contacts', icon: 'fa-users'},
+            {title: 'Рассылки', name: 'mailing', link: 'mailing', permission: 'contacts', icon: 'fa-paper-plane'},
             {title: 'Новости', name: 'news', link: 'news', permission: 'news', icon: 'fa-newspaper-o'},
             {title: 'Отзывы', name: 'reviews', link: 'reviews', permission: 'reviews', icon: 'fa-comment-o'},
             {title: 'Комментарии', name: 'comments', link: 'comments', permission: 'comments', icon: 'fa-comments-o'},
