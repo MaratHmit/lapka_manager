@@ -36,9 +36,13 @@ notice-edit
                 .col-md-3: .form-group
                     label.control-label Отправитель
                     input.form-control(name='sender', type='text', value='{ item.sender }')
-            .form-group
-                label.control-label Триггеры
-                checkbox-list(items='{ item.triggers }')
+            .row
+                .col-md-12
+                    .panel.panel-primary
+                        .panel-heading
+                            h3.panel-title Отметьте триггеры
+                        .panel-body
+                            checkbox-list(items='{ item.triggers }')
             .form-group
                    label.control-label Шаблон
                    ckeditor(name='content', value='{ item.content }')

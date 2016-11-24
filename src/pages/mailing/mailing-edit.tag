@@ -1,4 +1,5 @@
 | import 'components/ckeditor.tag'
+| import 'components/checkbox-list-inline.tag'
 
 mailing-edit
     loader(if='{ loader }')
@@ -19,19 +20,17 @@ mailing-edit
                     .form-group
                         label.control-label Дата отложенной отправки
                         datetime-picker.form-control(name='senderDate', format='DD.MM.YYYY HH:mm', value='{ item.senderDateDisplay }')
-            .row
                 .col-md-6
                     .form-group
                         label.control-label Тема письма
                         input.form-control(name='subject', type='text', value='{ item.subject }')
-                .col-md-3
-                    .form-group
-                        label.control-label Имя отправителя
-                        input.form-control(name='senderName', type='text', value='{ item.senderName }')
-                .col-md-3
-                    .form-group
-                        label.control-label Адрес отправителя
-                        input.form-control(name='senderEmail', type='text', value='{ item.senderEmail }')
+            .row
+                .col-md-12
+                    .panel.panel-primary
+                        .panel-heading
+                            h3.panel-title Отметьте группы получателей
+                        .panel-body
+                            checkbox-list-inline(items='{ item.userGroups }')
             .row
                 .col-md-12
                     .form-group
@@ -72,6 +71,7 @@ mailing-edit
             var params = {id: id}
             self.loader = true
             self.isNew = false
+            self.update()
 
             API.request({
                 object: 'Mailing',
@@ -93,7 +93,17 @@ mailing-edit
         observable.on('mailing-new', () => {
             self.item = {}
             self.isNew = true
-            self.update()
+            let now = new Date()
+            now.setDate(now.getDate() + 1)
+            self.item.senderDateDisplay = now.toLocaleDateString() + " 06:00"
+            API.request({
+                object: 'UserGroup',
+                method: 'Fetch',
+                success: (response) => {
+                    self.item.userGroups = response.items
+                    self.update()
+                }
+            })
         })
 
         self.reload = () => {
