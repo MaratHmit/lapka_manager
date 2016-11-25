@@ -20,10 +20,18 @@ mailing-edit
                     .form-group
                         label.control-label Дата отложенной отправки
                         datetime-picker.form-control(name='senderDate', format='DD.MM.YYYY HH:mm', value='{ item.senderDateDisplay }')
-                .col-md-6
+                .col-md-4
+                    .form-group
+                        label.control-label Имя рассылки/кампании
+                        input.form-control(name='name', type='text', value='{ item.name }')
+                .col-md-3
                     .form-group
                         label.control-label Тема письма
                         input.form-control(name='subject', type='text', value='{ item.subject }')
+                .col-md-3
+                    .form-group
+                        label.control-label Имя отправителя
+                        input.form-control(name='senderName', type='text', value='{ item.senderName }')
             .row
                 .col-md-12
                     .panel.panel-primary

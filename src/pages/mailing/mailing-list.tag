@@ -10,6 +10,7 @@ mailing-list
         #{'yield'}(to='body')
             datatable-cell(name='id') { row.id }
             datatable-cell(name='dateDisplay') { row.senderDateDisplay }
+            datatable-cell(name='name') { row.name }
             datatable-cell(name='subject') { row.subject }
             datatable-cell(name='body') { _.truncate(row.body.replace( /<.*?>/g, '' ), {length: 50}) }
 
@@ -23,6 +24,7 @@ mailing-list
         self.cols = [
             {name: 'id', value: '#'},
             {name: 'dateDisplay', value: 'Дата отправки'},
+            {name: 'name', value: 'Имя рассылки/кампании'},
             {name: 'subject', value: 'Тема письма'},
             {name: 'body', value: 'Тело письма'},
         ]
