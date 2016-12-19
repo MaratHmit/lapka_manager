@@ -11,8 +11,6 @@
 | import 'pages/settings/permissions/permissions.tag'
 | import 'pages/settings/permissions/permission-rights-edit.tag'
 | import 'pages/settings/synhro-1c/settings-synhro-1c.tag'
-| import 'pages/settings/sms/sms.tag'
-| import 'pages/settings/sms/sms-template-edit.tag'
 | import 'pages/settings/services/services.tag'
 | import 'pages/settings/services/service-edit.tag'
 
@@ -48,7 +46,6 @@ settings
             pay-system-edit(if='{ tab == "pay-systems" && edit }')
             notice-edit(if='{ tab == "notice" && edit }')
             permission-rights-edit(if='{ tab == "permissions" && edit }')
-            sms-template-edit(if='{ tab == "sms" && edit }')
             service-edit(if='{ tab == "services" && edit }')
 
     script(type='text/babel').
