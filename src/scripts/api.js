@@ -1,6 +1,6 @@
 var API = {
     version: process.env.NODE_ENV === 'development' ? '2_dev' : '2',
-    url: 'http://lapka.e-stile.ru/api/',
+    url: process.env.NODE_ENV === 'development' ? 'http://lapka.me/api/' : "/api/",
     complete(params) {
         if (!('notFoundRedirect' in params))
             params.notFoundRedirect = true

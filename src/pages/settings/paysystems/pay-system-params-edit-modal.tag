@@ -6,10 +6,10 @@ pay-system-params-edit-modal
             form(onchange='{ change }', onkeyup='{ change }')
                 .row
                     .col-md-12
-                        .form-group(class='{ has-error: error.code }')
+                        .form-group(class='{ has-error: error.key }')
                             label.control-label Код
-                            input.form-control(name='code', value='{ item.code }', disabled='{ !isNew }')
-                            .help-block { error.code }
+                            input.form-control(name='key', value='{ item.key }', disabled='{ !isNew }')
+                            .help-block { error.key }
                 .row
                     .col-md-12
                         .form-group(class='{ has-error: error.name }')
@@ -40,7 +40,7 @@ pay-system-params-edit-modal
                 modal.mixin('change')
 
                 modal.rules = {
-                    code: 'empty',
+                    key: 'empty',
                     name: 'empty',
                     value: 'empty'
                 }

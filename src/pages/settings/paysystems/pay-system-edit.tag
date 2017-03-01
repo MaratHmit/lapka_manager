@@ -19,71 +19,34 @@ pay-system-edit
                 label.control-label Наименование
                 input.form-control(name='name', type='text', value='{ item.name }')
                 .help-block { error.name }
-            ul.nav.nav-tabs.m-b-2
-                li.active #[a(data-toggle='tab', href='#pay-system-edit-settings') Настройки]
-                li #[a(data-toggle='tab', href='#pay-system-edit-main-info') Страница пояснений]
-                li(if='{ item.code == null }') #[a(data-toggle='tab', href='#pay-system-edit-blank') Бланк счета]
 
-            .tab-content
-                #pay-system-edit-settings.tab-pane.fade.in.active
-                    .row
-                        .col-md-2
-                            .form-group
-                                .well.well-sm
-                                    image-select(name='imagePath', section='shoppayment', alt='0', size='64', value='{ item.imagePath }')
+                .row
+                    .col-md-2
+                        .form-group
+                            .well.well-sm
+                                image-select(name='imagePath', section='shoppayment', alt='0', size='64', value='{ item.imagePath }')
 
-                        .col-md-10
-                            .row
-                                .col-md-12
-                                    .form-group
-                                        label.control-label Плагин
-                                        .input-group
-                                            select.form-control(name='code', value='{ item.code }')
-                                                option(value='')
-                                                option(each='{ plugin in item.plugins }', value='{ plugin.id }', selected='{ plugin.id == item.code }')
-                                                    | { plugin.name }
-                                            span.input-group-addon(onclick='{ submit }')
-                                                | Получить параметры
-                            .row
-                                .col-md-12
-                                    .form-group
-                                        label.control-label Справка URL
-                                        input.form-control(name='urlHelp', type='text', value='{ item.urlHelp }')
+                    .col-md-10
+                        h4 Параметры
 
-                            .row
-                                .col-md-12
-                                    .form-group
-                                        .checkbox-inline
-                                            label
-                                                input(type='checkbox', name='isActive', checked='{ item.isActive }')
-                                                | Отображать на сайте
-                                        .checkbox-inline
-                                            label
-                                                input(type='checkbox', name='isTestMode', checked='{ item.isTestMode }')
-                                                | Режим тестирования
+                        catalog-static(if='{ !isNew }', name='params', cols='{ paramsCols }', rows='{ item.params }',
+                        dblclick='{ editParam }', add='{ addParams }')
+                            #{'yield'}(to='body')
+                                datatable-cell(name='key') { row.key }
+                                datatable-cell(name='name') { row.name }
+                                datatable-cell(name='value') { row.value }
 
-                    .row(if='{ !isNew }')
-                        .col-md-12
-                            h4 Параметры
-
-                    catalog-static(if='{ !isNew }', name='params', cols='{ paramsCols }', rows='{ item.params }',
-                    dblclick='{ editParam }', add='{ addParams }')
-                        #{'yield'}(to='body')
-                            datatable-cell(name='key') { row.key }
-                            datatable-cell(name='name') { row.name }
-                            datatable-cell(name='value') { row.value }
-
-                #pay-system-edit-main-info.tab-pane.fade
-                    .row
-                        .col-md-12
-                            .form-group
-                                ckeditor(name='info', value='{ item.info }')
-
-                #pay-system-edit-blank.tab-pane.fade(if='{ item.code == null }')
-                    .row
-                        .col-md-12
-                            .form-group
-                                ckeditor(name='blank', value='{ item.blank }')
+                .row
+                    .col-md-12
+                        .form-group
+                            .checkbox-inline
+                                label
+                                    input(type='checkbox', name='isActive', checked='{ item.isActive }')
+                                    | Отображать на сайте
+                            .checkbox-inline
+                                label
+                                    input(type='checkbox', name='isTestMode', checked='{ item.isTestMode }')
+                                    | Режим тестирования
 
     script(type='text/babel').
         var self = this

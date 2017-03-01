@@ -1,8 +1,6 @@
 pay-systems
     catalog(object='PaySystem', cols='{ cols }', reload='true',
-    add='{ permission(add, "paysystems", "0100") }',
-    remove='{ permission(remove, "paysystems", "0001") }',
-    dblclick='{ permission(paySystemOpen, "paysystems", "1000") }')
+        dblclick='{ permission(paySystemOpen, "paysystems", "1000") }')
         #{'yield'}(to='body')
             datatable-cell(name='id') { row.id }
             datatable-cell(name='imageUrlPreview')
@@ -26,8 +24,6 @@ pay-systems
             { name: 'imageFile', value: 'Картинка' },
             { name: 'name', value: 'Наименование'},
         ]
-
-        self.add = () => riot.route('/settings/pay-systems/new')
 
         self.paySystemOpen = (e) => riot.route(`settings/pay-systems/${e.item.row.id}`)
 
