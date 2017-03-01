@@ -27,12 +27,14 @@ orders-list
             datatable-cell(name='date') { row.dateDisplay }
             datatable-cell(name='customer') { row.customer }
             datatable-cell(name='customerPhone') { row.customerPhone }
-            datatable-cell(name='amount') { row.amount }
+            datatable-cell(name='amount') { (row.amount / 1).toFixed(2) } р.
+            datatable-cell(name='paymentType') { row.paymentType }
+            datatable-cell(name='delivery') { row.delivery }
             datatable-cell(name='status', style='background-color:{ handlers.statuses.colors[row.idStatus]  } ')
                 | { handlers.statuses.text[row.idStatus]  }
 
         #{'yield'}(to='aggregation')
-            strong Сумма заказов: { (parent.totalAmount || 0) +  " " }
+            strong Сумма заказов: { ( (parent.totalAmount / 1).toFixed(2) || 0) +  " р. " }
 
     script(type='text/babel').
         var self = this
@@ -52,6 +54,8 @@ orders-list
             { name: 'customer' , value: 'Заказчик' },
             { name: 'customerPhone' , value: 'Телефон' },
             { name: 'amount' , value: 'Сумма' },
+            { name: 'paymentType' , value: 'Вид оплаты' },
+            { name: 'delivery' , value: 'Доставка' },
             { name: 'status' , value: 'Статус заказа' },
         ]
 
